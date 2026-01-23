@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vai-server
+  labels:
+    app: vai-server
+    tags.datadoghq.com/env: CI_ENVIRONMENT_SLUG
+    tags.datadoghq.com/service: "vai-server"
+spec:
+  selector:
+    matchLabels:
+      app: vai-server
+  template:
+    metadata:
+      labels:
+        app: vai-server
+        tags.datadoghq.com/env: CI_ENVIRONMENT_SLUG
+        tags.datadoghq.com/service: "vai-server"
+        ai-services: "true"
+    spec:
+      tolerations:
+        - key: "ai-web-tools"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+      nodeSelector:
+        cloud.google.com/gke-nodepool: artie-node-pool-4x-16gb
+      containers:
+        - name: vai-server
+          image: # TODO: add the image name 
+          ports:
+            - containerPort: 7777
+          resources:
+            requests:
+              memory: "10Gi"
+              cpu: "3.0"
+            limits:
+              memory: "12Gi"
+              cpu: "3.5"
+          imagePullPolicy: Always
+          env:
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/env']
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_AGENT_HOST
+              value: datadog.datadog.svc
+          livenessProbe:
+            httpGet:
+              port: 7777
+              path: /health
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              port: 7777
+              path: /health
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 10
+      imagePullSecrets:
+        - name: gitlab-registry
+
+
+
+
+
+
+

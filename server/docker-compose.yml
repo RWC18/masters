@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: aiavatar-web
+    ports:
+      - "7777:7777" # Adjust based on your server.js port
+    volumes:
+      - .:/var/www/client
+      - /var/www/client/node_modules
+    environment:
+      - NODE_ENV=production

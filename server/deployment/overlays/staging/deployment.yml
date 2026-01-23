@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vai-server
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: vai-server
+          env:
+            - name: PORT
+              value: "7777"
+            - name: MONGO_URL
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_URI
+                  name: vai-server-secret-global-staging
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: SECRET_KEY
+                  name: vai-server-secret-global-staging
+            - name: AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_TOKEN
+                  name: vai-server-secret-global-staging

@@ -1,0 +1,137 @@
+stages:
+  - build
+  - deploy-client 
+  - deploy-server
+
+variables:
+    BASE_TAG: "${CI_REGISTRY_IMAGE}"
+    TAG_SERVER: "${BASE_TAG}/server:${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}"
+    TAG_LATEST_SERVER: "${BASE_TAG}/server:latest"
+    TAG_CLIENT: "${BASE_TAG}/client:${CI_COMMIT_REF_NAME}-${CI_PIPELINE_ID}"
+    TAG_LATEST_CLIENT: "${BASE_TAG}/client:latest"
+
+build-server:
+  image: docker:23.0.1-dind
+  stage: build
+  services:
+    - docker:23.0.1-dind
+  before_script:
+    - cd server
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - echo "TAG_SERVER ${TAG_SERVER}  TAG_LATEST_SERVER ${TAG_LATEST_SERVER}"  
+    - docker pull "${TAG_LATEST_SERVER}" || true
+    - docker build --cache-from "${TAG_LATEST_SERVER}" -t "${TAG_LATEST_SERVER}" -t "${TAG_SERVER}" --build-arg BUILDKIT_INLINE_CACHE=1  .
+    - docker push "${TAG_SERVER}"
+    - docker push "${TAG_LATEST_SERVER}"
+  only:
+    refs:
+      - main
+      - staging
+      - init-cicd
+
+build-client:
+  image: docker:23.0.1-dind
+  stage: build
+  services:
+    - docker:23.0.1-dind
+  before_script:
+    - cd client
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - echo "TAG_CLIENT ${TAG_CLIENT}  TAG_LATEST_CLIENT ${TAG_LATEST_CLIENT}"
+    - docker pull "${TAG_LATEST_CLIENT}" || true
+    - docker build --cache-from "${TAG_LATEST_CLIENT}" -t "${TAG_LATEST_CLIENT}" -t "${TAG_CLIENT}" --build-arg BUILDKIT_INLINE_CACHE=1  .
+    - docker push "${TAG_CLIENT}"
+    - docker push "${TAG_LATEST_CLIENT}"
+  only:
+    refs:
+      - main
+      - staging
+      - init-cicd
+
+.generic_client_deploy:
+  when: manual
+  tags:
+    - x1
+  image:
+    name: registry.gitlab.com/picsart/ai-engineering/common-tools/ubuntu:latest
+    pull_policy: always
+    entrypoint: [ "" ]
+  stage: deploy-client
+  variables:
+    NAMESPACE: "default"
+  script:
+    - kubectl config get-contexts
+    - kubectl config use-context picsart/gitlab-agent:ai-web-tools
+    - kubectl config set-context --current --namespace=${NAMESPACE}
+    - cd client/deployment/base && kustomize edit set image "${TAG_CLIENT}"; cd ../../../
+    - NAMESPACE_OVERLAY_PATH=client/deployment/overlays/${NAMESPACE}
+    - kubectl kustomize ${NAMESPACE_OVERLAY_PATH} | kubectl apply -k ${NAMESPACE_OVERLAY_PATH}
+  needs:
+    - job: build-client
+
+staging_client_deploy:
+  extends:
+    - .generic_client_deploy
+  variables:
+    NAMESPACE: "staging"
+  only:
+    refs:
+      - staging
+      - init-cicd
+      - dockerize
+
+prod_client_deploy:
+  extends:
+    - .generic_client_deploy
+  variables:
+    NAMESPACE: "prod"
+  only:
+    refs:
+      - main
+      - init-cicd
+      - dockerize
+
+.generic_server_deploy:
+  when: manual
+  tags:
+    - x1
+  image:
+    name: registry.gitlab.com/picsart/ai-engineering/common-tools/ubuntu:latest
+    pull_policy: always
+    entrypoint: [ "" ]
+  stage: deploy-server
+  variables:
+    NAMESPACE: "default"
+  script:
+    - kubectl config get-contexts
+    - kubectl config use-context picsart/gitlab-agent:ai-web-tools
+    - kubectl config set-context --current --namespace=${NAMESPACE}
+    - cd server/deployment/base && kustomize edit set image "${TAG_SERVER}"; cd ../../../
+    - NAMESPACE_OVERLAY_PATH=server/deployment/overlays/${NAMESPACE}
+    - kubectl kustomize ${NAMESPACE_OVERLAY_PATH} | kubectl apply -k ${NAMESPACE_OVERLAY_PATH}
+  needs:
+    - job: build-server
+
+staging_server_deploy:
+  extends:
+    - .generic_server_deploy
+  variables:
+    NAMESPACE: "staging"
+  only:
+    refs:
+      - staging
+      - dockerize
+      - init-cicd
+
+prod_server_deploy:
+  extends:
+    - .generic_server_deploy
+  variables:
+    NAMESPACE: "prod"
+  only:
+    refs:
+      - main
+      - dockerize
+      - init-cicd
