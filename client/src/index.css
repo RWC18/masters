@@ -1,0 +1,50 @@
+:root {
+  --public-url: '${process.env.PUBLIC_URL}';
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  font-family: 'SF Pro', sans-serif;
+  box-sizing: border-box;
+  border: 0;
+  text-decoration: none;
+   -moz-user-select: auto !important ; /* firefox */
+   -webkit-user-select: auto !important; /* Safari */
+   -ms-user-select: auto !important; /* IE*/
+   user-select: auto !important; /* Standard syntax */
+   -webkit-text-size-adjust: none !important;
+  text-size-adjust: none !important;
+  font-family: 'SF Pro', sans-serif !important;
+   scrollbar-width: thin;
+    scrollbar-color: #79EBFC #ffffff;
+}
+*::selection {
+  background: #79EBFC !important; /* WebKit/Blink Browsers */
+  color: black !important;
+}
+*::-moz-selection {
+  background: #79EBFC !important; /* Gecko Browsers */
+  color: black !important;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width:6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #79EBFC;
+  border-radius: 50px;
+  border: 0px none #ffffff;
+}
+
+html {
+  background-color: black !important;
+}
