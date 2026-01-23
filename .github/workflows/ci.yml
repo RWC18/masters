@@ -6,10 +6,12 @@ on:
       - main
       - staging
       - develop
+      - dockerize
   pull_request:
     branches:
       - main
       - staging
+      - dockerize
 
 env:
   REGISTRY: ghcr.io
