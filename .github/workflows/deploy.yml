@@ -1,68 +1,68 @@
-name: Deploy
+# name: Deploy
 
-on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy to'
-        required: true
-        type: choice
-        options:
-          - staging
-          - production
-      component:
-        description: 'Component to deploy'
-        required: true
-        type: choice
-        options:
-          - client
-          - server
-          - both
-  push:
-    branches:
-      - main
-      - staging
-      - dockerize
-    paths:
-      - 'client/**'
-      - 'server/**'
-      - '.github/workflows/deploy.yml'
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       environment:
+#         description: 'Environment to deploy to'
+#         required: true
+#         type: choice
+#         options:
+#           - staging
+#           - production
+#       component:
+#         description: 'Component to deploy'
+#         required: true
+#         type: choice
+#         options:
+#           - client
+#           - server
+#           - both
+#   push:
+#     branches:
+#       - main
+#       - staging
+#       - dockerize
+#     paths:
+#       - 'client/**'
+#       - 'server/**'
+#       - '.github/workflows/deploy.yml'
 
-env:
-  REGISTRY: ghcr.io
-  CLIENT_IMAGE_NAME: ${{ github.repository }}/client
-  SERVER_IMAGE_NAME: ${{ github.repository }}/server
+# env:
+#   REGISTRY: ghcr.io
+#   CLIENT_IMAGE_NAME: ${{ github.repository }}/client
+#   SERVER_IMAGE_NAME: ${{ github.repository }}/server
 
-jobs:
-  deploy:
-    name: Deploy to ${{ github.event.inputs.environment || github.ref_name }}
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/dockerize'
-    environment: ${{ github.event.inputs.environment || (github.ref == 'refs/heads/main' && 'production' || (github.ref == 'refs/heads/dockerize' && 'staging' || 'staging')) }}
+# jobs:
+#   deploy:
+#     name: Deploy to ${{ github.event.inputs.environment || github.ref_name }}
+#     runs-on: ubuntu-latest
+#     if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/dockerize'
+#     environment: ${{ github.event.inputs.environment || (github.ref == 'refs/heads/main' && 'production' || (github.ref == 'refs/heads/dockerize' && 'staging' || 'staging')) }}
     
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Configure deployment
-        id: config
-        run: |
-          ENV="${{ github.event.inputs.environment || (github.ref == 'refs/heads/main' && 'production' || (github.ref == 'refs/heads/dockerize' && 'staging' || 'staging')) }}"
-          COMPONENT="${{ github.event.inputs.component || 'both' }}"
-          echo "environment=$ENV" >> $GITHUB_OUTPUT
-          echo "component=$COMPONENT" >> $GITHUB_OUTPUT
+#       - name: Configure deployment
+#         id: config
+#         run: |
+#           ENV="${{ github.event.inputs.environment || (github.ref == 'refs/heads/main' && 'production' || (github.ref == 'refs/heads/dockerize' && 'staging' || 'staging')) }}"
+#           COMPONENT="${{ github.event.inputs.component || 'both' }}"
+#           echo "environment=$ENV" >> $GITHUB_OUTPUT
+#           echo "component=$COMPONENT" >> $GITHUB_OUTPUT
 
-      - name: Deploy Client
-        if: steps.config.outputs.component == 'client' || steps.config.outputs.component == 'both'
-        run: |
-          echo "Deploying client to ${{ steps.config.outputs.environment }}"
-          # Add your deployment commands here
-          # Example: kubectl, helm, terraform, etc.
+#       - name: Deploy Client
+#         if: steps.config.outputs.component == 'client' || steps.config.outputs.component == 'both'
+#         run: |
+#           echo "Deploying client to ${{ steps.config.outputs.environment }}"
+#           # Add your deployment commands here
+#           # Example: kubectl, helm, terraform, etc.
 
-      - name: Deploy Server
-        if: steps.config.outputs.component == 'server' || steps.config.outputs.component == 'both'
-        run: |
-          echo "Deploying server to ${{ steps.config.outputs.environment }}"
-          # Add your deployment commands here
-          # Example: kubectl, helm, terraform, etc.
+#       - name: Deploy Server
+#         if: steps.config.outputs.component == 'server' || steps.config.outputs.component == 'both'
+#         run: |
+#           echo "Deploying server to ${{ steps.config.outputs.environment }}"
+#           # Add your deployment commands here
+#           # Example: kubectl, helm, terraform, etc.
 
