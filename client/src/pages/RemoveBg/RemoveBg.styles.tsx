@@ -48,7 +48,7 @@ export const RemoveBgStyles = {
     marginTop: '12px',
   },
   sliderContainer: {
-    maxWidth: '700px',
+    maxWidth: '500px',
     margin: '0 auto',
     position: 'relative',
     overflow: 'hidden',
@@ -80,8 +80,8 @@ export const RemoveBgStyles = {
     justifyContent: 'center',
   },
   sliderKnob: {
-    width: '36px',
-    height: '36px',
+    maxWidth: '24px',
+    maxHeight: '24px',
     borderRadius: '50%',
     backgroundColor: colors.ORANGE_LIGHT,
     display: 'flex',
@@ -109,9 +109,10 @@ export const RemoveBgStyles = {
     marginBottom: '32px',
   },
   checkerboard: {
+    backgroundColor: '#fff',
     backgroundImage:
-      'linear-gradient(45deg, #333 25%, transparent 25%), linear-gradient(-45deg, #333 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #333 75%), linear-gradient(-45deg, transparent 75%, #333 75%)',
-    backgroundSize: '20px 20px',
-    backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
+      'linear-gradient(45deg, #e0e0e0 25%, transparent 25%), linear-gradient(-45deg, #e0e0e0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e0e0e0 75%), linear-gradient(-45deg, transparent 75%, #e0e0e0 75%)',
+    backgroundSize: '16px 16px',
+    backgroundPosition: '0 0, 0 8px, 8px -8px, -8px 0px',
   },
 };

@@ -4,7 +4,8 @@
     "products": "Products"
   },
   "header": {
-    "login": "Login"
+    "login": "Login",
+    "history": "My History"
   },
   "home": {
     "heroTitle": "Powering creativity with",
@@ -129,5 +130,19 @@
   },
   "common": {
     "generate": "Generate"
+  },
+  "history": {
+    "title": "My",
+    "titleAccent": "History",
+    "description": "View all your past generations by tool.",
+    "loading": "Loading...",
+    "empty": "No generations yet. Use the tools to create something!",
+    "tabs": {
+      "t2i": "Text to Image",
+      "avatar": "AI Avatar",
+      "logo": "Logo Gen",
+      "removebg": "Remove BG"
+    },
+    "generation": "Generation"
   }
 }

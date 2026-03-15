@@ -23,7 +23,7 @@ export const TEXT_2_IMAGE_BODY = {
   width: 1024,
   height: 1024,
   model: 'urn:air:picsart:model:picsart:fluxt2i@1',
-  count: 1,
+  count: 4,
 };
 
 export const DEFAULT_NEGATIVE_PROMPT =

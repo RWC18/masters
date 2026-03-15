@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { AI_API, headers, BACKEND_BASE_URL, STATUS_TYPES } from './constants';
 import { v4 as uuidv4 } from 'uuid';
+import { saveGenerationHistory } from './historyActions';
 
 export const removeBgActionTypes = {
   SET_ORIGINAL_IMAGE: 'SET_ORIGINAL_IMAGE',
@@ -48,10 +49,12 @@ export const uploadAndRemoveBg = (file: File) => async (dispatch: any) => {
     );
 
     if (res.data.status === STATUS_TYPES.SUCCESS) {
+      const resultUrl = res.data.data.url;
       dispatch({
         type: removeBgActionTypes.SET_RESULT_IMAGE,
-        data: res.data.data.url,
+        data: resultUrl,
       });
+      saveGenerationHistory('removebg', { original_url: imageUrl, result_url: resultUrl }).catch(() => {});
     } else {
       dispatch({ type: removeBgActionTypes.SET_ERROR_REMOVEBG, data: true });
     }

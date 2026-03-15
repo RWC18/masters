@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { BACKEND_BASE_URL, STATUS_TYPES } from './constants';
+import { saveGenerationHistory } from './historyActions';
 
 export const logoGenActions = {
   SET_BRANDNAME_LOGO: 'SET_BRANDNAME_LOGO',
@@ -74,11 +75,13 @@ export const genLogo =
       if (res.data.status === STATUS_TYPES.SUCCESS) {
         const inferenceId = res.data.data.inference_id;
         const results = await getLogoResults(inferenceId);
-
+        const resultsData = results?.data?.data || [];
         dispatch({
           type: logoGenActions.SET_RESULTS_LOGO,
-          data: results?.data?.data || [],
+          data: resultsData,
         });
+        const images = Array.isArray(resultsData) ? resultsData.map((img: any) => (typeof img === 'string' ? img : img?.url)) : [];
+        saveGenerationHistory('logo', { brand_name: data.brand_name, images }).catch(() => {});
       } else {
         dispatch({
           type: logoGenActions.SET_ERROR_LOGO,

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { AI_API, headers, BACKEND_BASE_URL, STATUS_TYPES } from './constants';
 import { v4 as uuidv4 } from 'uuid';
+import { saveGenerationHistory } from './historyActions';
 
 export const avatarActionTypes = {
   SET_PROMPT_AVATAR: 'SET_PROMPT_AVATAR',
@@ -92,11 +93,13 @@ export const genAvatar = (prompt: string, imageUrl: string, stylePrompt?: string
     if (res.data.status === STATUS_TYPES.SUCCESS) {
       const inferenceId = res.data.data.inference_id;
       const results = await getAvatarResults(inferenceId);
-
+      const images = results?.data?.urls || results?.data?.data || (Array.isArray(results?.data) ? results?.data : []) || [];
       dispatch({
         type: avatarActionTypes.SET_RESULTS_AVATAR,
-        data: results?.data?.urls || [],
+        data: images,
       });
+      const urls = Array.isArray(images) ? images.map((i: any) => (typeof i === 'string' ? i : i?.url)) : [];
+      saveGenerationHistory('avatar', { prompt: fullPrompt, images: urls }).catch(() => {});
     } else {
       dispatch({
         type: avatarActionTypes.SET_ERROR_AVATAR,

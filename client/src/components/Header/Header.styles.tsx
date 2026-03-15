@@ -1,9 +1,8 @@
-import { current } from "@reduxjs/toolkit";
 import { colors } from "../../constants/styles";
 
 export const HeaderStyles = {
   container: (scrolling: boolean) => ({
-    padding: { md: '22px 64px', xs: '12px 32px' },
+    padding: { md: '22px 64px', xs: '8px 16px' },
     width: '100%',
     position: 'fixed',
     background: scrolling ? '#00000070' : 'transparent',
@@ -12,13 +11,13 @@ export const HeaderStyles = {
     zIndex: '19',
   }),
   logo: {
-    width: '60px',
+    width: { xs: '40px', md: '60px' },
     cursor: 'pointer',
   },
   menuItem: {
     cursor: 'pointer',
     color: colors.TEXT_GRAY,
-    fontSize: '16px',
+    fontSize: { md: '16px', xs: '13px' },
     fontWeight: '500',
     transition: '.5s',
     '&:hover': {
@@ -27,20 +26,28 @@ export const HeaderStyles = {
     },
   },
   button: {
-    padding: '8px 32px',
+    padding: { md: '8px 32px', xs: '6px 16px' },
+    fontSize: { xs: '13px', md: 'inherit' },
   },
   user: {
-    fontSize: '12px',
+    fontSize: { md: '13px', xs: '12px' },
     fontWeight: '500',
     color: colors.ORANGE_ACTIVE,
     border: `1px solid ${colors.ORANGE_ACTIVE}`,
-    padding: '8px 16px',
+    padding: { md: '8px 14px', xs: '6px 8px' },
     borderRadius: '50px',
-    display: 'flex',
+    display: 'inline-flex',
     alignItems: 'center',
-    gap: '8px',
-},
-logoutIcon: {
+    gap: { md: '8px', xs: '4px' },
+    maxWidth: { xs: '140px', sm: 'none' },
+  },
+  userName: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    maxWidth: { xs: '72px', sm: 'none' },
+  },
+  logoutIcon: {
     cursor: 'pointer',
     currentColor: 'inherit',
     transition: '.5s',

@@ -52,6 +52,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
       <StylesSection
         selectedStyle={selectedStyle}
         onStyleSelect={onStyleSelect}
+        compact
       />
       <Box sx={AvatarResultsStyles.inputContainer}>
         <Grid

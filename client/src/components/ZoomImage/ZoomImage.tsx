@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { colors } from '../../constants/styles';
 import { forceDownload } from '../../redux/Actions/mainActions';
@@ -9,22 +11,44 @@ import { forceDownload } from '../../redux/Actions/mainActions';
 interface Props {
   url: string;
   handleClose: () => void;
+  /** When provided, show prev/next slider for multiple images */
+  images?: string[];
+  initialIndex?: number;
 }
 
-const ZoomImage = ({ url, handleClose }: Props) => {
+const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
+  const hasSlider = Array.isArray(images) && images.length > 1;
+  const [index, setIndex] = useState(hasSlider ? Math.min(initialIndex, images.length - 1) : 0);
+  const currentUrl = hasSlider ? images[index] : url;
+
+  useEffect(() => {
+    if (hasSlider && images) {
+      setIndex(Math.min(initialIndex, images.length - 1));
+    }
+  }, [hasSlider, images, initialIndex]);
+
+  const keydownFunction = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        handleClose();
+      }
+      if (hasSlider && images) {
+        if (event.key === 'ArrowLeft') setIndex((i) => (i <= 0 ? images.length - 1 : i - 1));
+        if (event.key === 'ArrowRight') setIndex((i) => (i >= images.length - 1 ? 0 : i + 1));
+      }
+    },
+    [handleClose, hasSlider, images]
+  );
+
   useEffect(() => {
     document.addEventListener('keydown', keydownFunction, false);
-    return () => {
-      document.removeEventListener('keydown', keydownFunction, false);
-    };
-    // eslint-disable-next-line
-  }, []);
+    return () => document.removeEventListener('keydown', keydownFunction, false);
+  }, [keydownFunction]);
 
-  const keydownFunction = (event: any) => {
-    if (event.key === 'Escape') {
-      handleClose();
-    }
-  };
+  const goPrev = () =>
+    hasSlider && images && setIndex((i) => (i <= 0 ? images.length - 1 : i - 1));
+  const goNext = () =>
+    hasSlider && images && setIndex((i) => (i >= images.length - 1 ? 0 : i + 1));
 
   return (
     <Box
@@ -36,7 +60,7 @@ const ZoomImage = ({ url, handleClose }: Props) => {
         bottom: 0,
         display: 'flex',
         alignItems: 'center',
-        zIndex: 20,
+        zIndex: 24,
         justifyContent: 'center',
         backdropFilter: 'blur(15px)',
         backgroundColor: '#00000070',
@@ -49,43 +73,87 @@ const ZoomImage = ({ url, handleClose }: Props) => {
           top: 15,
         }}
       >
-        <Grid container alignItems={'center'} spacing={1}>
+        <Grid container alignItems="center" spacing={1}>
           <Grid
             item
             sx={{
               transition: '.3s',
               cursor: 'pointer',
-              '&:hover': {
-                transform: 'scale(.95)',
-              },
+              '&:hover': { transform: 'scale(.95)' },
             }}
-            onClick={() => forceDownload(url)}
+            onClick={() => forceDownload(currentUrl)}
           >
-            <CloudDownloadIcon htmlColor={colors.TEXT_WHITE} fontSize='large' />
+            <CloudDownloadIcon htmlColor={colors.TEXT_WHITE} fontSize="large" />
           </Grid>
           <Grid
             item
             sx={{
               transition: '.3s',
               cursor: 'pointer',
-              '&:hover': {
-                transform: 'scale(.95)',
-              },
+              '&:hover': { transform: 'scale(.95)' },
             }}
-            onClick={() => handleClose()}
+            onClick={handleClose}
           >
-            <CloseIcon htmlColor={colors.TEXT_WHITE} fontSize='large' />
+            <CloseIcon htmlColor={colors.TEXT_WHITE} fontSize="large" />
           </Grid>
         </Grid>
       </Box>
-      <Box width={{ md: '40%', xs: '80%' }}>
+
+      {hasSlider && images && images.length > 1 && (
+        <IconButton
+          onClick={goPrev}
+          sx={{
+            position: 'absolute',
+            left: { xs: 8, md: 24 },
+            color: colors.TEXT_WHITE,
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            '&:hover': { backgroundColor: 'rgba(0,0,0,0.6)' },
+            zIndex: 1,
+          }}
+        >
+          <ChevronLeftIcon fontSize="large" />
+        </IconButton>
+      )}
+
+      <Box width={{ md: '40%', xs: '85%' }} sx={{ position: 'relative' }}>
         <img
-          src={url}
-          width={'100%'}
+          src={currentUrl}
+          width="100%"
           style={{ borderRadius: '16px' }}
-          alt={url}
+          alt=""
         />
       </Box>
+
+      {hasSlider && images && images.length > 1 && (
+        <IconButton
+          onClick={goNext}
+          sx={{
+            position: 'absolute',
+            right: { xs: 8, md: 24 },
+            color: colors.TEXT_WHITE,
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            '&:hover': { backgroundColor: 'rgba(0,0,0,0.6)' },
+            zIndex: 1,
+          }}
+        >
+          <ChevronRightIcon fontSize="large" />
+        </IconButton>
+      )}
+
+      {hasSlider && images && (
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: 16,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            color: colors.TEXT_WHITE,
+            fontSize: '14px',
+          }}
+        >
+          {index + 1} / {images.length}
+        </Box>
+      )}
     </Box>
   );
 };

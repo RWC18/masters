@@ -4,9 +4,10 @@ export const LoginFormStyles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
-    width: '350px',
-    padding: '20px 10px',
+    gap: { xs: '16px', md: '20px' },
+    width: '100%',
+    maxWidth: '350px',
+    padding: { xs: '16px 0', md: '20px 10px' },
     transition: '.5s',
   },
   inputs: {

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { BACKEND_BASE_URL, STATUS_TYPES } from './constants';
+import { saveGenerationHistory } from './historyActions';
 
 export const t2iActionTypes = {
   SET_PROMPT_T2I: 'SET_PROMPT_T2I',
@@ -47,11 +48,13 @@ export const genT2img = (caption: string) => async (dispatch: any) => {
     if (res.data.status === STATUS_TYPES.SUCCESS) {
       const tid = res.data.data.inference_id;
       const results = await getT2IResults(tid);
-
+      const data = results?.data?.data || [];
       dispatch({
         type: t2iActionTypes.SET_RESULTS_T2I,
-        data: results?.data?.data || [],
+        data,
       });
+      const images = Array.isArray(data) ? data.map((img: any) => (typeof img === 'string' ? img : img?.url)) : [];
+      saveGenerationHistory('t2i', { prompt: caption, images }).catch(() => {});
     } else {
       dispatch({
         type: t2iActionTypes.SET_ERROR_T2I,

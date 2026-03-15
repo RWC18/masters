@@ -18,7 +18,7 @@ const ColorsSection: React.FC<ColorsSectionProps> = ({
       container
       sx={LogoGenStyles.colorsGrid}
       spacing={0}
-      columns={{ md: 11, xs: 3 }}
+      columns={{ md: 11, xs: 2 }}
     >
       {genColors.map((clr: { title: string; thumbnail: string }) => (
         <Grid item sm={1} md={1} lg={1} xs={1} key={clr.title}>

@@ -16,17 +16,18 @@ export const PopUpStyles = {
   content: (isOpen: boolean) => ({
     position: 'fixed',
     top: isOpen ? '0%' : '-100%',
-    overflow: 'hidden',
+    overflow: 'auto',
     left: '0%',
     width: '100%',
     height: '100%',
     backgroundColor: colors.TEXT_DARK,
     zIndex: 21,
+    WebkitOverflowScrolling: 'touch',
   }),
   actions: {
     position: 'absolute',
-    right: '24px',
-    top: '24px',
+    right: { xs: '12px', md: '24px' },
+    top: { xs: '12px', md: '24px' },
     zIndex: 22,
   },
   cancelIcon: {
