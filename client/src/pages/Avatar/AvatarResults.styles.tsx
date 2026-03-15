@@ -1,6 +1,6 @@
 import { colors } from '../../constants/styles';
 
-export const I2IResultsStyles = {
+export const AvatarResultsStyles = {
   container: {
     padding: { md: '12px 154px 12px 64px', xs: '8px 32px' },
   },
@@ -39,12 +39,6 @@ export const I2IResultsStyles = {
     backgroundRepeat: 'no-repeat',
     width: '100%',
     aspectRatio: '1/1',
-  },
-  stylesContainer: {
-    maxHeight: { md: '600px', xs: 'auto' },
-    overflowX: 'hidden',
-    overflowY: 'scroll',
-    marginTop: '42px',
   },
   imageCard: {
     background: 'center center',
@@ -88,4 +82,3 @@ export const I2IResultsStyles = {
     boxShadow: `0px 0px 4px 0px ${colors.TEXT_DARK}`,
   },
 };
-

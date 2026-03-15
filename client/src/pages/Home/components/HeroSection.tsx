@@ -1,9 +1,11 @@
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { HomeStyles } from '../Home.styles';
-import { HOME_CONSTANTS } from '../Home.constants';
+import { useHomeConstants } from '../Home.constants';
 
 const HeroSection = () => {
+  const HOME_CONSTANTS = useHomeConstants();
+
   return (
     <Box sx={HomeStyles.container}>
       <Grid container justifyContent={'center'} alignItems={'center'}>

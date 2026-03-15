@@ -4,31 +4,25 @@ import Input from '../../../components/Input/Input';
 import Button from '../../../components/Button/Button';
 import { colors as styleColors } from '../../../constants/styles';
 import { LogoGenStyles } from '../LogoGen.styles';
-import { LOGO_GEN_CONSTANTS } from '../LogoGen.constants';
+import { useLogoGenConstants } from '../LogoGen.constants';
 
 interface InputSectionProps {
   brandname: string;
-  tagline: string;
-  colors: string[];
-  industries: string[];
+  description: string;
   onBrandnameChange: (value: string) => void;
-  onTaglineChange: (value: string) => void;
+  onDescriptionChange: (value: string) => void;
   onGenerate: () => void;
 }
 
 const InputSection: React.FC<InputSectionProps> = ({
   brandname,
-  tagline,
-  colors,
-  industries,
+  description,
   onBrandnameChange,
-  onTaglineChange,
+  onDescriptionChange,
   onGenerate,
 }) => {
-  const isDisabled =
-    brandname.trim().length === 0 ||
-    colors.length === 0 ||
-    industries.length === 0;
+  const LOGO_GEN_CONSTANTS = useLogoGenConstants();
+  const isDisabled = brandname.trim().length === 0;
 
   return (
     <Box sx={LogoGenStyles.inputContainer}>
@@ -42,9 +36,9 @@ const InputSection: React.FC<InputSectionProps> = ({
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={4}>
           <Input
-            placeholder={LOGO_GEN_CONSTANTS.taglinePlaceholder}
-            value={tagline}
-            handleChange={onTaglineChange}
+            placeholder={LOGO_GEN_CONSTANTS.descriptionPlaceholder}
+            value={description}
+            handleChange={onDescriptionChange}
           />
         </Grid>
         <Grid

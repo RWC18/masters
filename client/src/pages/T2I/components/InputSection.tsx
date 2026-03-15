@@ -4,7 +4,7 @@ import Input from '../../../components/Input/Input';
 import Button from '../../../components/Button/Button';
 import { colors } from '../../../constants/styles';
 import { T2IStyles } from '../T2I.styles';
-import { T2I_CONSTANTS } from '../T2I.constants';
+import { useT2IConstants } from '../T2I.constants';
 
 interface InputSectionProps {
   prompt: string;
@@ -17,6 +17,8 @@ const InputSection: React.FC<InputSectionProps> = ({
   onPromptChange,
   onGenerate,
 }) => {
+  const T2I_CONSTANTS = useT2IConstants();
+
   return (
     <Box sx={T2IStyles.inputContainer}>
       <Grid container spacing={2} sx={T2IStyles.inputGrid}>

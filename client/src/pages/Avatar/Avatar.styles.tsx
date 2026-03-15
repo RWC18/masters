@@ -1,6 +1,6 @@
 import { colors } from '../../constants/styles';
 
-export const I2IStyles = {
+export const AvatarStyles = {
   container: {
     padding: { md: '12px 64px', xs: '8px 32px' },
   },
@@ -61,5 +61,46 @@ export const I2IStyles = {
     alignItems: 'top',
     width: { md: '60%', xs: '100%' },
   },
+  tabsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '4px',
+    marginBottom: '8px',
+    marginTop: '32px',
+  },
+  tab: {
+    padding: '8px 28px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    color: colors.TEXT_GRAY,
+    fontSize: '14px',
+    fontWeight: '500',
+    transition: '.25s',
+    userSelect: 'none',
+    '&:hover': {
+      color: colors.TEXT_WHITE,
+    },
+  },
+  tabActive: {
+    padding: '8px 28px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    backgroundColor: colors.ORANGE_ACTIVE,
+    color: colors.TEXT_DARK,
+    fontSize: '14px',
+    fontWeight: '700',
+    transition: '.25s',
+    userSelect: 'none',
+  },
+  emojiCircle: {
+    width: { md: '80px', xs: '64px' },
+    height: { md: '80px', xs: '64px' },
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    fontSize: { md: '36px', xs: '28px' },
+    transition: '.5s',
+  },
 };
-

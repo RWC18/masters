@@ -3,15 +3,15 @@ import { RegisterFormStyles } from "./RegisterForm.styles"
 import Input from "../../Input/Input"
 import Button from "../../Button/Button"
 import { colors } from "../../../constants/styles"
-import { registerUser, setPopUpStatus, signInUser } from "../../../redux/Actions/mainActions"
+import { registerUser, setPopUpStatus, setUser } from "../../../redux/Actions/mainActions"
 import { LOCALSTORAGE_KEYS } from "../../../constants/constants"
-import { getUser } from "../../../redux/Actions/mainActions"
-import { setUser } from "../../../redux/Actions/mainActions"
 import { useDispatch } from "react-redux"
 import { useState } from "react"
 import { IUserRegistration } from "../../../redux/types"
+import { useTranslation } from "react-i18next"
 
 const RegisterForm = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -31,7 +31,7 @@ const RegisterForm = () => {
     setError(null); 
     const isPasswordMatch = handleCheckPasswordMatch();
     if (!isPasswordMatch) {
-      setError("Passwords do not match");
+      setError(t('auth.passwordMismatch'));
       return;
     }
     const userData: IUserRegistration = {
@@ -63,17 +63,17 @@ const RegisterForm = () => {
   
   return (
     <Box sx={RegisterFormStyles.container}>
-        <Input value={email} placeholder='Email' handleChange={setEmail} styles={RegisterFormStyles.inputs} size={'small'} />
+        <Input value={email} placeholder={t('auth.email')} handleChange={setEmail} styles={RegisterFormStyles.inputs} size={'small'} />
         <Input
           value={fullName}
-          placeholder='Full Name'
+          placeholder={t('auth.fullName')}
           handleChange={setFullName}
           styles={RegisterFormStyles.inputs}
           size={'small'}
         />
         <Input
           value={password}
-          placeholder='Password'
+          placeholder={t('auth.password')}
           handleChange={setPassword}
           styles={RegisterFormStyles.inputs}
           size={'small'}
@@ -81,7 +81,7 @@ const RegisterForm = () => {
         />
         <Input
           value={confirmPassword}
-          placeholder='Confirm Password'
+          placeholder={t('auth.confirmPassword')}
           handleChange={setConfirmPassword}
           styles={RegisterFormStyles.inputs}
           size={'small'}
@@ -89,7 +89,7 @@ const RegisterForm = () => {
         />
         <Button
           handleClick={handleRegister}
-          title='Register'
+          title={t('auth.register')}
           bgColor={colors.ORANGE_ACTIVE}
           hoverColor={colors.GRAY_DARK}
           textColor={colors.TEXT_DARK}

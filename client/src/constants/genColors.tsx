@@ -1,5 +1,9 @@
 export const genColors = [
   {
+    title: 'Auto',
+    thumbnail: '/mix.png',
+  },
+  {
     title: 'Red',
     thumbnail: '/red.png',
   },
@@ -32,11 +36,7 @@ export const genColors = [
     thumbnail: '/brown.png',
   },
   {
-    title: 'Grayscale',
+    title: 'Gray',
     thumbnail: '/gray.png',
-  },
-  {
-    title: 'Mix',
-    thumbnail: '/mix.png',
   },
 ];

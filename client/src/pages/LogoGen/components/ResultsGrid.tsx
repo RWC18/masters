@@ -4,7 +4,7 @@ import ResultImageCard from './ResultImageCard';
 import { LogoGenResultsStyles } from '../LogoGenResults.styles';
 
 interface ResultsGridProps {
-  results: Array<{ id: string; result_cdn_url: string }>;
+  results: Array<{ id: string; url: string }>;
   onZoom: (url: string) => void;
 }
 
@@ -20,7 +20,7 @@ const ResultsGrid: React.FC<ResultsGridProps> = ({ results, onZoom }) => {
           {results.map((image: any) => (
             <Grid item xs={6} sm={6} lg={4} md={4} key={image.id}>
               <ResultImageCard
-                imageUrl={image.result_cdn_url}
+                imageUrl={image.url}
                 onZoom={onZoom}
               />
             </Grid>

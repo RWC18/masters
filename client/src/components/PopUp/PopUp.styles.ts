@@ -1,4 +1,3 @@
-import { Margin, Padding } from "@mui/icons-material";
 import { colors } from "../../constants/styles";
 
 export const PopUpStyles = {

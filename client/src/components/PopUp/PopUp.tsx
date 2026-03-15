@@ -4,7 +4,6 @@ import { Box } from '@mui/material'
 import CancelIcon from '@mui/icons-material/Cancel';
 
 import { PopUpStyles } from './PopUp.styles'
-import { colors } from '../../constants/styles';
 
 interface Props {
     isOpen: boolean;

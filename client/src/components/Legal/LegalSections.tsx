@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { colors } from '../../constants/styles';
 import { LegalSelectionsStyles } from './LegalSelections.styles';
 
 interface Props {

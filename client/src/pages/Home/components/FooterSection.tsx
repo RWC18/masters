@@ -1,14 +1,17 @@
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { menuItems } from '../../../constants/menu';
-import { products } from '../../../constants/products';
+import { useMenuItems } from '../../../constants/menu';
+import { useProducts } from '../../../constants/products';
 import { scrollTO } from '../../../components/Header/Header';
 import { HomeStyles } from '../Home.styles';
-import { HOME_CONSTANTS } from '../Home.constants';
+import { useHomeConstants } from '../Home.constants';
 
 const FooterSection = () => {
   const navigate = useNavigate();
+  const HOME_CONSTANTS = useHomeConstants();
+  const menuItems = useMenuItems();
+  const products = useProducts();
 
   return (
     <Box sx={HomeStyles.footer}>

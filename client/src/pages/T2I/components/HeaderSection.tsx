@@ -1,9 +1,11 @@
 import { Typography } from '@mui/material';
 import React from 'react';
 import { T2IStyles } from '../T2I.styles';
-import { T2I_CONSTANTS } from '../T2I.constants';
+import { useT2IConstants } from '../T2I.constants';
 
 const HeaderSection = () => {
+  const T2I_CONSTANTS = useT2IConstants();
+
   return (
     <>
       <Typography sx={T2IStyles.title}>

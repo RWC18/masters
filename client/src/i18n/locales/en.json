@@ -1,0 +1,133 @@
+{
+  "menu": {
+    "aboutUs": "About us",
+    "products": "Products"
+  },
+  "header": {
+    "login": "Login"
+  },
+  "home": {
+    "heroTitle": "Powering creativity with",
+    "heroAccent": "AI innovation",
+    "heroDescription": "At VAi Research, we imagine a future where cutting-edge artificial intelligence opens the door to radical creativity. We're passionate about exploring new frontiers in creative communication, and harnessing the power of AI to drive innovation.",
+    "aboutTitle": "Unlock Your Creative Potential with VAi",
+    "aboutDescription": "At VAi, we empower you to turn your ideas into reality with ease. Whether you're transforming text into captivating images, enhancing photos into stunning artworks, or crafting professional logos, Vai has you covered.",
+    "productsTitle": "Products",
+    "copyright": "© {{year}} VAi, Inc."
+  },
+  "products": {
+    "t2i": {
+      "title": "Text to Image",
+      "description": "AI-generated pics can save you time without sacrificing creativity. Our algorithm scans millions of images and their associated text to create unique photos from text prompts. Use them to upgrade your designs, whether you're a professional designer, small business owner, or social media influencer. Our advanced AI-generated photos are authentic and one-of-a-kind."
+    },
+    "avatar": {
+      "title": "AI Avatar",
+      "description": "Transform your photos into stunning AI-powered avatars. Upload a selfie and let our advanced AI create unique, personalized avatars in any style you can imagine — from professional headshots to fantasy characters and artistic portraits."
+    },
+    "removeBg": {
+      "title": "Remove Background",
+      "description": "Instantly remove the background from any photo with AI-powered precision. Perfect for product photos, profile pictures, and creative projects — get a clean, transparent cutout in seconds."
+    },
+    "logoGen": {
+      "title": "Logo generator",
+      "description": "Welcome to the realm of creative logo design. Harnessing the dynamic synergy of advanced AI technology and graphic design tools, our LogoGen platform empowers you to transform simple ideas into impactful brand symbols. Dive into a world of creativity and unlock boundless possibilities to craft professional logos that leave a lasting impression."
+    }
+  },
+  "pluses": {
+    "intuitiveInterface": {
+      "title": "Intuitive Interface",
+      "description": "Our user-friendly interface makes design effortless and enjoyable. From beginners to seasoned designers, everyone can easily navigate our platform and bring their ideas to life."
+    },
+    "aiPowered": {
+      "title": "AI-Powered Magic",
+      "description": "Experience the magic of AI with Vai's cutting-edge technology. Our intelligent algorithms analyze your inputs and suggest creative enhancements, ensuring your designs are always top-notch."
+    },
+    "endless": {
+      "title": "Endless Possibilities",
+      "description": "With a vast library of templates, fonts, colors, and graphics, your creativity knows no bounds. Customize every aspect of your design to match your vision perfectly."
+    },
+    "timeSaving": {
+      "title": "Time-Saving Solutions",
+      "description": "Say goodbye to tedious design processes. Vai streamlines your workflow, allowing you to create polished designs in minutes, not hours."
+    },
+    "quality": {
+      "title": "Quality Assurance",
+      "description": "We prioritize quality in every aspect of our platform. From high-resolution images to seamless user experiences, Vai delivers excellence at every step of the design journey."
+    },
+    "security": {
+      "title": "Security Features",
+      "description": "Rest assured knowing your data is safe with us. Vai employs state-of-the-art security measures to protect your designs and personal information."
+    }
+  },
+  "t2i": {
+    "titleMain": "Text",
+    "titleAccent": "to",
+    "titleEnd": "Image",
+    "description": "Let AI-powered image maker generate your images!",
+    "placeholder": "The cat sitting near piano ...",
+    "generate": "Generate"
+  },
+  "avatar": {
+    "titleMain": "AI",
+    "titleAccent": "Avatar",
+    "titleEnd": "Generator",
+    "description": "Upload your photo and let AI create stunning personalized avatars in any style you imagine!",
+    "placeholder": "A professional portrait in cyberpunk style ...",
+    "generate": "Generate",
+    "male": "Male",
+    "female": "Female",
+    "styles": {
+      "business": "Business",
+      "cyberpunk": "Cyberpunk",
+      "medieval": "Medieval",
+      "astronaut": "Astronaut",
+      "superhero": "Superhero",
+      "anime": "Anime",
+      "pirate": "Pirate",
+      "viking": "Viking",
+      "detective": "Detective",
+      "athlete": "Athlete",
+      "samurai": "Samurai",
+      "wizard": "Wizard",
+      "fantasy": "Fantasy",
+      "royal": "Royal",
+      "goddess": "Goddess",
+      "witchy": "Witchy",
+      "mermaid": "Mermaid"
+    }
+  },
+  "logoGen": {
+    "titleMain": "New Logo",
+    "titleAccent": "&",
+    "titleEnd": "Brand Design",
+    "description": "Let AI-powered logo maker generate your new logo, create matching stationery, and design a brand you love!",
+    "brandPlaceholder": "Brand Name*",
+    "descPlaceholder": "Business Description (Optional)",
+    "generate": "Generate",
+    "resultMain": "AI made these Logos",
+    "resultAccent": "For You",
+    "back": "Back",
+    "regenerate": "Regenerate"
+  },
+  "removeBg": {
+    "titleMain": "Remove",
+    "titleAccent": "Background",
+    "description": "Instantly remove the background from any image with AI precision. Upload your photo and get a clean cutout in seconds!",
+    "upload": "Upload Image",
+    "download": "Download",
+    "reset": "Try Another",
+    "error": "Something went wrong. Please try again."
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "confirmPassword": "Confirm Password",
+    "passwordMismatch": "Passwords do not match"
+  },
+  "common": {
+    "generate": "Generate"
+  }
+}

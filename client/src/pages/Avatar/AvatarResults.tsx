@@ -4,26 +4,33 @@ import Loading from '../../components/Loading/Loading';
 import { Box, Grid } from '@mui/material';
 import ZoomImage from '../../components/ZoomImage/ZoomImage';
 import {
-  genI2img,
-  setSelectedStylesI2i,
-  setI2iPrompt,
-  uploaderI2I,
-} from '../../redux/Actions/i2iActions';
+  genAvatar,
+  setAvatarPrompt,
+  setAvatarStyle,
+  uploaderAvatar,
+} from '../../redux/Actions/avatarActions';
 import { useNavigate } from 'react-router-dom';
-import { I2IResultsStyles } from './I2IResults.styles';
+import { AvatarResultsStyles } from './AvatarResults.styles';
 import MobileTitle from './components/MobileTitle';
 import ControlPanel from './components/ControlPanel';
 import ResultsPanel from './components/ResultsPanel';
+import { MALE_PRESETS, FEMALE_PRESETS } from './Avatar.presets';
 
-const I2IResults = () => {
+const getStylePrompt = (styleId: string | null): string | undefined => {
+  if (!styleId) return undefined;
+  const all = [...MALE_PRESETS, ...FEMALE_PRESETS];
+  return all.find((p) => p.id === styleId)?.prompt;
+};
+
+const AvatarResults = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const prompt = useSelector((state: any) => state.i2i.prompt);
-  const loading = useSelector((state: any) => state.i2i.loading);
-  const results = useSelector((state: any) => state.i2i.results);
-  const selectedStyles = useSelector((state: any) => state.i2i.selectedStyles);
-  const image_url = useSelector((state: any) => state.i2i.image_url);
+  const prompt = useSelector((state: any) => state.avatar.prompt);
+  const loading = useSelector((state: any) => state.avatar.loading);
+  const results = useSelector((state: any) => state.avatar.results);
+  const image_url = useSelector((state: any) => state.avatar.image_url);
+  const selectedStyle = useSelector((state: any) => state.avatar.selectedStyle);
   const user = useSelector((state: any) => state.main.user);
 
   useEffect(() => {
@@ -36,34 +43,21 @@ const I2IResults = () => {
   const [zoomedImageUrl, setZoomedImageUrl] = useState<string | null>(null);
 
   const handlePromptChange = (value: string) => {
-    dispatch<any>(setI2iPrompt(value));
+    dispatch<any>(setAvatarPrompt(value));
   };
 
   const handleImageChange = async (file: File) => {
     if (file) {
-      await dispatch<any>(uploaderI2I(file));
+      await dispatch<any>(uploaderAvatar(file));
     }
   };
 
-  const handleStyleSelect = (style: {
-    prompt: string;
-    thumbnail: string;
-    title: string;
-  }) => {
-    dispatch<any>(setSelectedStylesI2i(style));
+  const handleStyleSelect = (styleId: string | null) => {
+    dispatch<any>(setAvatarStyle(styleId));
   };
 
   const handleGenerate = () => {
-    const styles = selectedStyles.map(
-      (style: {
-        prompt: string;
-        thumbnail: string;
-        title: string;
-      }) => style.prompt
-    );
-    dispatch<any>(
-      genI2img(prompt + ', ' + styles.join(', '), image_url)
-    );
+    dispatch<any>(genAvatar(prompt, image_url, getStylePrompt(selectedStyle)));
   };
 
   const handleZoom = (url: string) => {
@@ -76,7 +70,7 @@ const I2IResults = () => {
   };
 
   return (
-    <Box sx={I2IResultsStyles.container}>
+    <Box sx={AvatarResultsStyles.container}>
       {zoomedImageUrl && zoomStatus && (
         <ZoomImage url={zoomedImageUrl} handleClose={handleCloseZoom} />
       )}
@@ -91,7 +85,7 @@ const I2IResults = () => {
         <ControlPanel
           prompt={prompt}
           imageUrl={image_url}
-          selectedStyles={selectedStyles}
+          selectedStyle={selectedStyle}
           onPromptChange={handlePromptChange}
           onImageChange={handleImageChange}
           onStyleSelect={handleStyleSelect}
@@ -103,4 +97,4 @@ const I2IResults = () => {
   );
 };
 
-export default I2IResults;
+export default AvatarResults;

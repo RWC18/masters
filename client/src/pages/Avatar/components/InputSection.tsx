@@ -3,8 +3,8 @@ import React from 'react';
 import Input from '../../../components/Input/Input';
 import Button from '../../../components/Button/Button';
 import { colors } from '../../../constants/styles';
-import { I2IStyles } from '../I2I.styles';
-import { I2I_CONSTANTS } from '../I2I.constants';
+import { AvatarStyles } from '../Avatar.styles';
+import { useAvatarConstants } from '../Avatar.constants';
 import ImageUploadSection from './ImageUploadSection';
 
 interface InputSectionProps {
@@ -22,20 +22,22 @@ const InputSection: React.FC<InputSectionProps> = ({
   onImageChange,
   onGenerate,
 }) => {
+  const AVATAR_CONSTANTS = useAvatarConstants();
+
   return (
-    <Box sx={I2IStyles.inputContainer}>
-      <Grid container spacing={2} sx={I2IStyles.inputGrid}>
+    <Box sx={AvatarStyles.inputContainer}>
+      <Grid container spacing={2} sx={AvatarStyles.inputGrid}>
         <ImageUploadSection imageUrl={imageUrl} onImageChange={onImageChange} />
         <Grid item xs={9} sm={9} md={4} lg={4}>
           <Input
-            placeholder={I2I_CONSTANTS.inputPlaceholder}
+            placeholder={AVATAR_CONSTANTS.inputPlaceholder}
             value={prompt}
             handleChange={onPromptChange}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={1} lg={1}>
           <Button
-            title={I2I_CONSTANTS.generateButton}
+            title={AVATAR_CONSTANTS.generateButton}
             handleClick={onGenerate}
             textColor={colors.TEXT_DARK}
             bgColor={colors.ORANGE_ACTIVE}
@@ -50,4 +52,3 @@ const InputSection: React.FC<InputSectionProps> = ({
 };
 
 export default InputSection;
-

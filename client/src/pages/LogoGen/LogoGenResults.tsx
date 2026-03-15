@@ -14,7 +14,7 @@ const LogoGenResults = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { results, loading, brandname, tagline, colors, industries, count } =
+  const { results, loading, brandname, tagline, colors, count } =
     useSelector((state: any) => state.logo);
   const user = useSelector((state: any) => state.main.user);
 
@@ -44,10 +44,9 @@ const LogoGenResults = () => {
     dispatch<any>(
       genLogo(
         {
-          tagline: tagline,
-          text_prompt: brandname,
-          industries: industries,
-          palettes: colors,
+          brand_name: brandname,
+          business_description: tagline,
+          color_tone: colors[0] || 'Auto',
         },
         count
       )

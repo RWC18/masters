@@ -1,9 +1,11 @@
 import { Typography } from '@mui/material';
 import React from 'react';
 import { LogoGenStyles } from '../LogoGen.styles';
-import { LOGO_GEN_CONSTANTS } from '../LogoGen.constants';
+import { useLogoGenConstants } from '../LogoGen.constants';
 
 const HeaderSection = () => {
+  const LOGO_GEN_CONSTANTS = useLogoGenConstants();
+
   return (
     <>
       <Typography sx={LogoGenStyles.title}>

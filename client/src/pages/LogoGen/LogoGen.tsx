@@ -7,13 +7,11 @@ import {
   setLogoBrandname,
   setLogoTagline,
   setSelectedColorLogoGen,
-  setSelectedIndustryLogoGen,
 } from '../../redux/Actions/logoGenActions';
 import Loading from '../../components/Loading/Loading';
 import { LogoGenStyles } from './LogoGen.styles';
 import HeaderSection from './components/HeaderSection';
 import InputSection from './components/InputSection';
-import IndustriesSection from './components/IndustriesSection';
 import ColorsSection from './components/ColorsSection';
 import GenerateButtonSection from './components/GenerateButtonSection';
 
@@ -21,7 +19,7 @@ const LogoGen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { brandname, tagline, colors, industries, count, loading } =
+  const { brandname, tagline, colors, count, loading } =
     useSelector((state: any) => state.logo);
   const user = useSelector((state: any) => state.main.user);
 
@@ -35,12 +33,8 @@ const LogoGen = () => {
     dispatch<any>(setLogoBrandname(value));
   };
 
-  const handleTaglineChange = (value: string) => {
+  const handleDescriptionChange = (value: string) => {
     dispatch<any>(setLogoTagline(value));
-  };
-
-  const handleIndustrySelect = (industryId: string) => {
-    dispatch<any>(setSelectedIndustryLogoGen(industryId));
   };
 
   const handleColorSelect = (color: string) => {
@@ -52,10 +46,9 @@ const LogoGen = () => {
     dispatch<any>(
       genLogo(
         {
-          tagline: tagline,
-          text_prompt: brandname,
-          industries: industries,
-          palettes: colors,
+          brand_name: brandname,
+          business_description: tagline,
+          color_tone: colors[0] || 'Auto',
         },
         count
       )
@@ -68,18 +61,12 @@ const LogoGen = () => {
       <HeaderSection />
       <InputSection
         brandname={brandname}
-        tagline={tagline}
-        colors={colors}
-        industries={industries}
+        description={tagline}
         onBrandnameChange={handleBrandnameChange}
-        onTaglineChange={handleTaglineChange}
+        onDescriptionChange={handleDescriptionChange}
         onGenerate={handleGenerate}
       />
       <Box sx={LogoGenStyles.selectionContainer}>
-        <IndustriesSection
-          selectedIndustry={industries[0] || ''}
-          onIndustrySelect={handleIndustrySelect}
-        />
         <ColorsSection
           selectedColor={colors[0] || ''}
           onColorSelect={handleColorSelect}
@@ -87,8 +74,6 @@ const LogoGen = () => {
       </Box>
       <GenerateButtonSection
         brandname={brandname}
-        colors={colors}
-        industries={industries}
         onGenerate={handleGenerate}
       />
     </Box>

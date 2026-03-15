@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { colors } from '../../constants/styles';
-import { menuItems } from '../../constants/menu';
+import { useMenuItems } from '../../constants/menu';
 import { HeaderStyles } from './Header.styles';
 import Button from '../Button/Button';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,8 @@ import { getUser, setPopUpContent, setPopUpStatus, setUser, signInUser } from '.
 import {   LogoutOutlined } from '@mui/icons-material';
 import Login from '../SignIn/SignIn';
 import { LOCALSTORAGE_KEYS } from '../../constants/constants';
+import LanguageSelector from '../LanguageSelector/LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
 export const scrollTO = (id: string) => {
   const violation = document.getElementById(id) as any;
@@ -27,9 +29,11 @@ export const scrollTO = (id: string) => {
 };
 
 const Header = () => {
+  const menuItems = useMenuItems();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const [scrolling, setScrolling] = useState(false);
 
@@ -115,22 +119,29 @@ const Header = () => {
         </Grid>
       </Grid>
       <Grid item>
-        {user ? (
-          <Typography sx={HeaderStyles.user}
-          >{user.full_name}
-          <LogoutOutlined sx={HeaderStyles.logoutIcon} fontSize='small' onClick={() => handleLogout()}/>
-          </Typography>
-        ) : (
-          <Button
-            title='Login'
-            handleClick={() => handleLogin()}
-            textColor={colors.TEXT_DARK}
-            bgColor={colors.ORANGE_ACTIVE}
-            hoverColor={colors.ORANGE_LIGHT}
-            isDisabled={false}
-            styles={HeaderStyles.button}
-          />
-        )}
+        <Grid container alignItems={'center'} spacing={2}>
+          <Grid item>
+            <LanguageSelector />
+          </Grid>
+          <Grid item>
+            {user ? (
+              <Typography sx={HeaderStyles.user}
+              >{user.full_name}
+              <LogoutOutlined sx={HeaderStyles.logoutIcon} fontSize='small' onClick={() => handleLogout()}/>
+              </Typography>
+            ) : (
+              <Button
+                title={t('header.login')}
+                handleClick={() => handleLogin()}
+                textColor={colors.TEXT_DARK}
+                bgColor={colors.ORANGE_ACTIVE}
+                hoverColor={colors.ORANGE_LIGHT}
+                isDisabled={false}
+                styles={HeaderStyles.button}
+              />
+            )}
+          </Grid>
+        </Grid>
       </Grid>
       </Grid> 
     </Box>

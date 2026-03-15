@@ -3,25 +3,19 @@ import React from 'react';
 import Button from '../../../components/Button/Button';
 import { colors as styleColors } from '../../../constants/styles';
 import { LogoGenStyles } from '../LogoGen.styles';
-import { LOGO_GEN_CONSTANTS } from '../LogoGen.constants';
+import { useLogoGenConstants } from '../LogoGen.constants';
 
 interface GenerateButtonSectionProps {
   brandname: string;
-  colors: string[];
-  industries: string[];
   onGenerate: () => void;
 }
 
 const GenerateButtonSection: React.FC<GenerateButtonSectionProps> = ({
   brandname,
-  colors,
-  industries,
   onGenerate,
 }) => {
-  const isDisabled =
-    brandname.trim().length === 0 ||
-    colors.length === 0 ||
-    industries.length === 0;
+  const LOGO_GEN_CONSTANTS = useLogoGenConstants();
+  const isDisabled = brandname.trim().length === 0;
 
   return (
     <Grid container sx={LogoGenStyles.generateButtonContainer}>

@@ -3,25 +3,32 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  genI2img,
-  setSelectedStylesI2i,
-  setI2iPrompt,
-  uploaderI2I,
-} from '../../redux/Actions/i2iActions';
+  genAvatar,
+  setAvatarPrompt,
+  setAvatarStyle,
+  uploaderAvatar,
+} from '../../redux/Actions/avatarActions';
 import Loading from '../../components/Loading/Loading';
-import { I2IStyles } from './I2I.styles';
+import { AvatarStyles } from './Avatar.styles';
 import HeaderSection from './components/HeaderSection';
 import InputSection from './components/InputSection';
 import StylesSection from './components/StylesSection';
+import { MALE_PRESETS, FEMALE_PRESETS } from './Avatar.presets';
 
-const I2I = () => {
+const getStylePrompt = (styleId: string | null): string | undefined => {
+  if (!styleId) return undefined;
+  const all = [...MALE_PRESETS, ...FEMALE_PRESETS];
+  return all.find((p) => p.id === styleId)?.prompt;
+};
+
+const Avatar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const prompt = useSelector((state: any) => state.i2i.prompt);
-  const loading = useSelector((state: any) => state.i2i.loading);
-  const selectedStyles = useSelector((state: any) => state.i2i.selectedStyles);
-  const image_url = useSelector((state: any) => state.i2i.image_url);
+  const prompt = useSelector((state: any) => state.avatar.prompt);
+  const loading = useSelector((state: any) => state.avatar.loading);
+  const image_url = useSelector((state: any) => state.avatar.image_url);
+  const selectedStyle = useSelector((state: any) => state.avatar.selectedStyle);
   const user = useSelector((state: any) => state.main.user);
 
   const [imageLoading, setImageLoading] = useState(false);
@@ -33,41 +40,28 @@ const I2I = () => {
   }, [user, navigate]);
 
   const handlePromptChange = (value: string) => {
-    dispatch<any>(setI2iPrompt(value));
-  };
-
-  const handleStyleSelect = (style: {
-    prompt: string;
-    thumbnail: string;
-    title: string;
-  }) => {
-    dispatch<any>(setSelectedStylesI2i(style));
+    dispatch<any>(setAvatarPrompt(value));
   };
 
   const handleImageChange = async (file: File) => {
     if (file) {
       setImageLoading(true);
-      await dispatch<any>(uploaderI2I(file));
+      await dispatch<any>(uploaderAvatar(file));
       setImageLoading(false);
     }
   };
 
+  const handleStyleSelect = (styleId: string | null) => {
+    dispatch<any>(setAvatarStyle(styleId));
+  };
+
   const handleGenerate = () => {
-    navigate('/i2i/results');
-    const styles = selectedStyles.map(
-      (style: {
-        prompt: string;
-        thumbnail: string;
-        title: string;
-      }) => style.prompt
-    );
-    dispatch<any>(
-      genI2img(prompt + ', ' + styles.join(', '), image_url)
-    );
+    navigate('/avatar/results');
+    dispatch<any>(genAvatar(prompt, image_url, getStylePrompt(selectedStyle)));
   };
 
   return (
-    <Box sx={I2IStyles.container}>
+    <Box sx={AvatarStyles.container}>
       {imageLoading && <Loading />}
       {loading && <Loading />}
       <HeaderSection />
@@ -79,11 +73,11 @@ const I2I = () => {
         onGenerate={handleGenerate}
       />
       <StylesSection
-        selectedStyles={selectedStyles}
+        selectedStyle={selectedStyle}
         onStyleSelect={handleStyleSelect}
       />
     </Box>
   );
 };
 
-export default I2I;
+export default Avatar;

@@ -2,7 +2,7 @@ import { Box, Grid, IconButton } from '@mui/material';
 import React from 'react';
 import { PhotoCamera } from '@mui/icons-material';
 import { colors } from '../../../constants/styles';
-import { I2IStyles } from '../I2I.styles';
+import { AvatarStyles } from '../Avatar.styles';
 
 interface ImageUploadSectionProps {
   imageUrl: string | null;
@@ -32,12 +32,12 @@ const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
         {imageUrl ? (
           <Box
             sx={{
-              ...I2IStyles.imagePreview,
+              ...AvatarStyles.imagePreview,
               background: `url(${imageUrl}) center center / contain`,
             }}
           />
         ) : (
-          <IconButton component='span' sx={I2IStyles.imageUploadButton}>
+          <IconButton component='span' sx={AvatarStyles.imageUploadButton}>
             <PhotoCamera htmlColor={colors.TEXT_GRAY} />
           </IconButton>
         )}
@@ -47,4 +47,3 @@ const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
 };
 
 export default ImageUploadSection;
-

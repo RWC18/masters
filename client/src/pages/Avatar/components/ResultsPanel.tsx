@@ -4,10 +4,10 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import { colors } from '../../../constants/styles';
 import { forceDownload } from '../../../redux/Actions/mainActions';
-import { I2IResultsStyles } from '../I2IResults.styles';
+import { AvatarResultsStyles } from '../AvatarResults.styles';
 
 interface ResultsPanelProps {
-  results: Array<{ id: string; url: string }>;
+  results: string[];
   onZoom: (url: string) => void;
 }
 
@@ -29,22 +29,22 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, onZoom }) => {
         spacing={{ md: 4, xs: 2 }}
       >
         {results &&
-          results.map((image: any) => (
-            <Grid item xs={6} sm={6} lg={6} md={6} key={image.id}>
+          results.map((url: string, index: number) => (
+            <Grid item xs={6} sm={6} lg={6} md={6} key={index}>
               <Box
                 sx={{
-                  ...I2IResultsStyles.imageCard,
-                  background: `url('${image.url}')`,
+                  ...AvatarResultsStyles.imageCard,
+                  background: `url('${url}')`,
                 }}
               >
-                <Box sx={I2IResultsStyles.actionButtons}>
+                <Box sx={AvatarResultsStyles.actionButtons}>
                   <Grid container alignItems={'center'} spacing={1}>
                     <Grid
                       item
-                      sx={I2IResultsStyles.actionButton}
-                      onClick={() => forceDownload(image.url)}
+                      sx={AvatarResultsStyles.actionButton}
+                      onClick={() => forceDownload(url)}
                     >
-                      <Box sx={I2IResultsStyles.actionIconContainer}>
+                      <Box sx={AvatarResultsStyles.actionIconContainer}>
                         <CloudDownloadIcon
                           htmlColor={colors.TEXT_DARK}
                           fontSize='small'
@@ -53,10 +53,10 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, onZoom }) => {
                     </Grid>
                     <Grid
                       item
-                      sx={I2IResultsStyles.actionButton}
-                      onClick={() => onZoom(image.url)}
+                      sx={AvatarResultsStyles.actionButton}
+                      onClick={() => onZoom(url)}
                     >
-                      <Box sx={I2IResultsStyles.actionIconContainer}>
+                      <Box sx={AvatarResultsStyles.actionIconContainer}>
                         <ZoomInIcon
                           htmlColor={colors.TEXT_DARK}
                           fontSize='small'
@@ -74,4 +74,3 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, onZoom }) => {
 };
 
 export default ResultsPanel;
-

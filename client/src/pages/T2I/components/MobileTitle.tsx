@@ -1,9 +1,11 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { T2IResultsStyles } from '../T2IResults.styles';
-import { T2I_RESULTS_CONSTANTS } from '../T2IResults.constants';
+import { useT2IResultsConstants } from '../T2IResults.constants';
 
 const MobileTitle = () => {
+  const T2I_RESULTS_CONSTANTS = useT2IResultsConstants();
+
   return (
     <Box sx={T2IResultsStyles.mobileTitle}>
       <Typography sx={T2IResultsStyles.title}>

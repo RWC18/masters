@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AI_API, DEFAULT_NEGATIVE_PROMPT, headers, BACKEND_BASE_URL, STATUS_TYPES } from './constants';
+import { BACKEND_BASE_URL, STATUS_TYPES } from './constants';
 
 export const t2iActionTypes = {
   SET_PROMPT_T2I: 'SET_PROMPT_T2I',
@@ -41,16 +41,10 @@ export const genT2img = (caption: string) => async (dispatch: any) => {
     });
     const res = await axios.post(
       `${BACKEND_BASE_URL}/generation/t2i`,
-      {
-        prompt: caption,
-      },
-      {
-        headers,
-      }
+      { prompt: caption }
     );
 
-    if (res.data.status === 'success') {
-      console.log(res.data);
+    if (res.data.status === STATUS_TYPES.SUCCESS) {
       const tid = res.data.data.inference_id;
       const results = await getT2IResults(tid);
 
@@ -84,7 +78,6 @@ export const genT2img = (caption: string) => async (dispatch: any) => {
 
 export const getT2IResults =
 async (tid: string) => {
-  debugger;
     try {
       let status = '';
 
@@ -94,12 +87,8 @@ async (tid: string) => {
         || status === ''
       ) {
         const res = await axios.get(
-          `${BACKEND_BASE_URL}/generation/t2i?tid=${tid}`,
-          {
-            headers,
-          }
+          `${BACKEND_BASE_URL}/generation/t2i?tid=${tid}`
         );
-        console.log(res.data);
         status = res.data.data.status;
 
         if (

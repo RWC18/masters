@@ -1,6 +1,9 @@
-export const menuItems = [
-  { title: 'About us', url: 'about' },
-  { title: 'Products', url: 'products' },
-  // { title: 'Contact us', url: 'contacts' },
-  // { title: 'Legal', url: '/legal' },
-];
+import { useTranslation } from 'react-i18next';
+
+export const useMenuItems = () => {
+  const { t } = useTranslation();
+  return [
+    { title: t('menu.aboutUs'), url: 'about' },
+    { title: t('menu.products'), url: 'products' },
+  ];
+};

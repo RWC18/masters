@@ -36,12 +36,6 @@ export const LogoGenStyles = {
     flexDirection: 'column',
     alignItems: 'center',
   },
-  industriesGrid: {
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    alignItems: 'top',
-    width: { md: '70%', xs: '100%' },
-  },
   colorsGrid: {
     flexWrap: 'wrap',
     justifyContent: 'space-between',

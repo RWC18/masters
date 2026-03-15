@@ -1,11 +1,14 @@
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
-import { pluses } from '../../../constants/pluses';
+import { usePluses } from '../../../constants/pluses';
 import { HomeStyles } from '../Home.styles';
-import { HOME_CONSTANTS } from '../Home.constants';
+import { useHomeConstants } from '../Home.constants';
 import PlusCard from './PlusCard';
 
 const AboutSection = () => {
+  const HOME_CONSTANTS = useHomeConstants();
+  const pluses = usePluses();
+
   return (
     <Box sx={HomeStyles.container}>
       <Typography id='about' sx={HomeStyles.sectionTitle}>

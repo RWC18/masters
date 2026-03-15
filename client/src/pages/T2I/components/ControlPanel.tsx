@@ -6,7 +6,7 @@ import { colors } from '../../../constants/styles';
 import { genStylesV2 } from '../../../constants/genStyles';
 import Style from '../../../components/Style/Style';
 import { T2IResultsStyles } from '../T2IResults.styles';
-import { T2I_RESULTS_CONSTANTS } from '../T2IResults.constants';
+import { useT2IResultsConstants } from '../T2IResults.constants';
 
 interface ControlPanelProps {
   prompt: string;
@@ -31,6 +31,8 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   onStyleSelect,
   onGenerate,
 }) => {
+  const T2I_RESULTS_CONSTANTS = useT2IResultsConstants();
+
   return (
     <Grid item xs={12} sm={12} lg={5} md={5}>
       <Typography sx={T2IResultsStyles.desktopTitle}>

@@ -9,8 +9,10 @@ import { getUser } from "../../../redux/Actions/mainActions"
 import { setUser } from "../../../redux/Actions/mainActions"
 import { useDispatch } from "react-redux"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 const LoginForm = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -44,9 +46,9 @@ const LoginForm = () => {
 
   return (
     <Box sx={LoginFormStyles.container}>
-        <Input value={email} placeholder='Email' handleChange={setEmail} styles={LoginFormStyles.inputs} size={'small'} />
-        <Input value={password} placeholder='Password' handleChange={setPassword}  styles={LoginFormStyles.inputs} size={'small'} type='password'/>
-        <Button handleClick={handleLogin} title='Login' bgColor={colors.ORANGE_ACTIVE} hoverColor={colors.GRAY_DARK} textColor={colors.TEXT_DARK}  isDisabled={isButtonDisabled()} styles={LoginFormStyles.button} />
+        <Input value={email} placeholder={t('auth.email')} handleChange={setEmail} styles={LoginFormStyles.inputs} size={'small'} />
+        <Input value={password} placeholder={t('auth.password')} handleChange={setPassword}  styles={LoginFormStyles.inputs} size={'small'} type='password'/>
+        <Button handleClick={handleLogin} title={t('auth.login')} bgColor={colors.ORANGE_ACTIVE} hoverColor={colors.GRAY_DARK} textColor={colors.TEXT_DARK}  isDisabled={isButtonDisabled()} styles={LoginFormStyles.button} />
           <Alert severity="error"  sx={LoginFormStyles.error(error !== null)}>
             {error}
           </Alert>

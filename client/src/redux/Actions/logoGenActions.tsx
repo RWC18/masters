@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AI_API, headers } from './constants';
+import { BACKEND_BASE_URL, STATUS_TYPES } from './constants';
 
 export const logoGenActions = {
   SET_BRANDNAME_LOGO: 'SET_BRANDNAME_LOGO',
@@ -45,10 +45,9 @@ export const setSelectedColorLogoGen =
 export const genLogo =
   (
     data: {
-      text_prompt: string;
-      tagline: string;
-      industries: any[];
-      palettes: any[];
+      brand_name: string;
+      business_description: string;
+      color_tone: string;
     },
     count: number
   ) =>
@@ -66,17 +65,19 @@ export const genLogo =
         type: logoGenActions.SET_LOADING_LOGO,
         data: true,
       });
+
       const res = await axios.post(
-        `${AI_API}/logo-generator/v1/?limit=${count}`,
-        data,
-        {
-          headers,
-        }
+        `${BACKEND_BASE_URL}/generation/logo`,
+        { ...data, count }
       );
-      if (res.status === 200) {
+
+      if (res.data.status === STATUS_TYPES.SUCCESS) {
+        const inferenceId = res.data.data.inference_id;
+        const results = await getLogoResults(inferenceId);
+
         dispatch({
           type: logoGenActions.SET_RESULTS_LOGO,
-          data: res.data.data,
+          data: results?.data?.data || [],
         });
       } else {
         dispatch({
@@ -100,3 +101,32 @@ export const genLogo =
       });
     }
   };
+
+const getLogoResults = async (inferenceId: string) => {
+  try {
+    let status = '';
+
+    while (
+      status === STATUS_TYPES.PROCESSING ||
+      status === STATUS_TYPES.QUEUED ||
+      status === ''
+    ) {
+      const res = await axios.get(
+        `${BACKEND_BASE_URL}/generation/logo?tid=${inferenceId}`
+      );
+      status = res.data.data.status;
+
+      if (
+        status !== STATUS_TYPES.PROCESSING &&
+        status !== STATUS_TYPES.QUEUED &&
+        status !== ''
+      ) {
+        return { response: res, data: res.data.data };
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  } catch (e) {
+    return { response: e, data: null };
+  }
+};

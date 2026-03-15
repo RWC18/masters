@@ -1,11 +1,14 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { products } from '../../../constants/products';
+import { useProducts } from '../../../constants/products';
 import Product from '../../../components/Product/Product';
 import { HomeStyles } from '../Home.styles';
-import { HOME_CONSTANTS } from '../Home.constants';
+import { useHomeConstants } from '../Home.constants';
 
 const ProductsSection = () => {
+  const HOME_CONSTANTS = useHomeConstants();
+  const products = useProducts();
+
   return (
     <Box sx={HomeStyles.container}>
       <Box sx={HomeStyles.productsContainer}>

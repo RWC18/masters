@@ -1,13 +1,16 @@
-export const LOGO_GEN_CONSTANTS = {
-  title: {
-    main: 'New Logo',
-    accent: '&',
-    end: 'Brand Design',
-  },
-  description:
-    'Let AI-powered logo maker generate your new logo, create matching stationery, and design a brand you love!',
-  brandnamePlaceholder: 'Brandname*',
-  taglinePlaceholder: 'Tagline (Optional)',
-  generateButton: 'Generate',
-};
+import { useTranslation } from 'react-i18next';
 
+export const useLogoGenConstants = () => {
+  const { t } = useTranslation();
+  return {
+    title: {
+      main: t('logoGen.titleMain'),
+      accent: t('logoGen.titleAccent'),
+      end: t('logoGen.titleEnd'),
+    },
+    description: t('logoGen.description'),
+    brandnamePlaceholder: t('logoGen.brandPlaceholder'),
+    descriptionPlaceholder: t('logoGen.descPlaceholder'),
+    generateButton: t('logoGen.generate'),
+  };
+};
