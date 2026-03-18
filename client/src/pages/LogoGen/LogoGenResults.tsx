@@ -24,16 +24,17 @@ const LogoGenResults = () => {
     }
   }, [user, navigate]);
 
-  const [zoomStatus, setZoomStatus] = useState(false);
   const [zoomedImageUrl, setZoomedImageUrl] = useState<string | null>(null);
+
+  const imageUrls = (results || []).map((r: any) => (typeof r === 'string' ? r : r?.url)).filter(Boolean) as string[];
+  const zoomedIndex = zoomedImageUrl ? imageUrls.indexOf(zoomedImageUrl) : -1;
 
   const handleZoom = (url: string) => {
     setZoomedImageUrl(url);
-    setZoomStatus(true);
   };
 
   const handleCloseZoom = () => {
-    setZoomStatus(false);
+    setZoomedImageUrl(null);
   };
 
   const handleBack = () => {
@@ -55,8 +56,13 @@ const LogoGenResults = () => {
 
   return (
     <Box sx={LogoGenResultsStyles.container}>
-      {zoomedImageUrl && zoomStatus && (
-        <ZoomImage url={zoomedImageUrl} handleClose={handleCloseZoom} />
+      {zoomedImageUrl && zoomedIndex >= 0 && (
+        <ZoomImage
+          url={zoomedImageUrl}
+          handleClose={handleCloseZoom}
+          images={imageUrls.length > 1 ? imageUrls : undefined}
+          initialIndex={zoomedIndex}
+        />
       )}
       <ResultsHeader />
       {loading && <Loading />}

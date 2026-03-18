@@ -30,8 +30,10 @@ const T2IResults = () => {
     }
   }, [user, navigate]);
 
-  const [zoomStatus, setZoomStatus] = useState(false);
   const [zoomedImageUrl, setZoomedImageUrl] = useState<string | null>(null);
+
+  const imageUrls = (results || []).map((r: any) => (typeof r === 'string' ? r : r?.url)).filter(Boolean) as string[];
+  const zoomedIndex = zoomedImageUrl ? imageUrls.indexOf(zoomedImageUrl) : -1;
 
   const handlePromptChange = (value: string) => {
     dispatch<any>(setT2iPrompt(value));
@@ -58,17 +60,21 @@ const T2IResults = () => {
 
   const handleZoom = (url: string) => {
     setZoomedImageUrl(url);
-    setZoomStatus(true);
   };
 
   const handleCloseZoom = () => {
-    setZoomStatus(false);
+    setZoomedImageUrl(null);
   };
 
   return (
     <Box sx={T2IResultsStyles.container}>
-      {zoomedImageUrl && zoomStatus && (
-        <ZoomImage url={zoomedImageUrl} handleClose={handleCloseZoom} />
+      {zoomedImageUrl && zoomedIndex >= 0 && (
+        <ZoomImage
+          url={zoomedImageUrl}
+          handleClose={handleCloseZoom}
+          images={imageUrls.length > 1 ? imageUrls : undefined}
+          initialIndex={zoomedIndex}
+        />
       )}
       {loading && <Loading />}
       <MobileTitle />

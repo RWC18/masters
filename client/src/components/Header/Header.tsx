@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { colors } from '../../constants/styles';
 import { useMenuItems } from '../../constants/menu';
 import { HeaderStyles } from './Header.styles';
 import Button from '../Button/Button';
+import ThemeSwitch from '../ThemeSwitch/ThemeSwitch';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPopUpContent, setPopUpStatus, setUser } from '../../redux/Actions/mainActions';
-import {   LogoutOutlined } from '@mui/icons-material';
+import { LogoutOutlined } from '@mui/icons-material';
 import Login from '../SignIn/SignIn';
 import { LOCALSTORAGE_KEYS } from '../../constants/constants';
 import LanguageSelector from '../LanguageSelector/LanguageSelector';
@@ -34,8 +35,14 @@ const Header = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const theme = useTheme();
 
   const [scrolling, setScrolling] = useState(false);
+  const headerBg = scrolling
+    ? theme.palette.mode === 'dark'
+      ? 'rgba(1, 38, 65, 0.72)'
+      : 'rgba(250, 240, 202, 0.92)'
+    : 'transparent';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,7 +74,7 @@ const Header = () => {
   }
 
   return (
-    <Box sx={HeaderStyles.container(scrolling)}>
+    <Box sx={{ ...HeaderStyles.container(scrolling), background: headerBg }}>
       <Grid
         container
         justifyContent="space-between"
@@ -102,7 +109,7 @@ const Header = () => {
                 {menuItems.map((menuItem: { title: string; url: string }) => (
                   <Grid item key={menuItem.url}>
                     <Typography
-                      sx={HeaderStyles.menuItem}
+                      sx={{ ...HeaderStyles.menuItem, color: theme.palette.text.secondary }}
                       onClick={() =>
                         location.pathname === '/'
                           ? scrollTO(menuItem.url)
@@ -120,12 +127,15 @@ const Header = () => {
         <Grid item>
           <Grid container alignItems="center" spacing={{ md: 2, xs: 1 }}>
             <Grid item>
+              <ThemeSwitch />
+            </Grid>
+            <Grid item>
               <LanguageSelector />
             </Grid>
             {user && (
               <Grid item>
                 <Typography
-                  sx={HeaderStyles.menuItem}
+                  sx={{ ...HeaderStyles.menuItem, color: theme.palette.text.secondary }}
                   onClick={() => navigate('/history')}
                 >
                   {t('header.history')}

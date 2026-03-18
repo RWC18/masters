@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setPopUpStatus, setPopUpContent } from '../../redux/Actions/mainActions';
 import Login from '../SignIn/SignIn';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   title: string;
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const Product = ({ title, url, thumbnail, description, reverse }: Props) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.main.user);
@@ -80,7 +82,7 @@ const Product = ({ title, url, thumbnail, description, reverse }: Props) => {
           <Grid item>
             <Button
               isDisabled={false}
-              title='Generate'
+              title={t('common.generate')}
               handleClick={handleGenerateClick}
               textColor={colors.TEXT_DARK}
               bgColor={colors.ORANGE_ACTIVE}

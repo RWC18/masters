@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { colors } from '../../constants/styles';
 
@@ -11,6 +11,7 @@ const languages = [
 
 const LanguageSelector = () => {
   const { i18n } = useTranslation();
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
 
   const currentLang = languages.find((l) => l.code === i18n.language) || languages[0];
@@ -36,7 +37,12 @@ const LanguageSelector = () => {
           padding: '6px 12px',
           borderRadius: '8px',
           transition: '.25s',
-          '&:hover': { backgroundColor: 'rgba(255,255,255,0.08)' },
+          '&:hover': {
+            backgroundColor:
+              theme.palette.mode === 'dark'
+                ? 'rgba(255,255,255,0.08)'
+                : 'rgba(13, 59, 102, 0.08)',
+          },
         }}
       >
         <Typography sx={{ fontSize: '18px', lineHeight: 1 }}>
@@ -59,9 +65,12 @@ const LanguageSelector = () => {
             position: 'absolute',
             top: '100%',
             right: 0,
-            backgroundColor: '#1a1a1a',
+            backgroundColor: colors.BG_PAPER,
             borderRadius: '10px',
-            border: '1px solid rgba(255,255,255,0.1)',
+            border:
+              theme.palette.mode === 'dark'
+                ? '1px solid rgba(255,255,255,0.12)'
+                : '1px solid rgba(13, 59, 102, 0.18)',
             overflow: 'hidden',
             minWidth: '100px',
             zIndex: 100,
@@ -80,10 +89,15 @@ const LanguageSelector = () => {
                 transition: '.2s',
                 backgroundColor:
                   lang.code === i18n.language
-                    ? 'rgba(121, 235, 252, 0.1)'
+                    ? theme.palette.mode === 'dark'
+                      ? 'rgba(238, 0, 90, 0.14)'
+                      : 'rgba(13, 59, 102, 0.12)'
                     : 'transparent',
                 '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.08)',
+                  backgroundColor:
+                    theme.palette.mode === 'dark'
+                      ? 'rgba(255,255,255,0.08)'
+                      : 'rgba(13, 59, 102, 0.08)',
                 },
               }}
             >

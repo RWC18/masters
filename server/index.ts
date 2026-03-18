@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import ErrorHandler from './src/middleware/ErrorHandler';
 import { router } from './src/controller';
+import path from 'path';
 
 const app = express();
 
@@ -41,6 +42,10 @@ app.options('*', (req, res) => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+// Serve persisted generated images (Option A)
+app.use('/generated', express.static(path.join(process.cwd(), 'public', 'generated')));
+
 app.use(router);
 app.use(ErrorHandler);
 

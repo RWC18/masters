@@ -110,7 +110,7 @@ export const HistoryStyles = {
   detailBackdrop: {
     position: 'fixed',
     inset: 0,
-    background: 'rgba(0,0,0,0.8)',
+    background: 'var(--app-overlay, rgba(0,0,0,0.75))',
     zIndex: 22,
     display: 'flex',
     alignItems: 'center',
@@ -119,7 +119,7 @@ export const HistoryStyles = {
     overflow: 'auto',
   },
   detailPanel: {
-    background: colors.TEXT_DARK,
+    background: colors.BG_PAPER,
     borderRadius: '16px',
     border: `1px solid ${colors.TEXT_GRAY}40`,
     maxWidth: '720px',
@@ -189,7 +189,7 @@ export const HistoryStyles = {
     opacity: 0.8,
     transition: 'opacity .2s',
     backgroundColor: colors.ORANGE_ACTIVE,
-    color: colors.TEXT_DARK,
+    color: colors.ON_PRIMARY,
     padding: '8px 12px',
     borderRadius: '50px',
     cursor: 'pointer',

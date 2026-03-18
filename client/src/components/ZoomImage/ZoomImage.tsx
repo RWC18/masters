@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid, IconButton } from '@mui/material';
+import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -17,6 +17,7 @@ interface Props {
 }
 
 const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
+  const theme = useTheme();
   const hasSlider = Array.isArray(images) && images.length > 1;
   const [index, setIndex] = useState(hasSlider ? Math.min(initialIndex, images.length - 1) : 0);
   const currentUrl = hasSlider ? images[index] : url;
@@ -63,7 +64,7 @@ const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
         zIndex: 24,
         justifyContent: 'center',
         backdropFilter: 'blur(15px)',
-        backgroundColor: '#00000070',
+        backgroundColor: 'var(--app-overlay, rgba(0,0,0,0.7))',
       }}
     >
       <Box
@@ -83,7 +84,7 @@ const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
             }}
             onClick={() => forceDownload(currentUrl)}
           >
-            <CloudDownloadIcon htmlColor={colors.TEXT_WHITE} fontSize="large" />
+            <CloudDownloadIcon htmlColor={theme.palette.text.primary} fontSize="large" />
           </Grid>
           <Grid
             item
@@ -94,7 +95,7 @@ const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
             }}
             onClick={handleClose}
           >
-            <CloseIcon htmlColor={colors.TEXT_WHITE} fontSize="large" />
+            <CloseIcon htmlColor={theme.palette.text.primary} fontSize="large" />
           </Grid>
         </Grid>
       </Box>
@@ -105,9 +106,21 @@ const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
           sx={{
             position: 'absolute',
             left: { xs: 8, md: 24 },
-            color: colors.TEXT_WHITE,
-            backgroundColor: 'rgba(0,0,0,0.4)',
-            '&:hover': { backgroundColor: 'rgba(0,0,0,0.6)' },
+            color: theme.palette.text.primary,
+            backgroundColor:
+              theme.palette.mode === 'dark'
+                ? 'rgba(1, 38, 65, 0.5)'
+                : 'rgba(251, 244, 215, 0.65)',
+            border:
+              theme.palette.mode === 'dark'
+                ? '1px solid rgba(255,255,255,0.10)'
+                : '1px solid rgba(13, 59, 102, 0.18)',
+            '&:hover': {
+              backgroundColor:
+                theme.palette.mode === 'dark'
+                  ? 'rgba(1, 38, 65, 0.7)'
+                  : 'rgba(251, 244, 215, 0.85)',
+            },
             zIndex: 1,
           }}
         >
@@ -130,9 +143,21 @@ const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
           sx={{
             position: 'absolute',
             right: { xs: 8, md: 24 },
-            color: colors.TEXT_WHITE,
-            backgroundColor: 'rgba(0,0,0,0.4)',
-            '&:hover': { backgroundColor: 'rgba(0,0,0,0.6)' },
+            color: theme.palette.text.primary,
+            backgroundColor:
+              theme.palette.mode === 'dark'
+                ? 'rgba(1, 38, 65, 0.5)'
+                : 'rgba(251, 244, 215, 0.65)',
+            border:
+              theme.palette.mode === 'dark'
+                ? '1px solid rgba(255,255,255,0.10)'
+                : '1px solid rgba(13, 59, 102, 0.18)',
+            '&:hover': {
+              backgroundColor:
+                theme.palette.mode === 'dark'
+                  ? 'rgba(1, 38, 65, 0.7)'
+                  : 'rgba(251, 244, 215, 0.85)',
+            },
             zIndex: 1,
           }}
         >
@@ -147,8 +172,18 @@ const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
             bottom: 16,
             left: '50%',
             transform: 'translateX(-50%)',
-            color: colors.TEXT_WHITE,
+            color: theme.palette.text.primary,
             fontSize: '14px',
+            backgroundColor:
+              theme.palette.mode === 'dark'
+                ? 'rgba(1, 38, 65, 0.55)'
+                : 'rgba(251, 244, 215, 0.75)',
+            border:
+              theme.palette.mode === 'dark'
+                ? '1px solid rgba(255,255,255,0.10)'
+                : '1px solid rgba(13, 59, 102, 0.18)',
+            padding: '6px 10px',
+            borderRadius: '999px',
           }}
         >
           {index + 1} / {images.length}

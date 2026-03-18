@@ -19,15 +19,15 @@
   text-size-adjust: none !important;
   font-family: 'SF Pro', sans-serif !important;
    scrollbar-width: thin;
-    scrollbar-color: #79EBFC #ffffff;
+    scrollbar-color: var(--app-primary, #EE005A) transparent;
 }
 *::selection {
-  background: #79EBFC !important; /* WebKit/Blink Browsers */
-  color: black !important;
+  background: var(--app-primary, #EE005A) !important; /* WebKit/Blink Browsers */
+  color: #fff !important;
 }
 *::-moz-selection {
-  background: #79EBFC !important; /* Gecko Browsers */
-  color: black !important;
+  background: var(--app-primary, #EE005A) !important; /* Gecko Browsers */
+  color: #fff !important;
 }
 
 /* Chrome, Edge, and Safari */
@@ -40,11 +40,9 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #79EBFC;
+  background-color: var(--app-primary, #EE005A);
   border-radius: 50px;
   border: 0px none #ffffff;
 }
 
-html {
-  background-color: black !important;
-}
+/* html background set by theme in App */
