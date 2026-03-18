@@ -15,12 +15,31 @@ const upload = multer({ storage: multer.memoryStorage() });
  */
 router.post('/photo', authMiddleware, upload.single('image'), async (req: AuthRequest, res: Response) => {
   try {
+    if (!AI_API_BASE_URL) {
+      res.status(500).json({
+        status: SERVICE_STATUS.ERROR,
+        message: 'Server misconfigured: AI_API_URL is missing',
+      });
+      return;
+    }
+    const authHeader = String(AI_API_HEADERS?.Authorization || '').trim();
+    const xAppHeader = String(AI_API_HEADERS?.['x-app-authorization'] || '').trim();
+    const hasBearerToken = (v: string) => v.startsWith('Bearer ') && v.length > 'Bearer '.length;
+    if (!hasBearerToken(authHeader) || !hasBearerToken(xAppHeader)) {
+      res.status(500).json({
+        status: SERVICE_STATUS.ERROR,
+        message: 'Server misconfigured: AI_AUTH / X_APP_AUTH is missing',
+      });
+      return;
+    }
+
     if (!req.file) {
       res.status(400).json({ status: SERVICE_STATUS.ERROR, message: 'image is required' });
       return;
     }
 
-    const filename = req.file.originalname || `upload-${Date.now()}.png`;
+    const safeName = (req.file.originalname || `upload-${Date.now()}.png`).replace(/[^\w.\-]+/g, '_');
+    const filename = `${Date.now()}_${safeName}`;
 
     const formData = new FormData();
     formData.append('image', req.file.buffer, {
@@ -45,9 +64,19 @@ router.post('/photo', authMiddleware, upload.single('image'), async (req: AuthRe
     }
 
     res.status(400).json({ status: SERVICE_STATUS.ERROR, data: null });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ status: SERVICE_STATUS.ERROR, data: null });
+  } catch (e: any) {
+    const upstreamStatus = e?.response?.status;
+    const upstreamData = e?.response?.data;
+    console.log('Upload photo failed', {
+      message: e?.message,
+      upstreamStatus,
+      upstreamData,
+    });
+    res.status(500).json({
+      status: SERVICE_STATUS.ERROR,
+      message: 'Upload failed',
+      upstreamStatus: upstreamStatus || null,
+    });
   }
 });
 
