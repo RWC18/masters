@@ -46,6 +46,8 @@ app.use(cookieParser());
 // Serve persisted generated images (Option A)
 app.use('/generated', express.static(path.join(process.cwd(), 'public', 'generated')));
 
+// Support both legacy routes (/auth, /generation, ...) and versioned routes (/api/v1/*)
+app.use('/api/v1', router);
 app.use(router);
 app.use(ErrorHandler);
 

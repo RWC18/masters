@@ -6,7 +6,6 @@ module.exports = function (app) {
       target: process.env.REACT_APP_BACKEND_URL,
       secure: false,
       changeOrigin: true,
-      pathRewrite: { '^/api/v1/': '/' },
     })
   );
 };
