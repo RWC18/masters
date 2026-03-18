@@ -11,6 +11,37 @@ const constants_1 = require("../../constants/constants");
 const persistImage_1 = require("../utils/persistImage");
 const router = express_1.default.Router();
 const TOOL_NAMES = ['t2i', 'avatar', 'logo', 'removebg'];
+const getPublicBaseUrl = (req) => {
+    const protoHeader = req.headers['x-forwarded-proto'] || req.protocol;
+    const hostHeader = req.headers['x-forwarded-host'] ||
+        req.headers.host ||
+        'localhost';
+    const proto = protoHeader.split(',')[0].trim();
+    const host = hostHeader.split(',')[0].trim();
+    return `${proto}://${host}`;
+};
+const absolutizeGeneratedUrls = (baseUrl, result) => {
+    if (!result || typeof result !== 'object')
+        return result;
+    const next = Object.assign({}, result);
+    const toAbs = (u) => {
+        if (typeof u !== 'string')
+            return u;
+        if (u.startsWith('http://') || u.startsWith('https://'))
+            return u;
+        if (u.startsWith('/generated/'))
+            return `${baseUrl}${u}`;
+        return u;
+    };
+    if (Array.isArray(next.images)) {
+        next.images = next.images.map(toAbs);
+    }
+    if (typeof next.original_url === 'string')
+        next.original_url = toAbs(next.original_url);
+    if (typeof next.result_url === 'string')
+        next.result_url = toAbs(next.result_url);
+    return next;
+};
 const saveHistory = async (req, res) => {
     const { tool_name, result } = req.body;
     if (!req.userId) {
@@ -84,6 +115,7 @@ const getHistory = async (req, res) => {
     }
     const tool = req.query.tool;
     try {
+        const baseUrl = getPublicBaseUrl(req);
         const filter = {
             user_id: new mongoose_1.default.Types.ObjectId(req.userId),
         };
@@ -93,7 +125,8 @@ const getHistory = async (req, res) => {
         const items = await history_1.History.find(filter)
             .sort({ createdAt: -1 })
             .lean();
-        res.status(200).json({ status: constants_1.SERVICE_STATUS.SUCCESS, data: items });
+        const hydrated = items.map((it) => (Object.assign(Object.assign({}, it), { result: absolutizeGeneratedUrls(baseUrl, it.result) })));
+        res.status(200).json({ status: constants_1.SERVICE_STATUS.SUCCESS, data: hydrated });
     }
     catch (e) {
         console.log(e);

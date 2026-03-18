@@ -31,7 +31,7 @@ const uploadImage = async (fileBuffer, filename, mimetype) => {
 };
 const generateI2Image = async (caption, imageUrl) => {
     try {
-        const res = await axios_1.default.post(`${constants_1.AI_API_BASE_URL}/image-to-image/v1/task`, Object.assign(Object.assign({}, constants_1.IMAGE_TO_IMAGE_BODY), { caption, image_url: imageUrl }), { headers: constants_1.AI_API_HEADERS });
+        const res = await axios_1.default.post(`${constants_1.AI_API_BASE_URL}/image-to-image/v1/task`, Object.assign(Object.assign({}, []), { caption, image_url: imageUrl }), { headers: constants_1.AI_API_HEADERS });
         if (res.data.status === 'DONE') {
             return { status: constants_1.SERVICE_STATUS.SUCCESS, data: res.data.data };
         }

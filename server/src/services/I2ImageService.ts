@@ -1,6 +1,6 @@
 import axios from 'axios';
 import FormData from 'form-data';
-import { AI_API_BASE_URL, AI_API_HEADERS, IMAGE_TO_IMAGE_BODY, SERVICE_STATUS } from '../../constants/constants';
+import { AI_API_BASE_URL, AI_API_HEADERS, SERVICE_STATUS } from '../../constants/constants';
 
 const uploadImage = async (fileBuffer: Buffer, filename: string, mimetype: string) => {
   try {
@@ -38,7 +38,7 @@ const generateI2Image = async (caption: string, imageUrl: string) => {
     const res = await axios.post(
       `${AI_API_BASE_URL}/image-to-image/v1/task`,
       {
-        ...IMAGE_TO_IMAGE_BODY,
+        ...[],
         caption,
         image_url: imageUrl,
       },
