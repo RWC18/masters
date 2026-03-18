@@ -5,7 +5,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import { colors } from '../../constants/styles';
 import { forceDownload } from '../../redux/Actions/mainActions';
 
 interface Props {

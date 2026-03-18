@@ -26,6 +26,14 @@ export const TEXT_2_IMAGE_BODY = {
   count: 4,
 };
 
+// Used by I2ImageService. Keep minimal defaults; service overrides caption/image_url.
+export const IMAGE_TO_IMAGE_BODY = {
+  width: 1024,
+  height: 1024,
+  // If your provider requires a model, set it here; otherwise it can be omitted.
+  // model: '...',
+};
+
 export const DEFAULT_NEGATIVE_PROMPT =
   'bad anatomy, bad proportions, blurry, cloned face, cropped, deformed, dehydrated, disfigured, duplicate, error, extra arms, extra fingers, extra legs, extra limbs, fused fingers, gross proportions, jpeg artifacts, long neck, low quality, lowres, malformed limbs, missing arms, missing legs, morbid, mutated hands, mutation, mutilated, out of frame, poorly drawn face, poorly drawn hands, signature, text, too many fingers, ugly, username, watermark, worst quality';
 

@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { AI_API, headers, BACKEND_BASE_URL, STATUS_TYPES } from './constants';
+import { BACKEND_BASE_URL, STATUS_TYPES } from './constants';
 import { v4 as uuidv4 } from 'uuid';
 import { saveGenerationHistory } from './historyActions';
+import { LOCALSTORAGE_KEYS } from '../../constants/constants';
 
 export const removeBgActionTypes = {
   SET_ORIGINAL_IMAGE: 'SET_ORIGINAL_IMAGE',
@@ -31,10 +32,13 @@ export const uploadAndRemoveBg = (file: File) => async (dispatch: any) => {
     formData.append('image', renamedFile);
 
     const uploadRes = await axios.post(
-      `${AI_API}/photos/${newFileName}`,
+      `${BACKEND_BASE_URL}/upload/photo`,
       formData,
       {
-        headers: { ...headers, 'Content-Type': 'multipart/form-data' },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(LOCALSTORAGE_KEYS.ACCESS_TOKEN) || ''}`,
+          'Content-Type': 'multipart/form-data',
+        },
         maxBodyLength: Infinity,
         maxContentLength: Infinity,
       }
