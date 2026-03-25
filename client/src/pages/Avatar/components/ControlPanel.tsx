@@ -48,6 +48,9 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         placeholder={AVATAR_RESULTS_CONSTANTS.inputPlaceholder}
         value={prompt}
         handleChange={onPromptChange}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && prompt.trim().length > 0) onGenerate();
+        }}
       />
       <StylesSection
         selectedStyle={selectedStyle}

@@ -11,9 +11,10 @@ interface Props {
   size?: 'small' | 'medium';
 
   type?: React.InputHTMLAttributes<unknown>['type'];
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }
 
-const Input = ({ value, placeholder, handleChange, styles, size, type, onBlur }: Props) => {
+const Input = ({ value, placeholder, handleChange, styles, size, type, onBlur, onKeyDown }: Props) => {
   return (
     <TextField
       placeholder={placeholder}
@@ -25,6 +26,7 @@ const Input = ({ value, placeholder, handleChange, styles, size, type, onBlur }:
       size={size || 'medium'}
       type={type || 'text'}
       fullWidth
+      inputProps={{ onKeyDown }}
       sx={{ ...InputStyles.inputField, ...styles }}
     />
   );

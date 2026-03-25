@@ -16,39 +16,78 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   
   const handleLogin = async () => {
-        setError(null);
-        const singInResponse = await signInUser({ email: email, password: password });
-        if (singInResponse.status && singInResponse.result.access_token) {
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      setError(null);
+      const singInResponse = await signInUser({ email: email, password: password });
+      if (singInResponse.status && singInResponse.result.access_token) {
         localStorage.setItem(LOCALSTORAGE_KEYS.ACCESS_TOKEN, singInResponse.result.access_token);
         const userResponse = await getUser(singInResponse.result.access_token);
         if (userResponse.status && userResponse.result) {
-            dispatch<any>(setUser(userResponse.result));
-            dispatch<any>(setPopUpStatus(false))
-            setError(null);
-            setEmail('');
-            setPassword('');
+          dispatch<any>(setUser(userResponse.result));
+          dispatch<any>(setPopUpStatus(false))
+          setError(null);
+          setEmail('');
+          setPassword('');
         }
-        }
-        if (singInResponse.status === false) {
+      }
+      if (singInResponse.status === false) {
         setError(singInResponse.message);
-        }
+      }
+    } finally {
+      setIsLoading(false);
     }
+  }
 
     const isButtonDisabled = () => {
     if (email.trim() === '' || password.trim() === '') {
         return true;
     }
-    return false;
+    return isLoading;
     }
 
   return (
     <Box sx={LoginFormStyles.container}>
-        <Input value={email} placeholder={t('auth.email')} handleChange={setEmail} styles={LoginFormStyles.inputs} size={'small'} />
-        <Input value={password} placeholder={t('auth.password')} handleChange={setPassword}  styles={LoginFormStyles.inputs} size={'small'} type='password'/>
-        <Button handleClick={handleLogin} title={t('auth.login')} bgColor={colors.ORANGE_ACTIVE} hoverColor={colors.GRAY_DARK} textColor={colors.TEXT_DARK}  isDisabled={isButtonDisabled()} styles={LoginFormStyles.button} />
+        <Input
+          value={email}
+          placeholder={t('auth.email')}
+          handleChange={setEmail}
+          styles={LoginFormStyles.inputs}
+          size={'small'}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !isButtonDisabled()) {
+              handleLogin();
+            }
+          }}
+        />
+        <Input
+          value={password}
+          placeholder={t('auth.password')}
+          handleChange={setPassword}
+          styles={LoginFormStyles.inputs}
+          size={'small'}
+          type='password'
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !isButtonDisabled()) {
+              handleLogin();
+            }
+          }}
+        />
+        <Button
+          handleClick={handleLogin}
+          title={t('auth.login')}
+          bgColor={colors.ORANGE_ACTIVE}
+          hoverColor={colors.GRAY_DARK}
+          textColor={colors.TEXT_DARK}
+          isDisabled={isButtonDisabled()}
+          isLoading={isLoading}
+          styles={LoginFormStyles.button}
+        />
           <Alert severity="error"  sx={LoginFormStyles.error(error !== null)}>
             {error}
           </Alert>

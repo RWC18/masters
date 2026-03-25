@@ -130,7 +130,8 @@
     "passwordMismatch": "Пароли не совпадают"
   },
   "common": {
-    "generate": "Создать"
+    "generate": "Создать",
+    "comingSoon": "Скоро"
   },
   "history": {
     "title": "Моя",

@@ -83,6 +83,17 @@ const History: React.FC = () => {
     loadHistory();
   }, [user, navigate, loadHistory]);
 
+  useEffect(() => {
+    if (!selectedItem) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedItem(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedItem]);
+
   const filtered = history.filter((item) => item.tool_name === tab);
   const isEmpty = !loading && filtered.length === 0;
 

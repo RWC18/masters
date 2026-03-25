@@ -32,6 +32,9 @@ const InputSection: React.FC<InputSectionProps> = ({
             placeholder={LOGO_GEN_CONSTANTS.brandnamePlaceholder}
             value={brandname}
             handleChange={onBrandnameChange}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && brandname.trim().length > 0) onGenerate();
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={4}>
@@ -39,6 +42,9 @@ const InputSection: React.FC<InputSectionProps> = ({
             placeholder={LOGO_GEN_CONSTANTS.descriptionPlaceholder}
             value={description}
             handleChange={onDescriptionChange}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && brandname.trim().length > 0) onGenerate();
+            }}
           />
         </Grid>
         <Grid

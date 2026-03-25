@@ -129,7 +129,8 @@
     "passwordMismatch": "Passwords do not match"
   },
   "common": {
-    "generate": "Generate"
+    "generate": "Generate",
+    "comingSoon": "Coming soon"
   },
   "history": {
     "title": "My",

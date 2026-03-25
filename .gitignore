@@ -4,3 +4,8 @@ node_modules
 server/public/generated
 */build
 */dist
+
+/client/.DS_Store
+
+/scripts
+/thesis_tech_doc_hy.pdf

@@ -22,6 +22,7 @@ const ProductsSection = () => {
               url: string;
               thumbnail: string;
               description: string;
+              isActive: boolean;
             },
             id
           ) => (

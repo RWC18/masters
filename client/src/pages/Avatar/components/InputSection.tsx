@@ -33,6 +33,9 @@ const InputSection: React.FC<InputSectionProps> = ({
             placeholder={AVATAR_CONSTANTS.inputPlaceholder}
             value={prompt}
             handleChange={onPromptChange}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && prompt.trim().length > 0) onGenerate();
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={1} lg={1}>

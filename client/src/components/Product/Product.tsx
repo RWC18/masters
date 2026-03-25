@@ -13,10 +13,11 @@ interface Props {
   url: string;
   thumbnail: string;
   description: string;
+  isActive: boolean;
   reverse: boolean;
 }
 
-const Product = ({ title, url, thumbnail, description, reverse }: Props) => {
+const Product = ({ title, url, thumbnail, description, isActive, reverse }: Props) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -81,8 +82,8 @@ const Product = ({ title, url, thumbnail, description, reverse }: Props) => {
           </Grid>
           <Grid item>
             <Button
-              isDisabled={false}
-              title={t('common.generate')}
+              isDisabled={!isActive}
+              title={isActive ? t('common.generate') : t('common.comingSoon')}
               handleClick={handleGenerateClick}
               textColor={colors.TEXT_DARK}
               bgColor={colors.ORANGE_ACTIVE}

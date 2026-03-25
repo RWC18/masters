@@ -17,6 +17,7 @@ const RegisterForm = () => {
   const [fullName, setFullName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckPasswordMatch = () => {
     if (password.trim() === confirmPassword.trim()) {
@@ -27,49 +28,72 @@ const RegisterForm = () => {
 
   const dispatch = useDispatch();
   
-  const handleRegister = async () => {
-    setError(null); 
-    const isPasswordMatch = handleCheckPasswordMatch();
-    if (!isPasswordMatch) {
-      setError(t('auth.passwordMismatch'));
-      return;
+  const isButtonDisabled = () => {
+    if (email.trim() === '' || password.trim() === '' || fullName.trim() === '' || confirmPassword.trim() === '') {
+      return true;
     }
-    const userData: IUserRegistration = {
-      email: email,
-      password: password,
-      full_name: fullName,
-    };
-    const registerResponse = await registerUser(userData);
-    if (registerResponse.status && registerResponse.data) {
-      dispatch<any>(setUser(registerResponse.data));
-      localStorage.setItem(LOCALSTORAGE_KEYS.ACCESS_TOKEN, registerResponse.data.access_token);
-      dispatch<any>(setPopUpStatus(false))
-      setError(null);
-      setEmail('');
-      setPassword('');
-      setFullName('');
-      setConfirmPassword('');
-    } else {
-      setError(registerResponse.message);
-    }
+    return isLoading;
   }
 
-    const isButtonDisabled = () => {
-      if (email.trim() === '' || password.trim() === '' || fullName.trim() === '' || confirmPassword.trim() === '') {
-        return true;
+  const handleRegister = async () => {
+    if (isLoading) return;
+    if (isButtonDisabled()) return;
+
+    setError(null); 
+    setIsLoading(true);
+
+    try {
+      const isPasswordMatch = handleCheckPasswordMatch();
+      if (!isPasswordMatch) {
+        setError(t('auth.passwordMismatch'));
+        return;
       }
-      return false;
+
+      const userData: IUserRegistration = {
+        email: email,
+        password: password,
+        full_name: fullName,
+      };
+
+      const registerResponse = await registerUser(userData);
+      if (registerResponse.status && registerResponse.data) {
+        dispatch<any>(setUser(registerResponse.data));
+        localStorage.setItem(LOCALSTORAGE_KEYS.ACCESS_TOKEN, registerResponse.data.access_token);
+        dispatch<any>(setPopUpStatus(false))
+        setError(null);
+        setEmail('');
+        setPassword('');
+        setFullName('');
+        setConfirmPassword('');
+      } else {
+        setError(registerResponse.message);
+      }
+    } finally {
+      setIsLoading(false);
     }
+  }
   
   return (
     <Box sx={RegisterFormStyles.container}>
-        <Input value={email} placeholder={t('auth.email')} handleChange={setEmail} styles={RegisterFormStyles.inputs} size={'small'} />
+        <Input
+          value={email}
+          placeholder={t('auth.email')}
+          handleChange={setEmail}
+          styles={RegisterFormStyles.inputs}
+          size={'small'}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !isButtonDisabled()) handleRegister();
+          }}
+        />
         <Input
           value={fullName}
           placeholder={t('auth.fullName')}
           handleChange={setFullName}
           styles={RegisterFormStyles.inputs}
           size={'small'}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !isButtonDisabled()) handleRegister();
+          }}
         />
         <Input
           value={password}
@@ -78,6 +102,9 @@ const RegisterForm = () => {
           styles={RegisterFormStyles.inputs}
           size={'small'}
           type='password'
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !isButtonDisabled()) handleRegister();
+          }}
         />
         <Input
           value={confirmPassword}
@@ -86,6 +113,9 @@ const RegisterForm = () => {
           styles={RegisterFormStyles.inputs}
           size={'small'}
           type='password'
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !isButtonDisabled()) handleRegister();
+          }}
         />
         <Button
           handleClick={handleRegister}
@@ -94,6 +124,7 @@ const RegisterForm = () => {
           hoverColor={colors.GRAY_DARK}
           textColor={colors.TEXT_DARK}
           isDisabled={isButtonDisabled()}
+          isLoading={isLoading}
           styles={RegisterFormStyles.button}
         />
         <Alert severity="error" sx={RegisterFormStyles.error(error !== null)}>

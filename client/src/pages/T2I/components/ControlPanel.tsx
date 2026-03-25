@@ -47,6 +47,9 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         placeholder={T2I_RESULTS_CONSTANTS.inputPlaceholder}
         value={prompt}
         handleChange={onPromptChange}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && prompt.trim().length > 0) onGenerate();
+        }}
       />
       <Box sx={T2IResultsStyles.inputContainer}>
         <Button

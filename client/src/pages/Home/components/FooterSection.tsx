@@ -6,12 +6,27 @@ import { useProducts } from '../../../constants/products';
 import { scrollTO } from '../../../components/Header/Header';
 import { HomeStyles } from '../Home.styles';
 import { useHomeConstants } from '../Home.constants';
+import Login from '../../../components/SignIn/SignIn';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPopUpContent, setPopUpStatus } from '../../../redux/Actions/mainActions';
 
 const FooterSection = () => {
   const navigate = useNavigate();
   const HOME_CONSTANTS = useHomeConstants();
   const menuItems = useMenuItems();
   const products = useProducts();
+  const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.main.user);
+
+  const handleProductClick = (url: string) => {
+    if (user) {
+      navigate(url);
+      return;
+    }
+
+    dispatch<any>(setPopUpStatus(true));
+    dispatch<any>(setPopUpContent(<Login />));
+  };
 
   return (
     <Box sx={HomeStyles.footer}>
@@ -57,7 +72,7 @@ const FooterSection = () => {
               ) => (
                 <Grid item key={id}>
                   <Typography
-                    onClick={() => navigate(product.url)}
+                    onClick={() => handleProductClick(product.url)}
                     sx={HomeStyles.footerMenuItem}
                   >
                     {product.title}

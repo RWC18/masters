@@ -130,7 +130,8 @@
     "passwordMismatch": "Գաղտնաբառերը չեն համընկնում"
   },
   "common": {
-    "generate": "Ստեղծել"
+    "generate": "Ստեղծել",
+    "comingSoon": "Շուտով"
   },
   "history": {
     "title": "Իմ",
