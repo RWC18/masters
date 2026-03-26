@@ -44,6 +44,8 @@ app.use(body_parser_1.default.json());
 app.use((0, cookie_parser_1.default)());
 // Serve persisted generated images (Option A)
 app.use('/generated', express_1.default.static(path_1.default.join(process.cwd(), 'public', 'generated')));
+// Support both legacy routes (/auth, /generation, ...) and versioned routes (/api/v1/*)
+app.use('/api/v1', controller_1.router);
 app.use(controller_1.router);
 app.use(ErrorHandler_1.default);
 mongoose_1.default

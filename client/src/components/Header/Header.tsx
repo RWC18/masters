@@ -142,6 +142,23 @@ const Header = () => {
                 </Typography>
               </Grid>
             )}
+            {user && (
+              <Grid item>
+                <Typography
+                  sx={{ ...HeaderStyles.menuItem, color: theme.palette.text.secondary }}
+                  onClick={() => navigate('/billing')}
+                >
+                  {t('header.billing')}
+                </Typography>
+              </Grid>
+            )}
+            {user && (
+              <Grid item>
+                <Typography sx={{ ...HeaderStyles.menuItem, color: colors.ORANGE_LIGHT }}>
+                  {t('header.credits')}: {user.credits || 0}
+                </Typography>
+              </Grid>
+            )}
             <Grid item>
               {user ? (
                 <Typography sx={HeaderStyles.user} component="span">

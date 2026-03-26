@@ -5,7 +5,9 @@
   },
   "header": {
     "login": "Login",
-    "history": "My History"
+    "history": "My History",
+    "billing": "Billing",
+    "credits": "Credits"
   },
   "home": {
     "heroTitle": "Powering creativity with",
@@ -145,5 +147,21 @@
       "removebg": "Remove BG"
     },
     "generation": "Generation"
+  },
+  "billing": {
+    "title": "Billing",
+    "subtitle": "Buy credit packs and track your usage.",
+    "currentBalance": "Current balance",
+    "credits": "credits",
+    "buyNow": "Buy now",
+    "usageTitle": "Credit usage by tool",
+    "t2iUsage": "2 credits per image",
+    "avatarUsage": "3 credits per image",
+    "logoUsage": "4 credits per image",
+    "removeBgUsage": "2 credits per image",
+    "recentTransactions": "Recent transactions",
+    "balance": "Balance",
+    "loadError": "Failed to load wallet",
+    "purchaseError": "Purchase failed"
   }
 }

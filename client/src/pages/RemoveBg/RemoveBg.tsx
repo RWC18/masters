@@ -11,8 +11,10 @@ import { colors } from '../../constants/styles';
 import { RemoveBgStyles } from './RemoveBg.styles';
 import { useRemoveBgConstants } from './RemoveBg.constants';
 import BeforeAfterSlider from './components/BeforeAfterSlider';
+import { useTranslation } from 'react-i18next';
 
 const RemoveBg = () => {
+  const { t } = useTranslation();
   const REMOVE_BG_CONSTANTS = useRemoveBgConstants();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,6 +55,28 @@ const RemoveBg = () => {
       <Typography sx={RemoveBgStyles.description}>
         {REMOVE_BG_CONSTANTS.description}
       </Typography>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <Box
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 1,
+            px: 1.5,
+            py: 0.75,
+            mb: 2,
+            borderRadius: '999px',
+            border: '1px solid rgba(255,255,255,0.14)',
+            backgroundColor: 'background.paper',
+            color: colors.TEXT_GRAY,
+            fontSize: 13,
+            fontWeight: 500,
+          }}
+        >
+          <Box component="span" sx={{ color: colors.ORANGE_LIGHT }}>⚡</Box>
+          {t('billing.removeBgUsage')}
+        </Box>
+      </Box>
 
       {!hasResult && !loading && (
         <label htmlFor='removebg-upload'>

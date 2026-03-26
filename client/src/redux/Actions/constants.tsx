@@ -1,4 +1,5 @@
 // export const baseUrl = '/api/v1';
+import { LOCALSTORAGE_KEYS } from '../../constants/constants';
 
 export const AI_AUTH = process.env.REACT_APP_API_AUTH;
 export const AI_API = process.env.REACT_APP_AI_URL;
@@ -26,4 +27,9 @@ export const STATUS_TYPES = {
   ERROR: 'error',
   PROCESSING: 'processing',
   QUEUED: 'queued',
+};
+
+export const getAuthHeaders = () => {
+  const token = localStorage.getItem(LOCALSTORAGE_KEYS.ACCESS_TOKEN) || '';
+  return token ? { Authorization: `Bearer ${token}` } : {};
 };

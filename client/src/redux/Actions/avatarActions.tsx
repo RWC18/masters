@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { BACKEND_BASE_URL, STATUS_TYPES } from './constants';
+import { BACKEND_BASE_URL, STATUS_TYPES, getAuthHeaders } from './constants';
 import { v4 as uuidv4 } from 'uuid';
 import { saveGenerationHistory } from './historyActions';
 import { LOCALSTORAGE_KEYS } from '../../constants/constants';
+import { setUser } from './mainActions';
 
 export const avatarActionTypes = {
   SET_PROMPT_AVATAR: 'SET_PROMPT_AVATAR',
@@ -68,7 +69,7 @@ export const setAvatarStyle = (styleId: string | null) => async (dispatch: any) 
   });
 };
 
-export const genAvatar = (prompt: string, imageUrl: string, stylePrompt?: string) => async (dispatch: any) => {
+export const genAvatar = (prompt: string, imageUrl: string, stylePrompt?: string) => async (dispatch: any, getState: any) => {
   try {
     dispatch({
       type: avatarActionTypes.SET_ERROR_AVATAR,
@@ -91,7 +92,8 @@ export const genAvatar = (prompt: string, imageUrl: string, stylePrompt?: string
         image_url: imageUrl,
         prompt: fullPrompt,
         count: 4,
-      }
+      },
+      { headers: getAuthHeaders() }
     );
 
     if (res.data.status === STATUS_TYPES.SUCCESS) {
@@ -104,6 +106,12 @@ export const genAvatar = (prompt: string, imageUrl: string, stylePrompt?: string
       });
       const urls = Array.isArray(images) ? images.map((i: any) => (typeof i === 'string' ? i : i?.url)) : [];
       saveGenerationHistory('avatar', { prompt: fullPrompt, images: urls }).catch(() => {});
+      if (typeof res?.data?.balance === 'number') {
+        const currentUser = getState()?.main?.user;
+        if (currentUser) {
+          dispatch(setUser({ ...currentUser, credits: res.data.balance }));
+        }
+      }
     } else {
       dispatch({
         type: avatarActionTypes.SET_ERROR_AVATAR,
@@ -138,7 +146,8 @@ const getAvatarResults = async (inferenceId: string) => {
       status === ''
     ) {
       const res = await axios.get(
-        `${BACKEND_BASE_URL}/generation/avatar?tid=${inferenceId}`
+        `${BACKEND_BASE_URL}/generation/avatar?tid=${inferenceId}`,
+        { headers: getAuthHeaders() }
       );
       status = res.data.data.status?.toLowerCase();
 

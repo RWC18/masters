@@ -12,6 +12,7 @@ import LogoGen from './pages/LogoGen/LogoGen';
 import LogoGenResults from './pages/LogoGen/LogoGenResults';
 import RemoveBg from './pages/RemoveBg/RemoveBg';
 import History from './pages/History/History';
+import Billing from './pages/Billing/Billing';
 import { LOCALSTORAGE_KEYS } from './constants/constants';
 import { getUser, setPopUpStatus, setUser } from './redux/Actions/mainActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -136,6 +137,14 @@ function App() {
             element={
               <>
                 <History />
+              </>
+            }
+          />
+          <Route
+            path={'/billing'}
+            element={
+              <>
+                <Billing />
               </>
             }
           />

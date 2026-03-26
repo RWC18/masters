@@ -5,6 +5,7 @@ import Button from '../../../components/Button/Button';
 import { colors } from '../../../constants/styles';
 import { T2IStyles } from '../T2I.styles';
 import { useT2IConstants } from '../T2I.constants';
+import { useTranslation } from 'react-i18next';
 
 interface InputSectionProps {
   prompt: string;
@@ -18,9 +19,32 @@ const InputSection: React.FC<InputSectionProps> = ({
   onGenerate,
 }) => {
   const T2I_CONSTANTS = useT2IConstants();
+  const { t } = useTranslation();
 
   return (
     <Box sx={T2IStyles.inputContainer}>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <Box
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 1,
+            px: 1.5,
+            py: 0.75,
+            mb: 1.25,
+            borderRadius: '999px',
+            border: '1px solid rgba(255,255,255,0.14)',
+            backgroundColor: 'background.paper',
+            color: colors.TEXT_GRAY,
+            fontSize: 13,
+            fontWeight: 500,
+          }}
+        >
+          <Box component="span" sx={{ color: colors.ORANGE_LIGHT }}>⚡</Box>
+          {t('billing.t2iUsage')}
+        </Box>
+      </Box>
       <Grid container spacing={2} sx={T2IStyles.inputGrid}>
         <Grid item xs={12} sm={12} md={4} lg={4}>
           <Input

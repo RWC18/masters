@@ -22,6 +22,7 @@ const createNewUser = async (userData) => {
             full_name: userData.full_name,
             password: hashedPassword,
             access_token: accessToken,
+            credits: 0,
         });
         const newUser = await user.save();
         if (newUser) {
@@ -67,6 +68,7 @@ const getUserByAccessToken = async (accessToken) => {
                 email: user.email,
                 full_name: user.full_name,
                 _id: user._id,
+                credits: Number(user.credits || 0),
             };
             return { status: true, result: res, message: constants_1.LOGIN_MESSAGES.SUCCESS };
         }

@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { BACKEND_BASE_URL, STATUS_TYPES } from './constants';
+import { BACKEND_BASE_URL, STATUS_TYPES, getAuthHeaders } from './constants';
 import { saveGenerationHistory } from './historyActions';
+import { setUser } from './mainActions';
 
 export const t2iActionTypes = {
   SET_PROMPT_T2I: 'SET_PROMPT_T2I',
@@ -26,7 +27,7 @@ export const setSelectedStylesT2i =
     });
   };
 
-export const genT2img = (caption: string) => async (dispatch: any) => {
+export const genT2img = (caption: string) => async (dispatch: any, getState: any) => {
   try {
     dispatch({
       type: t2iActionTypes.SET_ERROR_T2I,
@@ -42,7 +43,8 @@ export const genT2img = (caption: string) => async (dispatch: any) => {
     });
     const res = await axios.post(
       `${BACKEND_BASE_URL}/generation/t2i`,
-      { prompt: caption }
+      { prompt: caption },
+      { headers: getAuthHeaders() }
     );
 
     if (res.data.status === STATUS_TYPES.SUCCESS) {
@@ -55,6 +57,12 @@ export const genT2img = (caption: string) => async (dispatch: any) => {
       });
       const images = Array.isArray(data) ? data.map((img: any) => (typeof img === 'string' ? img : img?.url)) : [];
       saveGenerationHistory('t2i', { prompt: caption, images }).catch(() => {});
+      if (typeof res?.data?.balance === 'number') {
+        const currentUser = getState()?.main?.user;
+        if (currentUser) {
+          dispatch(setUser({ ...currentUser, credits: res.data.balance }));
+        }
+      }
     } else {
       dispatch({
         type: t2iActionTypes.SET_ERROR_T2I,
@@ -90,7 +98,8 @@ async (tid: string) => {
         || status === ''
       ) {
         const res = await axios.get(
-          `${BACKEND_BASE_URL}/generation/t2i?tid=${tid}`
+          `${BACKEND_BASE_URL}/generation/t2i?tid=${tid}`,
+          { headers: getAuthHeaders() }
         );
         status = res.data.data.status;
 

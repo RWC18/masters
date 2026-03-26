@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { BACKEND_BASE_URL, STATUS_TYPES } from './constants';
+import { BACKEND_BASE_URL, STATUS_TYPES, getAuthHeaders } from './constants';
 import { saveGenerationHistory } from './historyActions';
+import { setUser } from './mainActions';
 
 export const logoGenActions = {
   SET_BRANDNAME_LOGO: 'SET_BRANDNAME_LOGO',
@@ -52,7 +53,7 @@ export const genLogo =
     },
     count: number
   ) =>
-  async (dispatch: any) => {
+  async (dispatch: any, getState: any) => {
     try {
       dispatch({
         type: logoGenActions.SET_ERROR_LOGO,
@@ -69,7 +70,8 @@ export const genLogo =
 
       const res = await axios.post(
         `${BACKEND_BASE_URL}/generation/logo`,
-        { ...data, count }
+        { ...data, count },
+        { headers: getAuthHeaders() }
       );
 
       if (res.data.status === STATUS_TYPES.SUCCESS) {
@@ -82,6 +84,12 @@ export const genLogo =
         });
         const images = Array.isArray(resultsData) ? resultsData.map((img: any) => (typeof img === 'string' ? img : img?.url)) : [];
         saveGenerationHistory('logo', { brand_name: data.brand_name, images }).catch(() => {});
+        if (typeof res?.data?.balance === 'number') {
+          const currentUser = getState()?.main?.user;
+          if (currentUser) {
+            dispatch(setUser({ ...currentUser, credits: res.data.balance }));
+          }
+        }
       } else {
         dispatch({
           type: logoGenActions.SET_ERROR_LOGO,
@@ -115,7 +123,8 @@ const getLogoResults = async (inferenceId: string) => {
       status === ''
     ) {
       const res = await axios.get(
-        `${BACKEND_BASE_URL}/generation/logo?tid=${inferenceId}`
+        `${BACKEND_BASE_URL}/generation/logo?tid=${inferenceId}`,
+        { headers: getAuthHeaders() }
       );
       status = res.data.data.status;
 

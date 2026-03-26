@@ -9,12 +9,16 @@ const HealthController_1 = __importDefault(require("./HealthController"));
 const AuthController_1 = __importDefault(require("./AuthController"));
 const GenerationController_1 = __importDefault(require("./GenerationController"));
 const HistoryController_1 = __importDefault(require("./HistoryController"));
+const UploadController_1 = __importDefault(require("./UploadController"));
+const BillingController_1 = __importDefault(require("./BillingController"));
 const router = express_1.default.Router();
 exports.router = router;
 router.use('/health', HealthController_1.default);
 router.use('/auth', AuthController_1.default);
 router.use('/generation', GenerationController_1.default);
 router.use('/generation', HistoryController_1.default);
+router.use('/upload', UploadController_1.default);
+router.use('/billing', BillingController_1.default);
 router.use('/', (req, res) => {
     res.status(200).json({ message: 'ok' });
 });
