@@ -55,6 +55,7 @@ function App() {
     getUserAfterRefresh();
   }, [getUserAfterRefresh]);
 
+
   const popUpStatus = useSelector((state: any) => state.main.popUpStatus);
   const popUpContent = useSelector((state: any) => state.main.popUpContent);
 
@@ -67,96 +68,96 @@ function App() {
           {popUpContent}
         </PopUp>
         <Box paddingTop="90px" sx={{ bgcolor: 'background.default', color: 'text.primary', minHeight: '100vh' }}>
-        <Routes>
-          <Route
-            path={'/'}
-            element={
-              <>
-                <Home />
-              </>
-            }
-          />
-          <Route
-            path={'/t2i'}
-            element={
-              <>
-                <T2I />
-              </>
-            }
-          />
-          <Route
-            path={'/t2i/results'}
-            element={
-              <>
-                <T2IResults />
-              </>
-            }
-          />
-          <Route
-            path={'/avatar'}
-            element={
-              <>
-                <Avatar />
-              </>
-            }
-          />
-          <Route
-            path='/logo-gen'
-            element={
-              <>
-                <LogoGen />
-              </>
-            }
-          />
-          <Route
-            path='/logo-gen/results'
-            element={
-              <>
-                <LogoGenResults />
-              </>
-            }
-          />
-          <Route
-            path={'/avatar/results'}
-            element={
-              <>
-                <AvatarResults />
-              </>
-            }
-          />
-          <Route
-            path={'/remove-bg'}
-            element={
-              <>
-                <RemoveBg />
-              </>
-            }
-          />
-          <Route
-            path={'/history'}
-            element={
-              <>
-                <History />
-              </>
-            }
-          />
-          <Route
-            path={'/billing'}
-            element={
-              <>
-                <Billing />
-              </>
-            }
-          />
-          <Route
-            path={'/legal'}
-            element={
-              <>
-                <Legal />
-              </>
-            }
-          />
-        </Routes>
+          <Routes>
+            <Route
+              path={'/'}
+              element={
+                <>
+                  <Home />
+                </>
+              }
+            />
+            <Route
+              path={'/t2i'}
+              element={
+                <>
+                  <T2I />
+                </>
+              }
+            />
+            <Route
+              path={'/t2i/results'}
+              element={
+                <>
+                  <T2IResults />
+                </>
+              }
+            />
+            <Route
+              path={'/avatar'}
+              element={
+                <>
+                  <Avatar />
+                </>
+              }
+            />
+            <Route
+              path='/logo-gen'
+              element={
+                <>
+                  <LogoGen />
+                </>
+              }
+            />
+            <Route
+              path='/logo-gen/results'
+              element={
+                <>
+                  <LogoGenResults />
+                </>
+              }
+            />
+            <Route
+              path={'/avatar/results'}
+              element={
+                <>
+                  <AvatarResults />
+                </>
+              }
+            />
+            <Route
+              path={'/remove-bg'}
+              element={
+                <>
+                  <RemoveBg />
+                </>
+              }
+            />
+            <Route
+              path={'/history'}
+              element={
+                <>
+                  <History />
+                </>
+              }
+            />
+            <Route
+              path={'/billing'}
+              element={
+                <>
+                  <Billing />
+                </>
+              }
+            />
+            <Route
+              path={'/legal'}
+              element={
+                <>
+                  <Legal />
+                </>
+              }
+            />
+          </Routes>
         </Box>
       </Router>
     </MuiThemeProvider>

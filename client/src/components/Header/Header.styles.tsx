@@ -54,5 +54,43 @@ export const HeaderStyles = {
     '&:hover': {
         transform: 'scale(.98)',
       },
-  }
+  },
+  mobileDrawer: {
+    width: '82vw',
+    maxWidth: '360px',
+    backgroundColor: 'var(--app-bg-paper, #1f4058)',
+    color: 'var(--app-text-primary, #fff)',
+    borderLeft: '1px solid rgba(255,255,255,0.12)',
+  },
+  mobileDrawerInner: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 1.25,
+    padding: '20px 16px',
+  },
+  mobileDrawerTopRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '4px',
+  },
+  mobileDrawerItem: {
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '16px',
+    fontWeight: 500,
+    color: 'var(--app-text-primary, #fff)',
+    padding: '8px 2px',
+    borderBottom: '1px solid rgba(255,255,255,0.08)',
+  },
+  mobileUserName: {
+    fontSize: '14px',
+    color: 'var(--app-text-secondary, #b7b7b7)',
+    marginTop: '4px',
+    marginBottom: '2px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
 };
