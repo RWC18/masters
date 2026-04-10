@@ -28,11 +28,11 @@ const PopUp = ({ isOpen, onClose, children }: Props) => {
   return (
     <>
     <Box sx={PopUpStyles.container(isOpen)}/>
-    <Box sx={PopUpStyles.content(isOpen)}>
+    <Box sx={PopUpStyles.content(isOpen)} role="dialog" aria-modal="true">
         <Box sx={PopUpStyles.actions}>
-            <CancelIcon onClick={onClose} sx={PopUpStyles.cancelIcon} fontSize='large' />
+            <CancelIcon onClick={onClose} sx={PopUpStyles.cancelIcon} fontSize='large' aria-label="Close" />
         </Box>
-        {children}
+        {isOpen && children}
     </Box>
     </>
    

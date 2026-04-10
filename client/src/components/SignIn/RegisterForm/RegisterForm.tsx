@@ -39,6 +39,15 @@ const RegisterForm = () => {
     if (isLoading) return;
     if (isButtonDisabled()) return;
 
+    if (!email.includes('@')) {
+      setError(t('auth.invalidEmail'));
+      return;
+    }
+    if (password.length < 8) {
+      setError(t('auth.passwordTooShort'));
+      return;
+    }
+
     setError(null); 
     setIsLoading(true);
 
@@ -81,6 +90,7 @@ const RegisterForm = () => {
           handleChange={setEmail}
           styles={RegisterFormStyles.inputs}
           size={'small'}
+          type='email'
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !isButtonDisabled()) handleRegister();
           }}

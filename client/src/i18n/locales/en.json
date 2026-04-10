@@ -128,7 +128,9 @@
     "password": "Password",
     "fullName": "Full Name",
     "confirmPassword": "Confirm Password",
-    "passwordMismatch": "Passwords do not match"
+    "passwordMismatch": "Passwords do not match",
+    "invalidEmail": "Please enter a valid email address.",
+    "passwordTooShort": "Password must be at least 8 characters."
   },
   "common": {
     "generate": "Generate",

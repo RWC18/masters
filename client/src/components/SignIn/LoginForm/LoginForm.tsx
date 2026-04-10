@@ -3,10 +3,13 @@ import { LoginFormStyles } from "./LoginForm.styles"
 import Input from "../../Input/Input"
 import Button from "../../Button/Button"
 import { colors } from "../../../constants/styles"
-import { setPopUpStatus, signInUser } from "../../../redux/Actions/mainActions"
+import {
+  getUser,
+  setPopUpStatus,
+  setUser,
+  signInUser,
+} from "../../../redux/Actions/mainActions"
 import { LOCALSTORAGE_KEYS } from "../../../constants/constants"
-import { getUser } from "../../../redux/Actions/mainActions"
-import { setUser } from "../../../redux/Actions/mainActions"
 import { useDispatch } from "react-redux"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -21,6 +24,14 @@ const LoginForm = () => {
   
   const handleLogin = async () => {
     if (isLoading) return;
+    if (!email.includes('@')) {
+      setError(t('auth.invalidEmail'));
+      return;
+    }
+    if (password.length < 8) {
+      setError(t('auth.passwordTooShort'));
+      return;
+    }
     setIsLoading(true);
     try {
       setError(null);
@@ -59,6 +70,7 @@ const LoginForm = () => {
           handleChange={setEmail}
           styles={LoginFormStyles.inputs}
           size={'small'}
+          type='email'
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !isButtonDisabled()) {
               handleLogin();

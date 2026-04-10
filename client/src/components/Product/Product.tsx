@@ -1,8 +1,10 @@
+'use client';
+
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import Button from '../Button/Button';
 import { colors } from '../../constants/styles';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { setPopUpStatus, setPopUpContent } from '../../redux/Actions/mainActions';
 import Login from '../SignIn/SignIn';
@@ -19,13 +21,13 @@ interface Props {
 
 const Product = ({ title, url, thumbnail, description, isActive, reverse }: Props) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.main.user);
 
   const handleGenerateClick = () => {
     if (user) {
-      navigate(url);
+      router.push(url);
     } else {
       dispatch<any>(setPopUpStatus(true));
       dispatch<any>(setPopUpContent(<Login />));

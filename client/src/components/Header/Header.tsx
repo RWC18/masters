@@ -1,6 +1,8 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { Box, Drawer, Grid, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { usePathname, useRouter } from 'next/navigation';
 import { colors } from '../../constants/styles';
 import { useMenuItems } from '../../constants/menu';
 import { HeaderStyles } from './Header.styles';
@@ -15,10 +17,10 @@ import LanguageSelector from '../LanguageSelector/LanguageSelector';
 import { useTranslation } from 'react-i18next';
 
 export const scrollTO = (id: string) => {
-  const violation = document.getElementById(id) as any;
-  if (violation) {
+  const element = document.getElementById(id);
+  if (element) {
     window.scrollTo({
-      top: violation.offsetTop - 100,
+      top: element.offsetTop - 100,
       behavior: 'smooth',
     });
   } else {
@@ -31,8 +33,8 @@ export const scrollTO = (id: string) => {
 
 const Header = () => {
   const menuItems = useMenuItems();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const theme = useTheme();
@@ -77,10 +79,10 @@ const Header = () => {
   };
 
   const goHomeOrScroll = (target?: string) => {
-    if (location.pathname === '/') {
+    if (pathname === '/') {
       scrollTO(target || 'undef');
     } else {
-      navigate('/');
+      router.push('/');
     }
     setDrawerOpen(false);
   };
@@ -112,10 +114,10 @@ const Header = () => {
 
             {user && (
               <>
-                <Typography sx={HeaderStyles.mobileDrawerItem} onClick={() => { navigate('/history'); setDrawerOpen(false); }}>
+                <Typography sx={HeaderStyles.mobileDrawerItem} onClick={() => { router.push('/history'); setDrawerOpen(false); }}>
                   {t('header.history')}
                 </Typography>
-                <Typography sx={HeaderStyles.mobileDrawerItem} onClick={() => { navigate('/billing'); setDrawerOpen(false); }}>
+                <Typography sx={HeaderStyles.mobileDrawerItem} onClick={() => { router.push('/billing'); setDrawerOpen(false); }}>
                   {t('header.billing')}
                 </Typography>
                 <Typography sx={{ ...HeaderStyles.mobileDrawerItem, color: colors.ORANGE_LIGHT }}>
@@ -169,7 +171,7 @@ const Header = () => {
                 alt="logo VAi"
                 sx={HeaderStyles.logo}
                 onClick={() =>
-                  location.pathname === '/' ? scrollTO('undef') : navigate('/')
+                  pathname === '/' ? scrollTO('undef') : router.push('/')
                 }
               />
             </Grid>
@@ -184,10 +186,10 @@ const Header = () => {
                   <Grid item key={menuItem.url}>
                     <Typography
                       sx={{ ...HeaderStyles.menuItem, color: theme.palette.text.secondary }}
-                      onClick={() =>
-                        location.pathname === '/'
-                          ? scrollTO(menuItem.url)
-                          : navigate('/')
+            onClick={() =>
+                  pathname === '/'
+                    ? scrollTO(menuItem.url)
+                    : router.push('/')
                       }
                     >
                       {menuItem.title}
@@ -210,7 +212,7 @@ const Header = () => {
               <Grid item>
                 <Typography
                   sx={{ ...HeaderStyles.menuItem, color: theme.palette.text.secondary }}
-                  onClick={() => navigate('/history')}
+                  onClick={() => router.push('/history')}
                 >
                   {t('header.history')}
                 </Typography>
@@ -220,7 +222,7 @@ const Header = () => {
               <Grid item>
                 <Typography
                   sx={{ ...HeaderStyles.menuItem, color: theme.palette.text.secondary }}
-                  onClick={() => navigate('/billing')}
+                  onClick={() => router.push('/billing')}
                 >
                   {t('header.billing')}
                 </Typography>
@@ -239,11 +241,14 @@ const Header = () => {
                   <Box component="span" sx={HeaderStyles.userName}>
                     {user.full_name}
                   </Box>
-                  <LogoutOutlined
-                    sx={HeaderStyles.logoutIcon}
-                    fontSize="small"
+                  <IconButton
+                    aria-label="Logout"
                     onClick={() => handleLogout()}
-                  />
+                    size="small"
+                    sx={{ p: 0.5 }}
+                  >
+                    <LogoutOutlined sx={HeaderStyles.logoutIcon} fontSize="small" />
+                  </IconButton>
                 </Typography>
               ) : (
                 <Button

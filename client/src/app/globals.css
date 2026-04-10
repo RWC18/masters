@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+  border: 0;
+  text-decoration: none;
+  -moz-user-select: auto !important;
+  -webkit-user-select: auto !important;
+  -ms-user-select: auto !important;
+  user-select: auto !important;
+  -webkit-text-size-adjust: none !important;
+  text-size-adjust: none !important;
+  font-family: 'SF Pro', sans-serif !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--app-primary, #ee005a) transparent;
+}
+
+*::selection {
+  background: var(--app-primary, #ee005a) !important;
+  color: #fff !important;
+}
+
+*::-moz-selection {
+  background: var(--app-primary, #ee005a) !important;
+  color: #fff !important;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--app-primary, #ee005a);
+  border-radius: 50px;
+  border: 0px none #ffffff;
+}

@@ -26,7 +26,7 @@ export const SignInStyles = {
     width: { xs: '100%', md: '70%' },
     minHeight: { xs: '180px', md: '100%' },
     flex: { xs: '0 0 auto', md: 1 },
-    backgroundImage: `url(${process.env.PUBLIC_URL}/landing/banner.png)`,
+    backgroundImage: `url(/landing/banner.png)`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',

@@ -129,7 +129,9 @@
     "password": "Пароль",
     "fullName": "Полное имя",
     "confirmPassword": "Подтвердите пароль",
-    "passwordMismatch": "Пароли не совпадают"
+    "passwordMismatch": "Пароли не совпадают",
+    "invalidEmail": "Пожалуйста, введите корректный адрес эл. почты.",
+    "passwordTooShort": "Пароль должен содержать не менее 8 символов."
   },
   "common": {
     "generate": "Создать",

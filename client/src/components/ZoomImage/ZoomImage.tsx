@@ -102,6 +102,7 @@ const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
       {hasSlider && images && images.length > 1 && (
         <IconButton
           onClick={goPrev}
+          aria-label="Previous image"
           sx={{
             position: 'absolute',
             left: { xs: 8, md: 24 },
@@ -139,6 +140,7 @@ const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
       {hasSlider && images && images.length > 1 && (
         <IconButton
           onClick={goNext}
+          aria-label="Next image"
           sx={{
             position: 'absolute',
             right: { xs: 8, md: 24 },

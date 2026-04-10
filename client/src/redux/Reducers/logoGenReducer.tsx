@@ -3,9 +3,9 @@ import { logoGenActions } from '../Actions/logoGenActions';
 const initialState = {
   brandname: '',
   tagline: '',
-  colors: [],
-  industries: [],
-  results: [],
+  colors: [] as string[],
+  industries: [] as string[],
+  results: [] as string[],
   loading: false,
   error: false,
   count: 6,

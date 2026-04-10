@@ -1,14 +1,11 @@
-// export const baseUrl = '/api/v1';
 import { LOCALSTORAGE_KEYS } from '../../constants/constants';
 
-export const AI_AUTH = process.env.REACT_APP_API_AUTH;
-export const AI_API = process.env.REACT_APP_AI_URL;
-export const AI_E2E_API = process.env.REACT_APP_E2E_AI_URL;
-export const X_APP_AUTH = process.env.REACT_APP_X_APP_AUTH;
-const backendOrigin = process.env.REACT_APP_BACKEND_URL;
-export const BACKEND_BASE_URL = backendOrigin
-  ? `${backendOrigin.replace(/\/$/, '')}/api/v1`
-  : '/api/v1';
+export const AI_AUTH = process.env.NEXT_PUBLIC_API_AUTH;
+export const AI_API = process.env.NEXT_PUBLIC_AI_URL;
+export const AI_E2E_API = process.env.NEXT_PUBLIC_E2E_AI_URL;
+export const X_APP_AUTH = process.env.NEXT_PUBLIC_X_APP_AUTH;
+
+export const BACKEND_BASE_URL = '/api/v1';
 
 export const headers = {
   'Content-Type': 'application/json',

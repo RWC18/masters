@@ -13,6 +13,7 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 const stored = (): ThemeMode => {
   try {
+    if (typeof window === 'undefined') return 'dark';
     const v = localStorage.getItem(LOCALSTORAGE_KEYS.THEME_MODE);
     if (v === 'light' || v === 'dark') return v;
   } catch {}

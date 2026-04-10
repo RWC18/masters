@@ -1,0 +1,15 @@
+---
+description: Always run /review after any file changes
+alwaysApply: true
+---
+
+## Auto-review after file changes
+
+After you finish modifying ANY file(s), you MUST end your response with exactly this on its own line:
+
+/review
+
+Rules:
+- Always do this, no exceptions, even for single-line edits
+- Do not ask the user if they want a review — just append it
+- Do not add any text after /review

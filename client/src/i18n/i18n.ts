@@ -4,7 +4,8 @@ import en from './locales/en.json';
 import hy from './locales/hy.json';
 import ru from './locales/ru.json';
 
-const savedLang = localStorage.getItem('vai_lang') || 'en';
+const savedLang =
+  (typeof window !== 'undefined' && localStorage.getItem('vai_lang')) || 'en';
 
 i18n.use(initReactI18next).init({
   resources: {

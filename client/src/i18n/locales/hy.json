@@ -129,7 +129,9 @@
     "password": "Գաղտնաբառ",
     "fullName": "Անուն ազգանուն",
     "confirmPassword": "Հաստատեք գաղտնաբառը",
-    "passwordMismatch": "Գաղտնաբառերը չեն համընկնում"
+    "passwordMismatch": "Գաղտնաբառերը չեն համընկնում",
+    "invalidEmail": "Խնդրում ենք մուտքագրել վավեր էլ. փոստի հասցե։",
+    "passwordTooShort": "Գաղտնաբառը պետք է լինի առնվազն 8 նիշ։"
   },
   "common": {
     "generate": "Ստեղծել",

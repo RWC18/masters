@@ -22,6 +22,7 @@ export const forceDownload = (url: string) => {
     document.body.appendChild(tag);
     tag.click();
     document.body.removeChild(tag);
+    urlCreator.revokeObjectURL(imageUrl);
   };
   xhr.send();
 };
