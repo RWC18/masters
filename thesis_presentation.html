@@ -247,14 +247,187 @@
   /* ─── Nav active link ─── */
   .nav-links a.active { color: var(--accent-light); background: rgba(124,58,237,0.15); }
 
+
+  /* ─── Aurora / Northern Lights Effect ─── */
+  .aurora {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .aurora-band {
+    position: absolute; width: 200%; height: 300px; left: -50%;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(124,58,237,0.06) 15%,
+      rgba(6,182,212,0.08) 30%,
+      rgba(236,72,153,0.06) 50%,
+      rgba(124,58,237,0.08) 70%,
+      rgba(16,185,129,0.05) 85%,
+      transparent 100%
+    );
+    filter: blur(40px);
+    animation: auroraWave 12s ease-in-out infinite alternate;
+  }
+  .aurora-band:nth-child(1) { top: 10%; animation-duration: 12s; }
+  .aurora-band:nth-child(2) { top: 35%; animation-duration: 16s; animation-delay: -4s; opacity: 0.7; }
+  .aurora-band:nth-child(3) { top: 60%; animation-duration: 20s; animation-delay: -8s; opacity: 0.5; }
+  @keyframes auroraWave {
+    0% { transform: translateX(-20%) skewY(-2deg) scaleY(1); }
+    50% { transform: translateX(10%) skewY(1deg) scaleY(1.3); }
+    100% { transform: translateX(-10%) skewY(-1deg) scaleY(0.8); }
+  }
+
+  /* ─── Shooting Stars ─── */
+  .shooting-star {
+    position: fixed; width: 100px; height: 1px; z-index: 0; pointer-events: none;
+    background: linear-gradient(90deg, rgba(167,139,250,0.8), transparent);
+    animation: shootingStar 3s linear infinite;
+    opacity: 0;
+  }
+  @keyframes shootingStar {
+    0% { transform: translateX(-100px) translateY(0) rotate(-35deg); opacity: 0; }
+    5% { opacity: 1; }
+    15% { opacity: 1; }
+    30% { opacity: 0; }
+    100% { transform: translateX(100vw) translateY(300px) rotate(-35deg); opacity: 0; }
+  }
+
+  /* ─── Glitch text effect on hover for gradient-text ─── */
+  .gradient-text { position: relative; display: inline-block; }
+  .gradient-text:hover { animation: glitchText 0.3s ease; }
+  @keyframes glitchText {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    60% { transform: translate(-1px, -1px); }
+    80% { transform: translate(1px, 1px); }
+    100% { transform: translate(0); }
+  }
+
+  /* ─── Magnetic button effect ─── */
+  .billing-pack-btn { position: relative; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .billing-pack-btn::before {
+    content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0;
+    background: rgba(255,255,255,0.2); border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease;
+  }
+  .billing-pack-btn:hover::before { width: 300px; height: 300px; }
+  .billing-pack-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(245,158,11,0.3); }
+
+  /* ─── Neon glow on section numbers ─── */
+  .section-number {
+    animation: neonPulse 4s ease-in-out infinite;
+  }
+  @keyframes neonPulse {
+    0%, 100% { box-shadow: 0 0 5px rgba(167,139,250,0.2), 0 0 10px rgba(167,139,250,0.1); }
+    50% { box-shadow: 0 0 10px rgba(167,139,250,0.4), 0 0 20px rgba(167,139,250,0.2), 0 0 30px rgba(167,139,250,0.1); }
+  }
+
+  /* ─── Morphing border on feature screenshots ─── */
+  .feature-screenshot {
+    animation: morphBorder 8s ease-in-out infinite;
+  }
+  @keyframes morphBorder {
+    0%, 100% { border-radius: 12px; }
+    25% { border-radius: 16px 8px 20px 12px; }
+    50% { border-radius: 8px 20px 12px 16px; }
+    75% { border-radius: 20px 12px 8px 20px; }
+  }
+
+  /* ─── Sparkle on hero badge ─── */
+  .hero-badge, .uni-badge {
+    position: relative; overflow: hidden;
+  }
+  .hero-badge::after, .uni-badge::after {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+    animation: shimmer 4s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%) rotate(0deg); }
+    100% { transform: translateX(100%) rotate(0deg); }
+  }
+
+  /* ─── Gradient text animation ─── */
+  .hero h1 .gradient-text, .thesis-topic .highlight, .nav-logo, footer .footer-title {
+    background-size: 200% 200%;
+    animation: gradientShift 6s ease infinite;
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* ─── Hover 3D lift on arch boxes ─── */
+  .arch-box { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .arch-box:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 15px 40px rgba(124,58,237,0.15);
+    border-color: rgba(124,58,237,0.3);
+  }
+
+  /* ─── Academic section card shimmer border ─── */
+  .academic-section {
+    position: relative; overflow: hidden;
+  }
+  .academic-section::before {
+    content: ''; position: absolute; inset: -2px; z-index: -1;
+    background: conic-gradient(from 0deg, transparent, rgba(124,58,237,0.3), transparent, rgba(236,72,153,0.3), transparent);
+    border-radius: inherit;
+    animation: rotateBorder 8s linear infinite;
+  }
+  .academic-section::after {
+    content: ''; position: absolute; inset: 1px; background: var(--bg-card); border-radius: inherit; z-index: -1;
+  }
+  @keyframes rotateBorder {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* ─── Pulse ring around stat numbers ─── */
+  .stat-card { position: relative; }
+  .stat-card::before {
+    content: ''; position: absolute; top: 50%; left: 50%; width: 80px; height: 80px;
+    border: 1px solid rgba(124,58,237,0.15); border-radius: 50%;
+    transform: translate(-50%, -60%);
+    animation: pulseRing 3s ease-out infinite;
+  }
+  @keyframes pulseRing {
+    0% { transform: translate(-50%, -60%) scale(0.8); opacity: 0.5; }
+    100% { transform: translate(-50%, -60%) scale(2); opacity: 0; }
+  }
+
+  /* ─── Typewriter for meta values ─── */
+  .meta-value { overflow: hidden; white-space: nowrap; border-right: 2px solid var(--accent-light); animation: typewriter 2s steps(20) 0.5s both, blinkCaret 0.8s step-end infinite 2.5s; }
+  @keyframes typewriter { from { width: 0; } to { width: 100%; } }
+  @keyframes blinkCaret { 0%, 100% { border-color: var(--accent-light); } 50% { border-color: transparent; } }
+  .meta-row:nth-child(2) .meta-value { animation-delay: 1.5s; }
+
+  /* ─── Ripple on click anywhere ─── */
+  .click-ripple {
+    position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999;
+    border: 1px solid rgba(124,58,237,0.4);
+    animation: rippleExpand 0.6s ease-out forwards;
+  }
+  @keyframes rippleExpand {
+    0% { width: 0; height: 0; opacity: 1; }
+    100% { width: 150px; height: 150px; opacity: 0; }
+  }
+
 </style>
 </head>
 <body>
   <div class="scroll-progress" id="scrollProgress"></div>
   <canvas id="particles"></canvas>
+  <div class="aurora">
+    <div class="aurora-band"></div>
+    <div class="aurora-band"></div>
+    <div class="aurora-band"></div>
+  </div>
   <div class="bg-mesh"></div>
   <div class="bg-blob-3"></div>
   <div class="floating-shapes" id="floatingShapes"></div>
+  <div id="shootingStars"></div>
 
   <nav>
     <div class="nav-inner">
@@ -818,6 +991,95 @@
         const tilt = offset * 3;
         el.style.transform = `perspective(1000px) rotateX(${tilt}deg) translateY(${offset * 10}px)`;
       });
+    });
+
+
+    // ─── Shooting Stars ───
+    (function() {
+      const container = document.getElementById('shootingStars');
+      function createStar() {
+        const star = document.createElement('div');
+        star.className = 'shooting-star';
+        star.style.top = Math.random() * 50 + '%';
+        star.style.left = Math.random() * 30 + '%';
+        star.style.width = (Math.random() * 80 + 40) + 'px';
+        star.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+        container.appendChild(star);
+        setTimeout(() => star.remove(), 4000);
+      }
+      setInterval(createStar, 3000);
+      setTimeout(createStar, 500);
+      setTimeout(createStar, 1500);
+    })();
+
+    // ─── Click Ripple ───
+    document.addEventListener('click', (e) => {
+      const ripple = document.createElement('div');
+      ripple.className = 'click-ripple';
+      ripple.style.left = (e.clientX - 75) + 'px';
+      ripple.style.top = (e.clientY - 75) + 'px';
+      document.body.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+
+    // ─── Mouse Trail ───
+    (function() {
+      const trail = [];
+      const trailCount = 12;
+      for (let i = 0; i < trailCount; i++) {
+        const dot = document.createElement('div');
+        dot.style.cssText = `position:fixed;width:${6 - i * 0.4}px;height:${6 - i * 0.4}px;border-radius:50%;background:rgba(167,139,250,${0.4 - i * 0.03});pointer-events:none;z-index:9998;transition:transform ${0.08 + i * 0.02}s ease;`;
+        document.body.appendChild(dot);
+        trail.push({ el: dot, x: 0, y: 0 });
+      }
+      document.addEventListener('mousemove', (e) => {
+        trail[0].x = e.clientX;
+        trail[0].y = e.clientY;
+      });
+      function animateTrail() {
+        for (let i = trail.length - 1; i > 0; i--) {
+          trail[i].x += (trail[i-1].x - trail[i].x) * 0.35;
+          trail[i].y += (trail[i-1].y - trail[i].y) * 0.35;
+        }
+        trail.forEach(dot => {
+          dot.el.style.transform = `translate(${dot.x - 3}px, ${dot.y - 3}px)`;
+        });
+        requestAnimationFrame(animateTrail);
+      }
+      animateTrail();
+    })();
+
+    // ─── Particles React to Mouse ───
+    (function() {
+      let mouseX = 0, mouseY = 0;
+      document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+      const origAnimate = window._particleAnimate;
+    })();
+
+    // ─── Section Background Glow on Scroll ───
+    (function() {
+      const sectionHeaders = document.querySelectorAll('.section-header');
+      const glowObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.textShadow = '0 0 40px rgba(124,58,237,0.15)';
+            setTimeout(() => { entry.target.style.textShadow = 'none'; }, 1500);
+          }
+        });
+      }, { threshold: 0.5 });
+      sectionHeaders.forEach(h => glowObserver.observe(h));
+    })();
+
+    // ─── Scroll-triggered Nav Background ───
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      if (window.scrollY > 50) {
+        nav.style.background = 'rgba(10,10,15,0.95)';
+        nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+      } else {
+        nav.style.background = 'rgba(10,10,15,0.8)';
+        nav.style.boxShadow = 'none';
+      }
     });
   </script>
 </body>
