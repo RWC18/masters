@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "adapters": [
+    "telegram"
+  ],
+  "telegram": {
+    "token": "8179189512:AAH0WrW-KSXnBxbFX07AyMEMskL1p8xrbgc",
+    "chatId": "5511847638"
+  }
+}
