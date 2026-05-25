@@ -1,25 +1,27 @@
+import { themeVars } from '../../constants/themeVars';
+
 export const InputStyles = {
   inputField: {
     '& .MuiOutlinedInput-root': {
       borderRadius: '50px',
-      backgroundColor: '#fff',
+      backgroundColor: themeVars.inputBg,
       padding: '0 20px',
       '& .MuiOutlinedInput-input': {
-        color: '#020202',
+        color: themeVars.inputText,
       },
       '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: 'rgba(0,0,0,0.23)',
+        borderColor: themeVars.border,
       },
       '&:hover .MuiOutlinedInput-notchedOutline': {
-        borderColor: 'rgba(0,0,0,0.4)',
+        borderColor: themeVars.accentBorder,
       },
       '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-        borderColor: '#0A8A9A',
+        borderColor: themeVars.primary,
         borderWidth: '2px',
       },
     },
     '& .MuiInputBase-input::placeholder': {
-      color: '#666',
+      color: themeVars.textSecondary,
       opacity: 1,
     },
   },

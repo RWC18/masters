@@ -41,14 +41,17 @@ const Style = ({ title, thumbnail, onSelect, isSelected }: Props) => {
             justifyContent: 'center',
           }}
         >
-          <img
+          <Box
+            component="img"
             src={`/styles-v2/${thumbnail}`}
-            style={{
-              width: '100%',
-              height: 'auto',
-              borderRadius: '50%',
-            }}
             alt={title}
+            sx={{
+              width: { xs: 64, sm: 72 },
+              height: { xs: 64, sm: 72 },
+              borderRadius: '50%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
           />
         </Box>
       </Grid>

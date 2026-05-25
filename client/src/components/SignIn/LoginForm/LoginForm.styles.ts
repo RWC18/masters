@@ -1,35 +1,50 @@
+import { colors, themeVars } from '../../../constants/styles';
+
+const inputRoot = {
+  width: '100%',
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '12px',
+    bgcolor: themeVars.surfaceElevated,
+    color: colors.TEXT_WHITE,
+    '& .MuiOutlinedInput-input': { py: 1.35 },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: themeVars.border,
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: themeVars.accentBorder,
+    },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: colors.ORANGE_ACTIVE,
+      borderWidth: '2px',
+    },
+  },
+  '& .MuiInputBase-input::placeholder': {
+    color: colors.TEXT_GRAY,
+    opacity: 1,
+  },
+};
+
 export const LoginFormStyles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: { xs: '16px', md: '20px' },
+    gap: 1.5,
     width: '100%',
-    maxWidth: '350px',
-    padding: { xs: '16px 0', md: '20px 10px' },
-    transition: '.5s',
   },
-  inputs: {
-    width: '100%',
-    '& .MuiOutlinedInput-root': {
-      borderRadius: '50px',
-      backgroundColor: '#fff',
-      padding: '0 10px',
-      '& .MuiOutlinedInput-input': { color: '#020202' },
-      '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.23)' },
-      '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.4)' },
-      '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#0A8A9A', borderWidth: '2px' },
-    },
-    '& .MuiInputBase-input::placeholder': { color: '#666', opacity: 1 },
-  },
+  inputs: inputRoot,
   button: {
     width: '100%',
-    padding: '6px',
-  },    
+    mt: 0.5,
+    borderRadius: '12px',
+    py: 1.25,
+  },
   error: (hasError: boolean) => ({
     width: '100%',
-    padding: hasError ? '6px' : '0px',
+    borderRadius: '10px',
     overflow: 'hidden',
-    maxHeight: hasError ? '500px' : '0px',
-    transition: '.5s',
-  })
-}
+    maxHeight: hasError ? 120 : 0,
+    opacity: hasError ? 1 : 0,
+    transition: 'max-height 0.25s, opacity 0.25s',
+    '& .MuiAlert-message': { fontSize: 13 },
+  }),
+};

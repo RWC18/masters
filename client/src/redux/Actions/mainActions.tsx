@@ -3,10 +3,17 @@ import { BACKEND_BASE_URL } from './constants';
 import { IUser, IUserLogin, IUserRegistration } from '../types';
 import { Dispatch } from 'redux';
 
+export interface PaymentPopUpMeta {
+  balance?: number;
+  required?: number;
+}
+
 export const mainActionTypes = {
   SET_USER: 'SET_USER',
   SET_POP_UP_STATUS: 'SET_POP_UP_STATUS',
   SET_POP_UP_CONTENT: 'SET_POP_UP_CONTENT',
+  SET_PAYMENT_POP_UP_OPEN: 'SET_PAYMENT_POP_UP_OPEN',
+  SET_PAYMENT_POP_UP_META: 'SET_PAYMENT_POP_UP_META',
 };
 
 export const forceDownload = (url: string) => {
@@ -74,4 +81,27 @@ export const setPopUpContent = (content: React.ReactNode | null) => async (dispa
     type: mainActionTypes.SET_POP_UP_CONTENT,
     data: content,
   });
-}
+};
+
+export const openPaymentPopUp =
+  (meta?: PaymentPopUpMeta) => async (dispatch: Dispatch) => {
+    dispatch({
+      type: mainActionTypes.SET_PAYMENT_POP_UP_META,
+      data: meta || null,
+    });
+    dispatch({
+      type: mainActionTypes.SET_PAYMENT_POP_UP_OPEN,
+      data: true,
+    });
+  };
+
+export const closePaymentPopUp = () => async (dispatch: Dispatch) => {
+  dispatch({
+    type: mainActionTypes.SET_PAYMENT_POP_UP_OPEN,
+    data: false,
+  });
+  dispatch({
+    type: mainActionTypes.SET_PAYMENT_POP_UP_META,
+    data: null,
+  });
+};

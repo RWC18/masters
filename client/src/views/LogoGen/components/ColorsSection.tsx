@@ -1,8 +1,9 @@
-import { Grid } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { genColors } from '../../../constants/genColors';
 import OneColor from '../Colors';
 import { LogoGenStyles } from '../LogoGen.styles';
+import { useTranslation } from 'react-i18next';
 
 interface ColorsSectionProps {
   selectedColor: string;
@@ -13,25 +14,32 @@ const ColorsSection: React.FC<ColorsSectionProps> = ({
   selectedColor,
   onColorSelect,
 }) => {
+  const { t } = useTranslation();
+
   return (
-    <Grid
-      container
-      sx={LogoGenStyles.colorsGrid}
-      spacing={0}
-      columns={{ md: 11, xs: 2 }}
-    >
-      {genColors.map((clr: { title: string; thumbnail: string }) => (
-        <Grid item sm={1} md={1} lg={1} xs={1} key={clr.title}>
-          <OneColor
-            color={clr}
-            isActive={selectedColor === clr.title}
-            onSelect={() => onColorSelect(clr.title)}
-          />
-        </Grid>
-      ))}
-    </Grid>
+    <Box>
+      <Typography
+        sx={{
+          ...LogoGenStyles.colorsSectionTitle,
+          textAlign: 'center',
+          mb: 1.5,
+        }}
+      >
+        {t('logoGen.colorsLabel')}
+      </Typography>
+      <Box sx={LogoGenStyles.colorsGrid}>
+        {genColors.map((clr: { title: string; thumbnail: string }) => (
+          <Box key={clr.title} sx={LogoGenStyles.colorItem}>
+            <OneColor
+              color={clr}
+              isActive={selectedColor === clr.title}
+              onSelect={() => onColorSelect(clr.title)}
+            />
+          </Box>
+        ))}
+      </Box>
+    </Box>
   );
 };
 
 export default ColorsSection;
-

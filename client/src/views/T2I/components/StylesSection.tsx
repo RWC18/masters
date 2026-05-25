@@ -1,8 +1,9 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { genStylesV2 } from '../../../constants/genStyles';
 import Style from '../../../components/Style/Style';
-import { T2IStyles } from '../T2I.styles';
+import { ToolPageStyles } from '../../shared/ToolPage.styles';
+import { useTranslation } from 'react-i18next';
 
 interface StylesSectionProps {
   selectedStyles: Array<{
@@ -15,31 +16,40 @@ interface StylesSectionProps {
     thumbnail: string;
     title: string;
   }) => void;
+  embedded?: boolean;
 }
 
 const StylesSection: React.FC<StylesSectionProps> = ({
   selectedStyles,
   onStyleSelect,
+  embedded = false,
 }) => {
+  const { t } = useTranslation();
+
   return (
-    <Box sx={T2IStyles.stylesContainer}>
-      <Grid container sx={T2IStyles.stylesGrid} spacing={{ md: 6, xs: 1 }}>
-        {genStylesV2.map(
-          (style: { prompt: string; title: string; thumbnail: string }) => (
-            <Grid item sm={4} md={2} lg={2} xs={4} key={style.title}>
-              <Style
-                title={style.title}
-                thumbnail={style.thumbnail}
-                isSelected={selectedStyles.includes(style)}
-                onSelect={() => onStyleSelect(style)}
-              />
-            </Grid>
-          )
-        )}
-      </Grid>
+    <Box
+      sx={{
+        ...ToolPageStyles.stylesSection,
+        ...(embedded ? { mt: 0 } : {}),
+      }}
+    >
+      <Typography sx={ToolPageStyles.stylesSectionTitle}>
+        {t('t2i.stylesLabel')}
+      </Typography>
+      <Box sx={ToolPageStyles.artStylesGrid}>
+        {genStylesV2.map((style) => (
+          <Box key={style.title} sx={ToolPageStyles.artStyleItem}>
+            <Style
+              title={style.title}
+              thumbnail={style.thumbnail}
+              isSelected={selectedStyles.some((s) => s.title === style.title)}
+              onSelect={() => onStyleSelect(style)}
+            />
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 };
 
 export default StylesSection;
-

@@ -1,77 +1,39 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import { colors } from '../../../constants/styles';
-import { forceDownload } from '../../../redux/Actions/mainActions';
-import { T2IResultsStyles } from '../T2IResults.styles';
+import ToolResultCard from '../../shared/ToolResultCard';
+import { ToolPageStyles } from '../../shared/ToolPage.styles';
+import { useTranslation } from 'react-i18next';
 
 interface ResultsPanelProps {
-  results: Array<{ id: string; url: string }>;
+  results: Array<{ id: string; url: string } | string>;
   onZoom: (url: string) => void;
 }
 
 const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, onZoom }) => {
+  const { t } = useTranslation();
+  const items = (results || [])
+    .map((r) => (typeof r === 'string' ? { id: r, url: r } : r))
+    .filter((r) => r?.url);
+
   return (
-    <Grid
-      item
-      xs={12}
-      sm={12}
-      lg={5}
-      md={5}
-      width={{ md: 'auto', xs: '100%' }}
-    >
-      <Grid
-        container
-        justifyContent={'space-between'}
-        alignItems={'center'}
-        flexWrap={'wrap'}
-        spacing={{ md: 4, xs: 2 }}
-      >
-        {results &&
-          results.map((image: any) => (
-            <Grid item xs={6} sm={6} lg={6} md={6} key={image.id}>
-              <Box
-                sx={{
-                  ...T2IResultsStyles.imageCard,
-                  background: `url('${image.url}')`,
-                }}
-              >
-                <Box sx={T2IResultsStyles.actionButtons}>
-                  <Grid container alignItems={'center'} spacing={1}>
-                    <Grid
-                      item
-                      sx={T2IResultsStyles.actionButton}
-                      onClick={() => forceDownload(image.url)}
-                    >
-                      <Box sx={T2IResultsStyles.actionIconContainer}>
-                        <CloudDownloadIcon
-                          htmlColor={colors.TEXT_DARK}
-                          fontSize='small'
-                        />
-                      </Box>
-                    </Grid>
-                    <Grid
-                      item
-                      sx={T2IResultsStyles.actionButton}
-                      onClick={() => onZoom(image.url)}
-                    >
-                      <Box sx={T2IResultsStyles.actionIconContainer}>
-                        <ZoomInIcon
-                          htmlColor={colors.TEXT_DARK}
-                          fontSize='small'
-                        />
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </Box>
-              </Box>
-            </Grid>
+    <Box sx={ToolPageStyles.resultsArea}>
+      {items.length === 0 ? (
+        <Box sx={{ ...ToolPageStyles.emptyResults, flex: 1 }}>
+          <Typography>{t('t2i.emptyResults')}</Typography>
+        </Box>
+      ) : (
+        <Box sx={ToolPageStyles.resultsGrid}>
+          {items.map((image) => (
+            <ToolResultCard
+              key={image.id || image.url}
+              imageUrl={image.url}
+              onZoom={onZoom}
+            />
           ))}
-      </Grid>
-    </Grid>
+        </Box>
+      )}
+    </Box>
   );
 };
 
 export default ResultsPanel;
-

@@ -12,10 +12,10 @@ import {
 } from '../../redux/Actions/logoGenActions';
 import Loading from '../../components/Loading/Loading';
 import { LogoGenStyles } from './LogoGen.styles';
+import { ToolPageStyles } from '../shared/ToolPage.styles';
 import HeaderSection from './components/HeaderSection';
 import InputSection from './components/InputSection';
 import ColorsSection from './components/ColorsSection';
-import GenerateButtonSection from './components/GenerateButtonSection';
 
 const LogoGen = () => {
   const dispatch = useDispatch();
@@ -60,7 +60,9 @@ const LogoGen = () => {
   return (
     <Box sx={LogoGenStyles.container}>
       {loading && <Loading />}
-      <HeaderSection />
+      <Box sx={ToolPageStyles.centeredContent}>
+        <HeaderSection />
+      </Box>
       <InputSection
         brandname={brandname}
         description={tagline}
@@ -68,16 +70,17 @@ const LogoGen = () => {
         onDescriptionChange={handleDescriptionChange}
         onGenerate={handleGenerate}
       />
-      <Box sx={LogoGenStyles.selectionContainer}>
+      <Box
+        sx={{
+          ...LogoGenStyles.selectionContainer,
+          ...ToolPageStyles.centeredContent,
+        }}
+      >
         <ColorsSection
           selectedColor={colors[0] || ''}
           onColorSelect={handleColorSelect}
         />
       </Box>
-      <GenerateButtonSection
-        brandname={brandname}
-        onGenerate={handleGenerate}
-      />
     </Box>
   );
 };

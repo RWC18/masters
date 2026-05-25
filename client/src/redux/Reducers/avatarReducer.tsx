@@ -6,7 +6,7 @@ const initialState = {
   selectedStyle: null as string | null,
   results: [] as string[],
   loading: false,
-  error: false,
+  error: null as string | null,
 };
 
 export const avatarReducer = (

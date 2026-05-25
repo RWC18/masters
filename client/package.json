@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/runtime": "^7.26.10",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.3",
     "@emotion/server": "^11.11.0",
@@ -27,6 +28,7 @@
     "uuid": "^13.0.0"
   },
   "scripts": {
+    "postinstall": "node scripts/ensure-babel-runtime.cjs",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",

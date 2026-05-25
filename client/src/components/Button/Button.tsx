@@ -31,11 +31,7 @@ const Button = ({
   // If the button uses primary background, pick a readable text color automatically.
   const isPrimaryBg =
     bgColor === colors.ORANGE_ACTIVE || String(bgColor).includes('--app-primary');
-  const resolvedTextColor = isPrimaryBg
-    ? theme.palette.mode === 'dark'
-      ? '#020202'
-      : '#ffffff'
-    : textColor;
+  const resolvedTextColor = isPrimaryBg ? colors.ON_PRIMARY : textColor;
 
   return (
     <Box

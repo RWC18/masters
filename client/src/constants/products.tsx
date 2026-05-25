@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { AVATAR_GENERATION_ENABLED } from './constants';
 
 export const useProducts = () => {
   const { t } = useTranslation();
@@ -29,7 +30,7 @@ export const useProducts = () => {
       description: t('products.avatar.description'),
       url: '/avatar',
       thumbnail: 'avatar.png',
-      isActive: false,
+      isActive: AVATAR_GENERATION_ENABLED,
     },
   ];
 };

@@ -4,7 +4,7 @@ const initialState = {
   originalImage: null as string | null,
   resultImage: null as string | null,
   loading: false,
-  error: false,
+  error: null as string | null,
 };
 
 export const removeBgReducer = (

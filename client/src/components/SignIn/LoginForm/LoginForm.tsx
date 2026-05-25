@@ -94,7 +94,7 @@ const LoginForm = () => {
           handleClick={handleLogin}
           title={t('auth.login')}
           bgColor={colors.ORANGE_ACTIVE}
-          hoverColor={colors.GRAY_DARK}
+          hoverColor={colors.ORANGE_LIGHT}
           textColor={colors.TEXT_DARK}
           isDisabled={isButtonDisabled()}
           isLoading={isLoading}

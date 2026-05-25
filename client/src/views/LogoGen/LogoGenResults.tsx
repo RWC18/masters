@@ -3,20 +3,21 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from '../../components/Loading/Loading';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import ZoomImage from '../../components/ZoomImage/ZoomImage';
 import { genLogo } from '../../redux/Actions/logoGenActions';
 import { useRouter } from 'next/navigation';
-import { LogoGenResultsStyles } from './LogoGenResults.styles';
+import { ToolPageStyles } from '../shared/ToolPage.styles';
 import ResultsHeader from './components/ResultsHeader';
 import ResultsGrid from './components/ResultsGrid';
 import ActionButtons from './components/ActionButtons';
+import GenerationErrorAlert from '../../components/GenerationErrorAlert/GenerationErrorAlert';
 
 const LogoGenResults = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { results, loading, brandname, tagline, colors, count } =
+  const { results, loading, error, brandname, tagline, colors, count } =
     useSelector((state: any) => state.logo);
   const user = useSelector((state: any) => state.main.user);
 
@@ -28,20 +29,12 @@ const LogoGenResults = () => {
 
   const [zoomedImageUrl, setZoomedImageUrl] = useState<string | null>(null);
 
-  const imageUrls = (results || []).map((r: any) => (typeof r === 'string' ? r : r?.url)).filter(Boolean) as string[];
+  const imageUrls = (results || [])
+    .map((r: any) => (typeof r === 'string' ? r : r?.url))
+    .filter(Boolean) as string[];
   const zoomedIndex = zoomedImageUrl ? imageUrls.indexOf(zoomedImageUrl) : -1;
 
-  const handleZoom = (url: string) => {
-    setZoomedImageUrl(url);
-  };
-
-  const handleCloseZoom = () => {
-    setZoomedImageUrl(null);
-  };
-
-  const handleBack = () => {
-    router.push('/logo-gen');
-  };
+  const handleBack = () => router.push('/logo-gen');
 
   const handleRegenerate = () => {
     dispatch<any>(
@@ -56,26 +49,27 @@ const LogoGenResults = () => {
     );
   };
 
+  const hasResults = results && results.length > 0;
+
   return (
-    <Box sx={LogoGenResultsStyles.container}>
+    <Box sx={ToolPageStyles.resultsPage}>
       {zoomedImageUrl && zoomedIndex >= 0 && (
         <ZoomImage
           url={zoomedImageUrl}
-          handleClose={handleCloseZoom}
+          handleClose={() => setZoomedImageUrl(null)}
           images={imageUrls.length > 1 ? imageUrls : undefined}
           initialIndex={zoomedIndex}
         />
       )}
       <ResultsHeader />
+      <GenerationErrorAlert message={error} />
       {loading && <Loading />}
-      <Grid container justifyContent={'center'} alignItems={'center'}>
-        {results && results.length > 0 && (
-          <>
-            <ResultsGrid results={results} onZoom={handleZoom} />
-            <ActionButtons onBack={handleBack} onRegenerate={handleRegenerate} />
-          </>
-        )}
-      </Grid>
+      {hasResults && (
+        <Box sx={ToolPageStyles.resultsWorkspace}>
+          <ResultsGrid results={results} onZoom={setZoomedImageUrl} />
+          <ActionButtons onBack={handleBack} onRegenerate={handleRegenerate} />
+        </Box>
+      )}
     </Box>
   );
 };

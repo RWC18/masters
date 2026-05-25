@@ -131,7 +131,7 @@ const RegisterForm = () => {
           handleClick={handleRegister}
           title={t('auth.register')}
           bgColor={colors.ORANGE_ACTIVE}
-          hoverColor={colors.GRAY_DARK}
+          hoverColor={colors.ORANGE_LIGHT}
           textColor={colors.TEXT_DARK}
           isDisabled={isButtonDisabled()}
           isLoading={isLoading}

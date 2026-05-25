@@ -4,6 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { saveGenerationHistory } from './historyActions';
 import { LOCALSTORAGE_KEYS } from '../../constants/constants';
 import { setUser } from './mainActions';
+import { parseApiError } from './apiError';
+import {
+  handleAxiosGenerationError,
+  handleResponseGenerationError,
+} from './generationErrorHandler';
 
 export const avatarActionTypes = {
   SET_PROMPT_AVATAR: 'SET_PROMPT_AVATAR',
@@ -14,6 +19,10 @@ export const avatarActionTypes = {
   SET_SELECTED_STYLE_AVATAR: 'SET_SELECTED_STYLE_AVATAR',
 };
 
+const setError = (dispatch: any, message: string | null) => {
+  dispatch({ type: avatarActionTypes.SET_ERROR_AVATAR, data: message });
+};
+
 const getFileExtension = (filename: string): string => {
   const lastDot = filename.lastIndexOf('.');
   return lastDot !== -1 ? filename.substring(lastDot) : '.png';
@@ -21,6 +30,7 @@ const getFileExtension = (filename: string): string => {
 
 export const uploaderAvatar = (file: File) => async (dispatch: any) => {
   try {
+    setError(dispatch, null);
     const uuid = uuidv4();
     const extension = getFileExtension(file.name);
     const newFileName = `${uuid}${extension}`;
@@ -43,11 +53,24 @@ export const uploaderAvatar = (file: File) => async (dispatch: any) => {
       }
     );
 
-    dispatch({
-      type: avatarActionTypes.SET_UPLOADED_IMAGE_AVATAR,
-      data: res.data.data.url,
-    });
+    if (res.data?.status === STATUS_TYPES.SUCCESS && res.data?.data?.url) {
+      dispatch({
+        type: avatarActionTypes.SET_UPLOADED_IMAGE_AVATAR,
+        data: res.data.data.url,
+      });
+    } else {
+      setError(
+        dispatch,
+        res.data?.message || 'Image upload failed. Please try again.'
+      );
+      dispatch({
+        type: avatarActionTypes.SET_UPLOADED_IMAGE_AVATAR,
+        data: null,
+      });
+    }
   } catch (e) {
+    const parsed = parseApiError(e);
+    setError(dispatch, parsed.message);
     dispatch({
       type: avatarActionTypes.SET_UPLOADED_IMAGE_AVATAR,
       data: null,
@@ -69,71 +92,90 @@ export const setAvatarStyle = (styleId: string | null) => async (dispatch: any) 
   });
 };
 
-export const genAvatar = (prompt: string, imageUrl: string, stylePrompt?: string) => async (dispatch: any, getState: any) => {
-  try {
-    dispatch({
-      type: avatarActionTypes.SET_ERROR_AVATAR,
-      data: false,
-    });
-    dispatch({
-      type: avatarActionTypes.SET_RESULTS_AVATAR,
-      data: [],
-    });
-    dispatch({
-      type: avatarActionTypes.SET_LOADING_AVATAR,
-      data: true,
-    });
-
-    const fullPrompt = stylePrompt ? `${prompt}, ${stylePrompt}` : prompt;
-
-    const res = await axios.post(
-      `${BACKEND_BASE_URL}/generation/avatar`,
-      {
-        image_url: imageUrl,
-        prompt: fullPrompt,
-        count: 4,
-      },
-      { headers: getAuthHeaders() }
-    );
-
-    if (res.data.status === STATUS_TYPES.SUCCESS) {
-      const inferenceId = res.data.data.inference_id;
-      const results = await getAvatarResults(inferenceId);
-      const images = results?.data?.urls || results?.data?.data || (Array.isArray(results?.data) ? results?.data : []) || [];
+export const genAvatar =
+  (prompt: string, imageUrl: string, stylePrompt?: string) =>
+  async (dispatch: any, getState: any) => {
+    try {
+      setError(dispatch, null);
       dispatch({
         type: avatarActionTypes.SET_RESULTS_AVATAR,
-        data: images,
+        data: [],
       });
-      const urls = Array.isArray(images) ? images.map((i: any) => (typeof i === 'string' ? i : i?.url)) : [];
-      saveGenerationHistory('avatar', { prompt: fullPrompt, images: urls }).catch(() => {});
-      if (typeof res?.data?.balance === 'number') {
-        const currentUser = getState()?.main?.user;
-        if (currentUser) {
-          dispatch(setUser({ ...currentUser, credits: res.data.balance }));
-        }
-      }
-    } else {
       dispatch({
-        type: avatarActionTypes.SET_ERROR_AVATAR,
+        type: avatarActionTypes.SET_LOADING_AVATAR,
         data: true,
       });
-    }
 
-    dispatch({
-      type: avatarActionTypes.SET_LOADING_AVATAR,
-      data: false,
-    });
-  } catch (e) {
-    dispatch({
-      type: avatarActionTypes.SET_ERROR_AVATAR,
-      data: true,
-    });
-    dispatch({
-      type: avatarActionTypes.SET_LOADING_AVATAR,
-      data: false,
-    });
-  }
-};
+      const fullPrompt = stylePrompt ? `${prompt}, ${stylePrompt}` : prompt;
+
+      const res = await axios.post(
+        `${BACKEND_BASE_URL}/generation/avatar`,
+        {
+          image_url: imageUrl,
+          prompt: fullPrompt,
+          count: 4,
+        },
+        { headers: getAuthHeaders() }
+      );
+
+      if (res.data.status === STATUS_TYPES.SUCCESS) {
+        const inferenceId = res.data.data.inference_id;
+        const results = await getAvatarResults(inferenceId);
+        const images =
+          results?.data?.urls ||
+          results?.data?.data ||
+          (Array.isArray(results?.data) ? results?.data : []) ||
+          [];
+
+        if (!images.length) {
+          setError(
+            dispatch,
+            results?.failed
+              ? 'Generation failed. Please try again.'
+              : 'No avatars were returned. Please try again.'
+          );
+        } else {
+          dispatch({
+            type: avatarActionTypes.SET_RESULTS_AVATAR,
+            data: images,
+          });
+          const urls = Array.isArray(images)
+            ? images.map((i: any) => (typeof i === 'string' ? i : i?.url))
+            : [];
+          saveGenerationHistory('avatar', {
+            prompt: fullPrompt,
+            images: urls,
+          }).catch(() => {});
+        }
+
+        if (typeof res?.data?.balance === 'number') {
+          const currentUser = getState()?.main?.user;
+          if (currentUser) {
+            dispatch(setUser({ ...currentUser, credits: res.data.balance }));
+          }
+        }
+      } else if (
+        !handleResponseGenerationError(dispatch, res.data, (msg) =>
+          setError(dispatch, msg)
+        )
+      ) {
+        setError(dispatch, 'Generation failed. Please try again.');
+      }
+
+      dispatch({
+        type: avatarActionTypes.SET_LOADING_AVATAR,
+        data: false,
+      });
+    } catch (e) {
+      handleAxiosGenerationError(dispatch, e, (msg) =>
+        setError(dispatch, msg)
+      );
+      dispatch({
+        type: avatarActionTypes.SET_LOADING_AVATAR,
+        data: false,
+      });
+    }
+  };
 
 const getAvatarResults = async (inferenceId: string) => {
   try {
@@ -157,12 +199,24 @@ const getAvatarResults = async (inferenceId: string) => {
         status !== STATUS_TYPES.QUEUED &&
         status !== ''
       ) {
-        return { response: res, data: res.data.data.data || res.data.data };
+        if (status === STATUS_TYPES.ERROR || status === 'failed') {
+          return {
+            response: res,
+            data: res.data.data.data || res.data.data,
+            failed: true,
+          };
+        }
+        return {
+          response: res,
+          data: res.data.data.data || res.data.data,
+          failed: false,
+        };
       }
 
       await new Promise((resolve) => setTimeout(resolve, 1500));
     }
+    return { response: null, data: null, failed: true };
   } catch (e) {
-    return { response: e, data: null };
+    return { response: e, data: null, failed: true };
   }
 };

@@ -1,123 +1,184 @@
-import React, { useState } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Typography } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import CheckIcon from '@mui/icons-material/Check';
 import { useTranslation } from 'react-i18next';
-import { colors } from '../../constants/styles';
+import { LanguageSelectorStyles } from './LanguageSelector.styles';
+
+const CLOSE_DELAY_MS = 180;
 
 const languages = [
-  { code: 'en', label: 'EN', flag: '\u{1F1EC}\u{1F1E7}' },
-  { code: 'hy', label: 'HY', flag: '\u{1F1E6}\u{1F1F2}' },
-  { code: 'ru', label: 'RU', flag: '\u{1F1F7}\u{1F1FA}' },
+  { code: 'en', label: 'EN', flag: '\u{1F1EC}\u{1F1E7}', nameKey: 'language.english' },
+  { code: 'hy', label: 'HY', flag: '\u{1F1E6}\u{1F1F2}', nameKey: 'language.armenian' },
+  { code: 'ru', label: 'RU', flag: '\u{1F1F7}\u{1F1FA}', nameKey: 'language.russian' },
 ];
 
-const LanguageSelector = () => {
-  const { i18n } = useTranslation();
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
+interface LanguageSelectorProps {
+  variant?: 'default' | 'drawer';
+}
 
-  const currentLang = languages.find((l) => l.code === i18n.language) || languages[0];
+const LanguageSelector = ({ variant = 'default' }: LanguageSelectorProps) => {
+  const { t, i18n } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const resolvedCode = i18n.language?.split('-')[0] || 'en';
+  const currentLang =
+    languages.find((l) => l.code === resolvedCode) || languages[0];
+
+  const clearCloseTimer = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  };
+
+  const scheduleClose = () => {
+    clearCloseTimer();
+    closeTimerRef.current = setTimeout(() => setOpen(false), CLOSE_DELAY_MS);
+  };
+
+  const handleOpen = () => {
+    clearCloseTimer();
+    setOpen(true);
+  };
 
   const handleChange = (code: string) => {
     i18n.changeLanguage(code);
     localStorage.setItem('vai_lang', code);
+    clearCloseTimer();
     setOpen(false);
   };
 
+  useEffect(() => {
+    if (variant === 'drawer') return;
+
+    const onDocClick = (e: MouseEvent) => {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+        clearCloseTimer();
+        setOpen(false);
+      }
+    };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        clearCloseTimer();
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener('mousedown', onDocClick);
+      document.addEventListener('keydown', onKeyDown);
+    }
+    return () => {
+      document.removeEventListener('mousedown', onDocClick);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open, variant]);
+
+  useEffect(() => () => clearCloseTimer(), []);
+
+  if (variant === 'drawer') {
+    return (
+      <Box sx={LanguageSelectorStyles.drawerList}>
+        {languages.map((lang) => {
+          const active = lang.code === resolvedCode;
+          return (
+            <Box
+              key={lang.code}
+              sx={LanguageSelectorStyles.drawerItem(active)}
+              onClick={() => handleChange(lang.code)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && handleChange(lang.code)}
+            >
+              <Typography sx={LanguageSelectorStyles.menuFlag}>
+                {lang.flag}
+              </Typography>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography sx={LanguageSelectorStyles.menuText(active)}>
+                  {t(lang.nameKey)}
+                </Typography>
+                <Typography
+                  sx={{ fontSize: 11, color: 'text.secondary', fontWeight: 600 }}
+                >
+                  {lang.label}
+                </Typography>
+              </Box>
+              {active && <CheckIcon sx={LanguageSelectorStyles.check} />}
+            </Box>
+          );
+        })}
+      </Box>
+    );
+  }
+
   return (
     <Box
-      sx={{ position: 'relative', userSelect: 'none' }}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      ref={rootRef}
+      sx={LanguageSelectorStyles.root}
+      onMouseEnter={handleOpen}
+      onMouseLeave={scheduleClose}
     >
       <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          cursor: 'pointer',
-          padding: '6px 12px',
-          borderRadius: '8px',
-          transition: '.25s',
-          '&:hover': {
-            backgroundColor:
-              theme.palette.mode === 'dark'
-                ? 'rgba(255,255,255,0.08)'
-                : 'rgba(13, 59, 102, 0.08)',
-          },
+        sx={LanguageSelectorStyles.trigger(open)}
+        onClick={() => {
+          clearCloseTimer();
+          setOpen((v) => !v);
+        }}
+        role="button"
+        tabIndex={0}
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            clearCloseTimer();
+            setOpen((v) => !v);
+          }
         }}
       >
-        <Typography sx={{ fontSize: '18px', lineHeight: 1 }}>
+        <Typography sx={LanguageSelectorStyles.triggerFlag}>
           {currentLang.flag}
         </Typography>
-        <Typography
-          sx={{
-            color: colors.TEXT_GRAY,
-            fontSize: '13px',
-            fontWeight: '600',
-          }}
-        >
+        <Typography sx={LanguageSelectorStyles.triggerLabel}>
           {currentLang.label}
         </Typography>
+        <KeyboardArrowDownIcon sx={LanguageSelectorStyles.chevron(open)} />
       </Box>
 
       {open && (
         <Box
-          sx={{
-            position: 'absolute',
-            top: '100%',
-            right: 0,
-            backgroundColor: colors.BG_PAPER,
-            borderRadius: '10px',
-            border:
-              theme.palette.mode === 'dark'
-                ? '1px solid rgba(255,255,255,0.12)'
-                : '1px solid rgba(13, 59, 102, 0.18)',
-            overflow: 'hidden',
-            minWidth: '100px',
-            zIndex: 100,
-          }}
+          sx={LanguageSelectorStyles.menuWrap}
+          onMouseEnter={handleOpen}
+          onMouseLeave={scheduleClose}
         >
-          {languages.map((lang) => (
-            <Box
-              key={lang.code}
-              onClick={() => handleChange(lang.code)}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '10px 14px',
-                cursor: 'pointer',
-                transition: '.2s',
-                backgroundColor:
-                  lang.code === i18n.language
-                    ? theme.palette.mode === 'dark'
-                      ? 'rgba(238, 0, 90, 0.14)'
-                      : 'rgba(13, 59, 102, 0.12)'
-                    : 'transparent',
-                '&:hover': {
-                  backgroundColor:
-                    theme.palette.mode === 'dark'
-                      ? 'rgba(255,255,255,0.08)'
-                      : 'rgba(13, 59, 102, 0.08)',
-                },
-              }}
-            >
-              <Typography sx={{ fontSize: '18px', lineHeight: 1 }}>
-                {lang.flag}
-              </Typography>
-              <Typography
-                sx={{
-                  color:
-                    lang.code === i18n.language
-                      ? colors.ORANGE_ACTIVE
-                      : colors.TEXT_GRAY,
-                  fontSize: '13px',
-                  fontWeight: '600',
-                }}
-              >
-                {lang.label}
-              </Typography>
-            </Box>
-          ))}
+          <Box sx={LanguageSelectorStyles.menu} role="listbox">
+            {languages.map((lang) => {
+              const active = lang.code === resolvedCode;
+              return (
+                <Box
+                  key={lang.code}
+                  sx={LanguageSelectorStyles.menuItem(active)}
+                  onClick={() => handleChange(lang.code)}
+                  role="option"
+                  aria-selected={active}
+                >
+                  <Typography sx={LanguageSelectorStyles.menuFlag}>
+                    {lang.flag}
+                  </Typography>
+                  <Typography sx={LanguageSelectorStyles.menuText(active)}>
+                    {t(lang.nameKey)}
+                  </Typography>
+                  {active && <CheckIcon sx={LanguageSelectorStyles.check} />}
+                </Box>
+              );
+            })}
+          </Box>
         </Box>
       )}
     </Box>

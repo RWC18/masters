@@ -4,7 +4,7 @@ const initialState = {
   prompt: '',
   results: [],
   loading: false,
-  error: false,
+  error: null as string | null,
   selectedStyles: [] as any,
 };
 

@@ -1,55 +1,27 @@
-import { colors as styleColors } from '../../constants/styles';
+import { ToolPageStyles } from '../shared/ToolPage.styles';
 
 export const LogoGenStyles = {
-  container: {
-    padding: { md: '12px 64px', xs: '8px 32px' },
-  },
-  title: {
-    color: styleColors.ORANGE_LIGHT,
-    textAlign: 'center',
-    fontSize: { md: '48px', xs: '32px' },
-    fontWeight: '900',
-  },
-  titleAccent: {
-    color: styleColors.TEXT_WHITE,
-    textAlign: 'center',
-    fontSize: { md: '48px', xs: '32px' },
-    fontWeight: '900',
-  },
-  description: {
-    color: styleColors.TEXT_GRAY,
-    textAlign: 'center',
-    fontSize: { md: '18px', xs: '16px' },
-    fontWeight: '300',
-  },
-  inputContainer: {
-    marginTop: { md: '24px', xs: '18px' },
-  },
-  inputGrid: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  selectionContainer: {
-    justifyContent: 'center',
-    display: 'flex',
-    marginTop: '42px',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
+  container: ToolPageStyles.page,
+  ...ToolPageStyles,
+  inputContainer: ToolPageStyles.panelSection,
+  inputGrid: ToolPageStyles.inputRow,
+  selectionContainer: ToolPageStyles.stylesSection,
+  colorsSectionTitle: ToolPageStyles.stylesSectionTitle,
   colorsGrid: {
+    display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    alignItems: 'top',
-    width: '80%',
-    marginTop: '32px',
-    marginBottom: '32px',
+    justifyContent: 'center',
+    gap: { xs: 1.25, md: 1.75 },
+    maxWidth: 800,
+    mx: 'auto',
+  },
+  colorItem: {
+    flex: '0 0 auto',
+    width: 110,
   },
   generateButtonContainer: {
     display: { md: 'flex', xs: 'none' },
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '28px',
-    marginBottom: '28px',
+    mt: 2,
   },
 };
-

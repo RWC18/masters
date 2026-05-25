@@ -1,0 +1,60 @@
+import { colors } from '../../constants/styles';
+
+export const PaymentPopUpStyles = {
+  backdrop: (isOpen: boolean) => ({
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backdropFilter: 'blur(8px)',
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    zIndex: 30,
+    display: isOpen ? 'flex' : 'none',
+    alignItems: 'center',
+    justifyContent: 'center',
+    p: 2,
+  }),
+  panel: {
+    position: 'relative',
+    width: '100%',
+    maxWidth: 720,
+    maxHeight: '90vh',
+    overflow: 'auto',
+    bgcolor: colors.BG_PAPER,
+    color: colors.TEXT_WHITE,
+    borderRadius: '16px',
+    border: '1px solid rgba(255,255,255,0.1)',
+    p: { xs: 2, md: 3 },
+    boxShadow: '0 24px 48px rgba(0,0,0,0.4)',
+  },
+  closeBtn: {
+    position: 'absolute',
+    right: { xs: 8, md: 12 },
+    top: { xs: 8, md: 12 },
+    color: colors.ORANGE_ACTIVE,
+    cursor: 'pointer',
+  },
+  title: {
+    fontSize: { xs: 24, md: 32 },
+    fontWeight: 800,
+    color: colors.ORANGE_LIGHT,
+    pr: 5,
+    mb: 0.5,
+  },
+  subtitle: {
+    color: colors.TEXT_GRAY,
+    mb: 2,
+  },
+  balance: {
+    color: colors.ORANGE_LIGHT,
+    fontSize: 28,
+    fontWeight: 800,
+    mb: 2,
+  },
+  error: {
+    color: '#ff6666',
+    mb: 2,
+    fontSize: 14,
+  },
+};

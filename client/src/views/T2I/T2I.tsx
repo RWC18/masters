@@ -11,6 +11,7 @@ import {
 } from '../../redux/Actions/t2iActions';
 import Loading from '../../components/Loading/Loading';
 import { T2IStyles } from './T2I.styles';
+import { ToolPageStyles } from '../shared/ToolPage.styles';
 import HeaderSection from './components/HeaderSection';
 import InputSection from './components/InputSection';
 import StylesSection from './components/StylesSection';
@@ -57,16 +58,20 @@ const T2I = () => {
   return (
     <Box sx={T2IStyles.container}>
       {loading && <Loading />}
-      <HeaderSection />
+      <Box sx={ToolPageStyles.centeredContent}>
+        <HeaderSection />
+      </Box>
       <InputSection
         prompt={prompt}
         onPromptChange={handlePromptChange}
         onGenerate={handleGenerate}
       />
-      <StylesSection
-        selectedStyles={selectedStyles}
-        onStyleSelect={handleStyleSelect}
-      />
+      <Box sx={ToolPageStyles.centeredContent}>
+        <StylesSection
+          selectedStyles={selectedStyles}
+          onStyleSelect={handleStyleSelect}
+        />
+      </Box>
     </Box>
   );
 };

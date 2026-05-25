@@ -1,27 +1,65 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Alert, Box, Grid, Typography } from '@mui/material';
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
+import FaceRetouchingNaturalOutlinedIcon from '@mui/icons-material/FaceRetouchingNaturalOutlined';
+import DesignServicesOutlinedIcon from '@mui/icons-material/DesignServicesOutlined';
+import LayersClearOutlinedIcon from '@mui/icons-material/LayersClearOutlined';
+import HistoryIcon from '@mui/icons-material/History';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
-import Button from '../../components/Button/Button';
+import { useSelector } from 'react-redux';
+import CreditPacksPanel from '../../components/CreditPacksPanel/CreditPacksPanel';
+import TransactionsPopUp from '../../components/TransactionsPopUp/TransactionsPopUp';
 import { colors } from '../../constants/styles';
-import { fetchWallet, purchasePack, WalletResponse } from '../../redux/Actions/billingActions';
-import { setUser } from '../../redux/Actions/mainActions';
+import { fetchWallet, WalletResponse } from '../../redux/Actions/billingActions';
 import { useTranslation } from 'react-i18next';
+import { BillingStyles } from './Billing.styles';
+
+const USAGE_TOOLS = [
+  {
+    key: 't2i',
+    titleKey: 'history.tabs.t2i',
+    usageKey: 'billing.t2iUsage',
+    icon: AutoAwesomeOutlinedIcon,
+    tint: 'rgba(255, 140, 80, 0.15)',
+  },
+  {
+    key: 'avatar',
+    titleKey: 'history.tabs.avatar',
+    usageKey: 'billing.avatarUsage',
+    icon: FaceRetouchingNaturalOutlinedIcon,
+    tint: 'rgba(120, 200, 255, 0.15)',
+  },
+  {
+    key: 'logo',
+    titleKey: 'history.tabs.logo',
+    usageKey: 'billing.logoUsage',
+    icon: DesignServicesOutlinedIcon,
+    tint: 'rgba(180, 140, 255, 0.15)',
+  },
+  {
+    key: 'removebg',
+    titleKey: 'history.tabs.removebg',
+    usageKey: 'billing.removeBgUsage',
+    icon: LayersClearOutlinedIcon,
+    tint: 'rgba(100, 220, 180, 0.15)',
+  },
+] as const;
 
 const Billing = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const dispatch = useDispatch();
   const user = useSelector((state: any) => state.main.user);
   const [wallet, setWallet] = useState<WalletResponse | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [activePack, setActivePack] = useState<string | null>(null);
   const [error, setError] = useState<string>('');
+  const [transactionsOpen, setTransactionsOpen] = useState(false);
 
   const loadWallet = useCallback(async () => {
-    setLoading(true);
     const data = await fetchWallet();
     if (!data) {
       setError(t('billing.loadError'));
@@ -29,7 +67,6 @@ const Billing = () => {
       setWallet(data);
       setError('');
     }
-    setLoading(false);
   }, [t]);
 
   useEffect(() => {
@@ -42,109 +79,181 @@ const Billing = () => {
 
   if (!user) return null;
 
+  const balance = wallet?.balance ?? user?.credits ?? 0;
+  const transactions = wallet?.transactions || [];
+  const txCount = transactions.length;
+
   return (
-    <Box sx={{ maxWidth: 1100, margin: '0 auto', px: 2, pb: 6 }}>
-      <Typography sx={{ fontSize: { xs: 28, md: 42 }, fontWeight: 800, color: colors.ORANGE_LIGHT, mb: 1 }}>
-        {t('billing.title')}
-      </Typography>
-      <Typography sx={{ color: colors.TEXT_GRAY, mb: 3 }}>
-        {t('billing.subtitle')}
-      </Typography>
-
-      <Paper sx={{ p: 2, mb: 3, bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.08)' }}>
-        <Typography sx={{ color: colors.TEXT_GRAY, fontSize: 14 }}>{t('billing.currentBalance')}</Typography>
-        <Typography sx={{ color: colors.ORANGE_LIGHT, fontSize: 34, fontWeight: 800 }}>
-          {wallet?.balance ?? user?.credits ?? 0} {t('billing.credits')}
+    <Box sx={BillingStyles.page}>
+      <Box sx={{ mb: 1 }}>
+        <Typography component="h1" sx={BillingStyles.title}>
+          {t('billing.title')}
         </Typography>
-      </Paper>
+        <Typography component="span" sx={BillingStyles.titleAccent}>
+          {' '}
+          & {t('billing.titleAccent')}
+        </Typography>
+      </Box>
+      <Typography sx={BillingStyles.subtitle}>{t('billing.subtitle')}</Typography>
 
-      {error && (
-        <Typography sx={{ color: '#ff6666', mb: 2 }}>{error}</Typography>
-      )}
-
-      <Grid container spacing={2}>
-        {(wallet?.packs || []).map((pack) => (
-          <Grid item xs={12} sm={6} md={3} key={pack.id}>
-            <Paper sx={{ p: 2, bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <Typography sx={{ fontSize: 20, fontWeight: 700, color: colors.ORANGE_LIGHT }}>
-                {pack.credits} {t('billing.credits')}
-              </Typography>
-              <Typography sx={{ color: colors.TEXT_GRAY, mb: 2 }}>
-                ${pack.price_usd.toFixed(2)}
-              </Typography>
-              <Button
-                title={t('billing.buyNow')}
-                handleClick={async () => {
-                  setActivePack(pack.id);
-                  const res = await purchasePack(pack.id);
-                  setActivePack(null);
-                  if (res.ok) {
-                    const nextBalance = typeof res.balance === 'number' ? res.balance : wallet?.balance || 0;
-                    dispatch<any>(setUser({ ...user, credits: nextBalance }));
-                    loadWallet();
-                  } else {
-                    setError(res.message || t('billing.purchaseError'));
-                  }
+      <Grid container spacing={2} sx={BillingStyles.heroGrid}>
+        <Grid item xs={12} md={8}>
+          <Box sx={BillingStyles.balanceCard}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+                gap: 2,
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
+              <Box>
+                <Typography sx={BillingStyles.balanceLabel}>
+                  {t('billing.currentBalance')}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap' }}>
+                  <Typography component="span" sx={BillingStyles.balanceValue}>
+                    {balance}
+                  </Typography>
+                  <Typography component="span" sx={BillingStyles.balanceUnit}>
+                    {t('billing.credits')}
+                  </Typography>
+                </Box>
+                <Typography
+                  sx={{ color: colors.TEXT_GRAY, fontSize: 14, mt: 2, maxWidth: 360 }}
+                >
+                  {t('billing.balanceHint')}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  bgcolor: 'rgba(255, 140, 80, 0.18)',
+                  flexShrink: 0,
                 }}
-                textColor={colors.TEXT_DARK}
-                bgColor={colors.ORANGE_ACTIVE}
-                hoverColor={colors.ORANGE_LIGHT}
-                isDisabled={loading}
-                isLoading={activePack === pack.id}
-                styles={{ width: '100%' }}
-              />
-            </Paper>
-          </Grid>
-        ))}
+              >
+                <AccountBalanceWalletOutlinedIcon
+                  sx={{ fontSize: 30, color: colors.ORANGE_LIGHT }}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Box
+            sx={BillingStyles.historyCard}
+            onClick={() => setTransactionsOpen(true)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setTransactionsOpen(true);
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box
+                sx={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: '12px',
+                  bgcolor: 'rgba(255, 140, 80, 0.12)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <HistoryIcon sx={{ color: colors.ORANGE_LIGHT }} />
+              </Box>
+              <Box>
+                <Typography
+                  sx={{ color: colors.TEXT_WHITE, fontWeight: 700, fontSize: 15 }}
+                >
+                  {t('billing.viewTransactions')}
+                </Typography>
+                <Typography sx={{ color: colors.TEXT_GRAY, fontSize: 13 }}>
+                  {txCount > 0
+                    ? t('billing.transactionsPreview', { count: txCount })
+                    : t('billing.transactionsEmpty')}
+                </Typography>
+              </Box>
+            </Box>
+            <ChevronRightIcon sx={{ color: colors.ORANGE_LIGHT }} />
+          </Box>
+        </Grid>
       </Grid>
 
-      <Box sx={{ mt: 4 }}>
-        <Typography sx={{ color: colors.ORANGE_LIGHT, fontSize: 20, fontWeight: 700, mb: 1 }}>
-          {t('billing.usageTitle')}
+      {error && (
+        <Alert severity="error" sx={{ mb: 3, borderRadius: '12px' }}>
+          {error}
+        </Alert>
+      )}
+
+      <Box sx={{ mb: 5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+          <ShoppingBagOutlinedIcon sx={{ color: colors.ORANGE_LIGHT, fontSize: 22 }} />
+          <Typography sx={BillingStyles.sectionTitle}>
+            {t('billing.packsTitle')}
+          </Typography>
+        </Box>
+        <Typography sx={BillingStyles.sectionDesc}>
+          {t('billing.packsSubtitle')}
+        </Typography>
+        <CreditPacksPanel
+          packs={wallet?.packs || []}
+          balance={balance}
+          onBalanceChange={() => loadWallet()}
+          onPurchaseError={(msg) => setError(msg)}
+        />
+      </Box>
+
+      <Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+          <InfoOutlinedIcon sx={{ color: colors.ORANGE_LIGHT, fontSize: 22 }} />
+          <Typography sx={BillingStyles.sectionTitle}>
+            {t('billing.usageTitle')}
+          </Typography>
+        </Box>
+        <Typography sx={{ ...BillingStyles.sectionDesc, mb: 2 }}>
+          {t('billing.usageSubtitle')}
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Paper sx={{ p: 2, bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <Typography sx={{ color: colors.TEXT_WHITE, fontWeight: 700 }}>{t('history.tabs.t2i')}</Typography>
-              <Typography sx={{ color: colors.TEXT_GRAY }}>{t('billing.t2iUsage')}</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Paper sx={{ p: 2, bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <Typography sx={{ color: colors.TEXT_WHITE, fontWeight: 700 }}>{t('history.tabs.avatar')}</Typography>
-              <Typography sx={{ color: colors.TEXT_GRAY }}>{t('billing.avatarUsage')}</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Paper sx={{ p: 2, bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <Typography sx={{ color: colors.TEXT_WHITE, fontWeight: 700 }}>{t('history.tabs.logo')}</Typography>
-              <Typography sx={{ color: colors.TEXT_GRAY }}>{t('billing.logoUsage')}</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Paper sx={{ p: 2, bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <Typography sx={{ color: colors.TEXT_WHITE, fontWeight: 700 }}>{t('history.tabs.removebg')}</Typography>
-              <Typography sx={{ color: colors.TEXT_GRAY }}>{t('billing.removeBgUsage')}</Typography>
-            </Paper>
-          </Grid>
+          {USAGE_TOOLS.map((tool) => {
+            const Icon = tool.icon;
+            return (
+              <Grid item xs={12} sm={6} md={3} key={tool.key}>
+                <Box sx={BillingStyles.usageCard}>
+                  <Box sx={BillingStyles.usageIconWrap(tool.tint)}>
+                    <Icon sx={{ fontSize: 22, color: colors.ORANGE_LIGHT }} />
+                  </Box>
+                  <Typography
+                    sx={{ color: colors.TEXT_WHITE, fontWeight: 700, fontSize: 15 }}
+                  >
+                    {t(tool.titleKey)}
+                  </Typography>
+                  <Box component="span" sx={BillingStyles.usageCost}>
+                    {t(tool.usageKey)}
+                  </Box>
+                </Box>
+              </Grid>
+            );
+          })}
         </Grid>
       </Box>
 
-      <Box sx={{ mt: 4 }}>
-        <Typography sx={{ color: colors.ORANGE_LIGHT, fontSize: 20, fontWeight: 700, mb: 1 }}>
-          {t('billing.recentTransactions')}
-        </Typography>
-        {(wallet?.transactions || []).slice(0, 12).map((tx) => (
-          <Paper key={tx._id} sx={{ p: 1.5, mb: 1, bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <Typography sx={{ color: colors.TEXT_WHITE, fontSize: 14 }}>
-              {tx.reason} - {tx.amount > 0 ? `+${tx.amount}` : tx.amount} {t('billing.credits')} - {t('billing.balance')}: {tx.balance_after}
-            </Typography>
-          </Paper>
-        ))}
-      </Box>
+      <TransactionsPopUp
+        isOpen={transactionsOpen}
+        onClose={() => setTransactionsOpen(false)}
+        transactions={transactions}
+      />
     </Box>
   );
 };
 
 export default Billing;
-

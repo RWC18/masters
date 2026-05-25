@@ -13,11 +13,15 @@ import { colors } from '../../constants/styles';
 import { RemoveBgStyles } from './RemoveBg.styles';
 import { useRemoveBgConstants } from './RemoveBg.constants';
 import BeforeAfterSlider from './components/BeforeAfterSlider';
+import GenerationErrorAlert from '../../components/GenerationErrorAlert/GenerationErrorAlert';
+import ToolPageHeader from '../shared/ToolPageHeader';
+import CreditsBadge from '../shared/CreditsBadge';
+import { ToolPageStyles } from '../shared/ToolPage.styles';
 import { useTranslation } from 'react-i18next';
 
 const RemoveBg = () => {
   const { t } = useTranslation();
-  const REMOVE_BG_CONSTANTS = useRemoveBgConstants();
+  const c = useRemoveBgConstants();
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -33,7 +37,7 @@ const RemoveBg = () => {
   }, [user, router]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files?.[0]) {
       dispatch<any>(uploadAndRemoveBg(e.target.files[0]));
     }
   };
@@ -48,94 +52,67 @@ const RemoveBg = () => {
     <Box sx={RemoveBgStyles.container}>
       {loading && <Loading />}
 
-      <Typography sx={RemoveBgStyles.title}>
-        {REMOVE_BG_CONSTANTS.title.main}{' '}
-        <Typography component={'span'} sx={RemoveBgStyles.titleAccent}>
-          {REMOVE_BG_CONSTANTS.title.accent}
-        </Typography>
-      </Typography>
-      <Typography sx={RemoveBgStyles.description}>
-        {REMOVE_BG_CONSTANTS.description}
-      </Typography>
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-        <Box
-          sx={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 1,
-            px: 1.5,
-            py: 0.75,
-            mb: 2,
-            borderRadius: '999px',
-            border: '1px solid rgba(255,255,255,0.14)',
-            backgroundColor: 'background.paper',
-            color: colors.TEXT_GRAY,
-            fontSize: 13,
-            fontWeight: 500,
-          }}
-        >
-          <Box component="span" sx={{ color: colors.ORANGE_LIGHT }}>⚡</Box>
-          {t('billing.removeBgUsage')}
-        </Box>
-      </Box>
+      <ToolPageHeader
+        eyebrow={t('products.removeBg.title')}
+        titleMain={c.title.main}
+        titleAccent={c.title.accent}
+        description={c.description}
+      />
+
+      <CreditsBadge label={t('billing.removeBgUsage')} />
 
       {!hasResult && !loading && (
-        <label htmlFor='removebg-upload'>
+        <label htmlFor="removebg-upload">
           <input
-            accept='image/*'
-            id='removebg-upload'
-            type='file'
+            accept="image/*"
+            id="removebg-upload"
+            type="file"
             style={{ display: 'none' }}
             onChange={handleFileSelect}
           />
           <Box sx={RemoveBgStyles.uploadArea}>
-            <IconButton component='span'>
+            <IconButton component="span">
               <CloudUploadIcon
-                sx={{ fontSize: 48, color: colors.TEXT_GRAY }}
+                sx={{ fontSize: 48, color: colors.ORANGE_LIGHT }}
               />
             </IconButton>
             <Typography sx={RemoveBgStyles.uploadText}>
-              {REMOVE_BG_CONSTANTS.uploadButton}
+              {c.uploadButton}
             </Typography>
           </Box>
         </label>
       )}
 
       {hasResult && (
-        <>
+        <Box sx={ToolPageStyles.panelSection}>
           <BeforeAfterSlider
             originalUrl={originalImage}
             resultUrl={resultImage}
           />
           <Box sx={RemoveBgStyles.buttonsContainer}>
             <Button
-              title={REMOVE_BG_CONSTANTS.downloadButton}
+              title={c.downloadButton}
               handleClick={() => forceDownload(resultImage)}
               textColor={colors.TEXT_DARK}
               bgColor={colors.ORANGE_ACTIVE}
-              padding='14px 32px'
+              padding="14px 32px"
               hoverColor={colors.ORANGE_LIGHT}
               isDisabled={false}
             />
             <Button
-              title={REMOVE_BG_CONSTANTS.resetButton}
+              title={c.resetButton}
               handleClick={handleReset}
               textColor={colors.TEXT_WHITE}
-              bgColor={'transparent'}
-              padding='14px 32px'
+              bgColor="rgba(255,255,255,0.08)"
+              padding="14px 32px"
               hoverColor={colors.GRAY_DARK}
               isDisabled={false}
             />
           </Box>
-        </>
+        </Box>
       )}
 
-      {error && (
-        <Typography sx={{ color: 'red', textAlign: 'center', marginTop: '16px' }}>
-          {REMOVE_BG_CONSTANTS.error}
-        </Typography>
-      )}
+      <GenerationErrorAlert message={error} />
     </Box>
   );
 };

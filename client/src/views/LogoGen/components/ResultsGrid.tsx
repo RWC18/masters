@@ -1,35 +1,31 @@
-import { Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 import ResultImageCard from './ResultImageCard';
-import { LogoGenResultsStyles } from '../LogoGenResults.styles';
+import { ToolPageStyles } from '../../shared/ToolPage.styles';
 
 interface ResultsGridProps {
-  results: Array<{ id: string; url: string }>;
+  results: Array<{ id: string; url: string } | string>;
   onZoom: (url: string) => void;
 }
 
 const ResultsGrid: React.FC<ResultsGridProps> = ({ results, onZoom }) => {
+  const items = (results || [])
+    .map((r) => (typeof r === 'string' ? { id: r, url: r } : r))
+    .filter((r) => r?.url);
+
   return (
-    <Grid container justifyContent={'center'} alignItems={'center'}>
-      <Grid item xs={12} sm={12} lg={8} md={8}>
-        <Grid
-          container
-          sx={LogoGenResultsStyles.resultsGrid}
-          spacing={4}
-        >
-          {results.map((image: any) => (
-            <Grid item xs={6} sm={6} lg={4} md={4} key={image.id}>
-              <ResultImageCard
-                imageUrl={image.url}
-                onZoom={onZoom}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
-    </Grid>
+    <Box sx={ToolPageStyles.resultsArea}>
+      <Box sx={ToolPageStyles.resultsGridWide}>
+        {items.map((image) => (
+          <ResultImageCard
+            key={image.id || image.url}
+            imageUrl={image.url}
+            onZoom={onZoom}
+          />
+        ))}
+      </Box>
+    </Box>
   );
 };
 
 export default ResultsGrid;
-

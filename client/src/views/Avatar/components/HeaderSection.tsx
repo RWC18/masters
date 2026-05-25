@@ -1,24 +1,20 @@
-import { Typography } from '@mui/material';
 import React from 'react';
-import { AvatarStyles } from '../Avatar.styles';
+import ToolPageHeader from '../../shared/ToolPageHeader';
 import { useAvatarConstants } from '../Avatar.constants';
+import { useTranslation } from 'react-i18next';
 
 const HeaderSection = () => {
-  const AVATAR_CONSTANTS = useAvatarConstants();
+  const c = useAvatarConstants();
+  const { t } = useTranslation();
 
   return (
-    <>
-      <Typography sx={AvatarStyles.title}>
-        {AVATAR_CONSTANTS.title.main}{' '}
-        <Typography component={'span'} sx={AvatarStyles.titleAccent}>
-          {AVATAR_CONSTANTS.title.accent}
-        </Typography>{' '}
-        {AVATAR_CONSTANTS.title.end}
-      </Typography>
-      <Typography sx={AvatarStyles.description}>
-        {AVATAR_CONSTANTS.description}
-      </Typography>
-    </>
+    <ToolPageHeader
+      eyebrow={t('products.avatar.title')}
+      titleMain={c.title.main}
+      titleAccent={c.title.accent}
+      titleEnd={c.title.end}
+      description={c.description}
+    />
   );
 };
 

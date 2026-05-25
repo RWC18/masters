@@ -3,13 +3,17 @@ import mongoose from 'mongoose';
 import { History } from '../models/history';
 import { authMiddleware, AuthRequest } from '../middleware/authMiddleware';
 import { SERVICE_STATUS } from '../../constants/constants';
+import { BACKEND_URL } from '../../keys';
 import { persistRemoteImage } from '../utils/persistImage';
 
 const router = express.Router();
 
 const TOOL_NAMES = ['t2i', 'avatar', 'logo', 'removebg'] as const;
 
-const getPublicBaseUrl = (req: AuthRequest): string => {
+const getBackendBaseUrl = (req: AuthRequest): string => {
+  const fromEnv = BACKEND_URL.trim().replace(/\/$/, '');
+  if (fromEnv) return fromEnv;
+
   const protoHeader = (req.headers['x-forwarded-proto'] as string | undefined) || req.protocol;
   const hostHeader =
     (req.headers['x-forwarded-host'] as string | undefined) ||
@@ -116,7 +120,7 @@ const getHistory = async (req: AuthRequest, res: Response): Promise<void> => {
   const tool = req.query.tool as string | undefined;
 
   try {
-    const baseUrl = getPublicBaseUrl(req);
+    const baseUrl = getBackendBaseUrl(req);
     const filter: { user_id: mongoose.Types.ObjectId; tool_name?: string } = {
       user_id: new mongoose.Types.ObjectId(req.userId),
     };

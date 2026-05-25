@@ -16,6 +16,7 @@ import HeaderSection from './components/HeaderSection';
 import InputSection from './components/InputSection';
 import StylesSection from './components/StylesSection';
 import { MALE_PRESETS, FEMALE_PRESETS } from './Avatar.presets';
+import { AVATAR_GENERATION_ENABLED } from '../../constants/constants';
 
 const getStylePrompt = (styleId: string | null): string | undefined => {
   if (!styleId) return undefined;
@@ -58,8 +59,15 @@ const Avatar = () => {
   };
 
   const handleGenerate = () => {
+    if (!AVATAR_GENERATION_ENABLED || !image_url) return;
+    const stylePrompt = getStylePrompt(selectedStyle);
+    const effectivePrompt = prompt.trim() || (stylePrompt ? 'portrait' : '');
+    if (!effectivePrompt && !stylePrompt) return;
+
     router.push('/avatar/results');
-    dispatch<any>(genAvatar(prompt, image_url, getStylePrompt(selectedStyle)));
+    dispatch<any>(
+      genAvatar(effectivePrompt, image_url, stylePrompt)
+    );
   };
 
   return (
@@ -70,6 +78,7 @@ const Avatar = () => {
       <InputSection
         prompt={prompt}
         imageUrl={image_url}
+        selectedStyle={selectedStyle}
         onPromptChange={handlePromptChange}
         onImageChange={handleImageChange}
         onGenerate={handleGenerate}

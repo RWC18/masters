@@ -7,7 +7,7 @@ import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import { useTranslation } from 'react-i18next';
 import { colors } from './styles';
 
-const iconSx = { width: '32px', height: '32px' };
+const iconSx = { width: 28, height: 28, color: colors.ORANGE_LIGHT };
 
 export const usePluses = () => {
   const { t } = useTranslation();
@@ -15,32 +15,32 @@ export const usePluses = () => {
     {
       title: t('pluses.intuitiveInterface.title'),
       description: t('pluses.intuitiveInterface.description'),
-      icon: <TouchAppOutlinedIcon htmlColor={colors.ON_PRIMARY} sx={iconSx} />,
+      icon: <TouchAppOutlinedIcon sx={iconSx} />,
     },
     {
       title: t('pluses.aiPowered.title'),
       description: t('pluses.aiPowered.description'),
-      icon: <FlashOnOutlinedIcon htmlColor={colors.ON_PRIMARY} sx={iconSx} />,
+      icon: <FlashOnOutlinedIcon sx={iconSx} />,
     },
     {
       title: t('pluses.endless.title'),
       description: t('pluses.endless.description'),
-      icon: <PaletteOutlinedIcon htmlColor={colors.ON_PRIMARY} sx={iconSx} />,
+      icon: <PaletteOutlinedIcon sx={iconSx} />,
     },
     {
       title: t('pluses.timeSaving.title'),
       description: t('pluses.timeSaving.description'),
-      icon: <AccessTimeOutlinedIcon htmlColor={colors.ON_PRIMARY} sx={iconSx} />,
+      icon: <AccessTimeOutlinedIcon sx={iconSx} />,
     },
     {
       title: t('pluses.quality.title'),
       description: t('pluses.quality.description'),
-      icon: <StarOutlinedIcon htmlColor={colors.ON_PRIMARY} sx={iconSx} />,
+      icon: <StarOutlinedIcon sx={iconSx} />,
     },
     {
       title: t('pluses.security.title'),
       description: t('pluses.security.description'),
-      icon: <SecurityOutlinedIcon htmlColor={colors.ON_PRIMARY} sx={iconSx} />,
+      icon: <SecurityOutlinedIcon sx={iconSx} />,
     },
   ];
 };

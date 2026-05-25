@@ -9,3 +9,4 @@ export const AI_API_URL = process.env.AI_API_URL || '';
 // Back-compat: some envs used API_AUTH
 export const AI_AUTH = process.env.AI_AUTH || process.env.API_AUTH || '';
 export const X_APP_AUTH = process.env.X_APP_AUTH || '';
+export const BACKEND_URL = process.env.BACKEND_URL || '';

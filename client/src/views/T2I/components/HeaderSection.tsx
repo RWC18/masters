@@ -1,26 +1,21 @@
-import { Typography } from '@mui/material';
 import React from 'react';
-import { T2IStyles } from '../T2I.styles';
+import ToolPageHeader from '../../shared/ToolPageHeader';
 import { useT2IConstants } from '../T2I.constants';
+import { useTranslation } from 'react-i18next';
 
 const HeaderSection = () => {
-  const T2I_CONSTANTS = useT2IConstants();
+  const c = useT2IConstants();
+  const { t } = useTranslation();
 
   return (
-    <>
-      <Typography sx={T2IStyles.title}>
-        {T2I_CONSTANTS.title.main}{' '}
-        <Typography component={'span'} sx={T2IStyles.titleAccent}>
-          {T2I_CONSTANTS.title.accent}
-        </Typography>{' '}
-        {T2I_CONSTANTS.title.end}
-      </Typography>
-      <Typography sx={T2IStyles.description}>
-        {T2I_CONSTANTS.description}
-      </Typography>
-    </>
+    <ToolPageHeader
+      eyebrow={t('products.t2i.title')}
+      titleMain={c.title.main}
+      titleAccent={c.title.accent}
+      titleEnd={c.title.end}
+      description={c.description}
+    />
   );
 };
 
 export default HeaderSection;
-

@@ -2,6 +2,10 @@ import axios from 'axios';
 import { BACKEND_BASE_URL, STATUS_TYPES, getAuthHeaders } from './constants';
 import { saveGenerationHistory } from './historyActions';
 import { setUser } from './mainActions';
+import {
+  handleAxiosGenerationError,
+  handleResponseGenerationError,
+} from './generationErrorHandler';
 
 export const t2iActionTypes = {
   SET_PROMPT_T2I: 'SET_PROMPT_T2I',
@@ -9,6 +13,10 @@ export const t2iActionTypes = {
   SET_LOADING_T2I: 'SET_LOADING_T2I',
   SET_RESULTS_T2I: 'SET_RESULTS_T2I',
   SET_ERROR_T2I: 'SET_ERROR_T2I',
+};
+
+const setError = (dispatch: any, message: string | null) => {
+  dispatch({ type: t2iActionTypes.SET_ERROR_T2I, data: message });
 };
 
 export const setT2iPrompt = (prompt: string) => async (dispatch: any) => {
@@ -29,10 +37,7 @@ export const setSelectedStylesT2i =
 
 export const genT2img = (caption: string) => async (dispatch: any, getState: any) => {
   try {
-    dispatch({
-      type: t2iActionTypes.SET_ERROR_T2I,
-      data: false,
-    });
+    setError(dispatch, null);
     dispatch({
       type: t2iActionTypes.SET_RESULTS_T2I,
       data: [],
@@ -51,23 +56,39 @@ export const genT2img = (caption: string) => async (dispatch: any, getState: any
       const tid = res.data.data.inference_id;
       const results = await getT2IResults(tid);
       const data = results?.data?.data || [];
-      dispatch({
-        type: t2iActionTypes.SET_RESULTS_T2I,
-        data,
-      });
-      const images = Array.isArray(data) ? data.map((img: any) => (typeof img === 'string' ? img : img?.url)) : [];
-      saveGenerationHistory('t2i', { prompt: caption, images }).catch(() => {});
+
+      if (!data.length) {
+        setError(
+          dispatch,
+          results?.failed
+            ? 'Generation failed. Please try again.'
+            : 'No images were returned. Please try again.'
+        );
+      } else {
+        dispatch({
+          type: t2iActionTypes.SET_RESULTS_T2I,
+          data,
+        });
+        const images = Array.isArray(data)
+          ? data.map((img: any) => (typeof img === 'string' ? img : img?.url))
+          : [];
+        saveGenerationHistory('t2i', { prompt: caption, images }).catch(
+          () => {}
+        );
+      }
+
       if (typeof res?.data?.balance === 'number') {
         const currentUser = getState()?.main?.user;
         if (currentUser) {
           dispatch(setUser({ ...currentUser, credits: res.data.balance }));
         }
       }
-    } else {
-      dispatch({
-        type: t2iActionTypes.SET_ERROR_T2I,
-        data: true,
-      });
+    } else if (
+      !handleResponseGenerationError(dispatch, res.data, (msg) =>
+        setError(dispatch, msg)
+      )
+    ) {
+      setError(dispatch, 'Generation failed. Please try again.');
     }
 
     dispatch({
@@ -75,10 +96,7 @@ export const genT2img = (caption: string) => async (dispatch: any, getState: any
       data: false,
     });
   } catch (e) {
-    dispatch({
-      type: t2iActionTypes.SET_ERROR_T2I,
-      data: true,
-    });
+    handleAxiosGenerationError(dispatch, e, (msg) => setError(dispatch, msg));
     dispatch({
       type: t2iActionTypes.SET_LOADING_T2I,
       data: false,
@@ -86,34 +104,36 @@ export const genT2img = (caption: string) => async (dispatch: any, getState: any
   }
 };
 
+export const getT2IResults = async (tid: string) => {
+  try {
+    let status = '';
 
-export const getT2IResults =
-async (tid: string) => {
-    try {
-      let status = '';
+    while (
+      status === STATUS_TYPES.PROCESSING ||
+      status === STATUS_TYPES.QUEUED ||
+      status === ''
+    ) {
+      const res = await axios.get(
+        `${BACKEND_BASE_URL}/generation/t2i?tid=${tid}`,
+        { headers: getAuthHeaders() }
+      );
+      status = res.data.data.status;
 
-      while (
-        status === STATUS_TYPES.PROCESSING ||
-        status === STATUS_TYPES.QUEUED
-        || status === ''
+      if (
+        status !== STATUS_TYPES.PROCESSING &&
+        status !== STATUS_TYPES.QUEUED &&
+        status !== ''
       ) {
-        const res = await axios.get(
-          `${BACKEND_BASE_URL}/generation/t2i?tid=${tid}`,
-          { headers: getAuthHeaders() }
-        );
-        status = res.data.data.status;
-
-        if (
-          status !== STATUS_TYPES.PROCESSING &&
-          status !== STATUS_TYPES.QUEUED &&
-          status !== ''
-        ) {
-          return { response: res, data: res.data.data };
+        if (status === STATUS_TYPES.ERROR || status === 'failed') {
+          return { response: res, data: res.data.data, failed: true };
         }
-
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return { response: res, data: res.data.data, failed: false };
       }
-    } catch (e) {
-      return { response: e, data: null };
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
-  };
+    return { response: null, data: null, failed: true };
+  } catch (e) {
+    return { response: e, data: null, failed: true };
+  }
+};

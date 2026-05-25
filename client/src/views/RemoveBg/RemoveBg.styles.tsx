@@ -1,58 +1,14 @@
+import { ToolPageStyles } from '../shared/ToolPage.styles';
 import { colors } from '../../constants/styles';
 
 export const RemoveBgStyles = {
-  container: {
-    padding: { md: '12px 64px', xs: '8px 32px' },
-  },
-  title: {
-    color: colors.ORANGE_LIGHT,
-    textAlign: 'center',
-    fontSize: { md: '48px', xs: '32px' },
-    fontWeight: '900',
-  },
-  titleAccent: {
-    color: colors.TEXT_WHITE,
-    textAlign: 'center',
-    fontSize: { md: '48px', xs: '32px' },
-    fontWeight: '900',
-  },
-  description: {
-    color: colors.TEXT_GRAY,
-    textAlign: 'center',
-    fontSize: { md: '18px', xs: '16px' },
-    fontWeight: '300',
-    marginBottom: '32px',
-  },
-  uploadArea: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    border: `2px dashed ${colors.TEXT_GRAY}`,
-    borderRadius: '16px',
-    padding: '64px 32px',
-    cursor: 'pointer',
-    transition: '.3s',
-    maxWidth: '600px',
-    margin: '0 auto',
-    '&:hover': {
-      borderColor: colors.ORANGE_LIGHT,
-      '& svg': {
-        fill: colors.ORANGE_LIGHT,
-      },
-    },
-  },
-  uploadText: {
-    color: colors.TEXT_GRAY,
-    fontSize: '16px',
-    marginTop: '12px',
-  },
+  container: ToolPageStyles.page,
+  ...ToolPageStyles,
+  uploadArea: ToolPageStyles.uploadZone,
+  uploadText: ToolPageStyles.uploadText,
   sliderContainer: {
-    maxWidth: '500px',
-    margin: '0 auto',
+    ...ToolPageStyles.sliderWrap,
     position: 'relative',
-    overflow: 'hidden',
-    borderRadius: '16px',
     userSelect: 'none',
   },
   sliderImage: {
@@ -80,34 +36,26 @@ export const RemoveBgStyles = {
     justifyContent: 'center',
   },
   sliderKnob: {
-    maxWidth: '24px',
-    maxHeight: '24px',
+    width: 24,
+    height: 24,
     borderRadius: '50%',
     backgroundColor: colors.ORANGE_LIGHT,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
   },
   sliderLabel: {
     position: 'absolute',
-    bottom: '12px',
-    padding: '4px 12px',
+    bottom: 12,
+    px: 1.5,
+    py: 0.5,
     borderRadius: '8px',
     backgroundColor: 'rgba(0,0,0,0.6)',
     color: colors.TEXT_WHITE,
-    fontSize: '13px',
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: 600,
     zIndex: 5,
     pointerEvents: 'none',
   },
-  buttonsContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '16px',
-    marginTop: '32px',
-    marginBottom: '32px',
-  },
+  buttonsContainer: ToolPageStyles.actionsRow,
   checkerboard: {
     backgroundColor: '#fff',
     backgroundImage:

@@ -15,21 +15,30 @@ interface StylesSectionProps {
   selectedStyle: string | null;
   onStyleSelect: (styleId: string | null) => void;
   compact?: boolean;
+  embedded?: boolean;
 }
 
 const StylesSection: React.FC<StylesSectionProps> = ({
   selectedStyle,
   onStyleSelect,
   compact = false,
+  embedded = false,
 }) => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<GenderTab>('male');
 
   const presets = activeTab === 'male' ? MALE_PRESETS : FEMALE_PRESETS;
 
-  const tabsContainerSx = compact ? AvatarResultsStyles.stylesTabsContainer : AvatarStyles.tabsContainer;
+  const tabsContainerSx = {
+    ...(compact ? AvatarResultsStyles.stylesTabsContainer : AvatarStyles.tabsContainer),
+    ...(embedded ? { justifyContent: 'center' } : {}),
+  };
   const stylesContainerSx = compact ? AvatarResultsStyles.stylesContainer : AvatarStyles.stylesContainer;
-  const stylesGridSx = compact ? AvatarResultsStyles.stylesGrid : AvatarStyles.stylesGrid;
+  const stylesGridSx = embedded
+    ? { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 1 }
+    : compact
+      ? AvatarResultsStyles.stylesGrid
+      : AvatarStyles.stylesGrid;
   const tabSx = (active: boolean) =>
     active
       ? (compact ? AvatarResultsStyles.tabActive : AvatarStyles.tabActive)

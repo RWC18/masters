@@ -7,7 +7,7 @@ const initialState = {
   industries: [] as string[],
   results: [] as string[],
   loading: false,
-  error: false,
+  error: null as string | null,
   count: 6,
 };
 

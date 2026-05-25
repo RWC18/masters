@@ -1,20 +1,19 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { AvatarResultsStyles } from '../AvatarResults.styles';
+import { ToolPageStyles } from '../../shared/ToolPage.styles';
 import { useAvatarResultsConstants } from '../AvatarResults.constants';
 
 const MobileTitle = () => {
-  const AVATAR_RESULTS_CONSTANTS = useAvatarResultsConstants();
+  const c = useAvatarResultsConstants();
 
   return (
-    <Box sx={AvatarResultsStyles.mobileTitle}>
-      <Typography sx={AvatarResultsStyles.title}>
-        {AVATAR_RESULTS_CONSTANTS.title.main}
-        <Typography component={'span'} sx={AvatarResultsStyles.titleAccent}>
-          {' '}
-          {AVATAR_RESULTS_CONSTANTS.title.accent}{' '}
-        </Typography>
-        {AVATAR_RESULTS_CONSTANTS.title.end}
+    <Box sx={ToolPageStyles.mobileTitle}>
+      <Typography sx={ToolPageStyles.sidebarTitle}>
+        {c.title.main}{' '}
+        <Typography component="span" sx={ToolPageStyles.sidebarTitleAccent}>
+          {c.title.accent}
+        </Typography>{' '}
+        {c.title.end}
       </Typography>
     </Box>
   );

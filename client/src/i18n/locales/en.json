@@ -5,17 +5,52 @@
   },
   "header": {
     "login": "Login",
-    "history": "My History",
+    "logout": "Log out",
+    "history": "History",
     "billing": "Billing",
-    "credits": "Credits"
+    "credits": "Credits",
+    "navSection": "Explore",
+    "accountSection": "Account",
+    "settingsSection": "Settings",
+    "welcome": "Welcome to VAi",
+    "guestHint": "Sign in to save history, manage credits, and more.",
+    "topUp": "Top up",
+    "theme": "Theme",
+    "language": "Language"
+  },
+  "language": {
+    "english": "English",
+    "armenian": "Armenian",
+    "russian": "Russian"
   },
   "home": {
+    "heroBadge": "AI creative suite",
     "heroTitle": "Powering creativity with",
     "heroAccent": "AI innovation",
-    "heroDescription": "At VAi Research, we imagine a future where cutting-edge artificial intelligence opens the door to radical creativity. We're passionate about exploring new frontiers in creative communication, and harnessing the power of AI to drive innovation.",
-    "aboutTitle": "Unlock Your Creative Potential with VAi",
-    "aboutDescription": "At VAi, we empower you to turn your ideas into reality with ease. Whether you're transforming text into captivating images, enhancing photos into stunning artworks, or crafting professional logos, Vai has you covered.",
-    "productsTitle": "Products",
+    "heroDescription": "Turn ideas into images, logos, avatars, and clean cutouts in seconds. VAi brings studio-quality AI tools into one simple workspace.",
+    "ctaStart": "Start creating",
+    "ctaExplore": "Explore tools",
+    "showcase": {
+      "toolsValue": "4+",
+      "tools": "AI tools",
+      "fastValue": "<30s",
+      "fast": "Typical generation",
+      "qualityValue": "HD",
+      "quality": "Output quality",
+      "secureValue": "100%",
+      "secure": "Private workspace"
+    },
+    "aboutEyebrow": "Why VAi",
+    "aboutTitle": "Unlock your creative potential",
+    "aboutDescription": "From text-to-image to logos and avatars — everything you need to create, refine, and ship visuals faster.",
+    "productsEyebrow": "Tools",
+    "productsTitle": "Everything you need to create",
+    "productsSubtitle": "Pick a tool and start generating. Sign in to save history and manage credits.",
+    "productActive": "Available",
+    "footerTagline": "AI-powered creative tools for images, logos, avatars, and more.",
+    "footerNav": "Navigate",
+    "footerTools": "Tools",
+    "footerAccount": "Account",
     "copyright": "© {{year}} VAi, Inc."
   },
   "products": {
@@ -68,7 +103,9 @@
     "titleEnd": "Image",
     "description": "Let AI-powered image maker generate your images!",
     "placeholder": "The cat sitting near piano ...",
-    "generate": "Generate"
+    "generate": "Generate",
+    "stylesLabel": "Art styles",
+    "emptyResults": "Your generated images will appear here"
   },
   "avatar": {
     "titleMain": "AI",
@@ -77,6 +114,9 @@
     "description": "Upload your photo and let AI create stunning personalized avatars in any style you imagine!",
     "placeholder": "A professional portrait in cyberpunk style ...",
     "generate": "Generate",
+    "uploadRequired": "Upload a photo to enable Generate.",
+    "promptOrStyleRequired": "Enter a prompt or pick a style to enable Generate.",
+    "emptyResults": "Your avatars will appear here",
     "male": "Male",
     "female": "Female",
     "styles": {
@@ -104,9 +144,10 @@
     "titleAccent": "&",
     "titleEnd": "Brand Design",
     "description": "Let AI-powered logo maker generate your new logo, create matching stationery, and design a brand you love!",
-    "brandPlaceholder": "Brand Name*",
-    "descPlaceholder": "Business Description (Optional)",
+    "brandPlaceholder": "Brand name *",
+    "descPlaceholder": "Business description (optional)",
     "generate": "Generate",
+    "colorsLabel": "Color palette",
     "resultMain": "AI made these Logos",
     "resultAccent": "For You",
     "back": "Back",
@@ -121,6 +162,29 @@
     "reset": "Try Another",
     "error": "Something went wrong. Please try again."
   },
+  "zoom": {
+    "title": "Preview",
+    "close": "Close",
+    "download": "Download",
+    "previous": "Previous image",
+    "next": "Next image",
+    "counter": "{{current}} / {{total}}",
+    "goTo": "View image {{n}}"
+  },
+  "payment": {
+    "title": "Add credits",
+    "subtitle": "You need more credits to continue. Choose a pack below to top up your balance.",
+    "subtitleRequired": "You need {{required}} credits for this action, but you only have {{balance}}. Buy a pack to continue.",
+    "loading": "Loading packs..."
+  },
+  "errors": {
+    "generationFailed": "Generation failed. Please try again.",
+    "noResults": "No results were returned. Please try again.",
+    "uploadFailed": "Image upload failed. Please try again.",
+    "network": "Network error. Check your connection and try again.",
+    "unauthorized": "Please sign in to continue.",
+    "removeBgFailed": "Background removal failed. Please try again."
+  },
   "auth": {
     "login": "Login",
     "register": "Register",
@@ -130,7 +194,9 @@
     "confirmPassword": "Confirm Password",
     "passwordMismatch": "Passwords do not match",
     "invalidEmail": "Please enter a valid email address.",
-    "passwordTooShort": "Password must be at least 8 characters."
+    "passwordTooShort": "Password must be at least 8 characters.",
+    "welcomeTitle": "Welcome to VAi",
+    "welcomeSubtitle": "Sign in or create an account to generate, save history, and manage credits."
   },
   "common": {
     "generate": "Generate",
@@ -139,9 +205,13 @@
   "history": {
     "title": "My",
     "titleAccent": "History",
-    "description": "View all your past generations by tool.",
-    "loading": "Loading...",
-    "empty": "No generations yet. Use the tools to create something!",
+    "description": "Browse everything you've created, organized by tool.",
+    "loading": "Loading your generations...",
+    "empty": "Nothing here yet",
+    "emptyHint": "Create something with Text to Image, Avatar, Logo, or Remove BG — it will show up here.",
+    "itemCount": "{{count}} generations",
+    "imageCount": "{{count}} images",
+    "viewDetails": "View",
     "tabs": {
       "t2i": "Text to Image",
       "avatar": "AI Avatar",
@@ -152,7 +222,14 @@
   },
   "billing": {
     "title": "Billing",
-    "subtitle": "Buy credit packs and track your usage.",
+    "titleAccent": "Credits",
+    "subtitle": "Top up your wallet, generate more, and keep track of every credit you spend.",
+    "balanceHint": "Credits are used when you run AI tools. Buy a pack anytime to keep creating.",
+    "packsTitle": "Credit packs",
+    "packsSubtitle": "Choose a pack — larger bundles offer better value per credit.",
+    "usageSubtitle": "Each tool uses a fixed number of credits per generation.",
+    "bestValue": "Best value",
+    "perCredit": "${{price}} per credit",
     "currentBalance": "Current balance",
     "credits": "credits",
     "buyNow": "Buy now",
@@ -161,9 +238,19 @@
     "avatarUsage": "3 credits per image",
     "logoUsage": "4 credits per image",
     "removeBgUsage": "2 credits per image",
-    "recentTransactions": "Recent transactions",
+    "recentTransactions": "Transaction history",
+    "viewTransactions": "View transaction history",
+    "transactionsSubtitle": "{{count}} recent entries",
+    "transactionsPreview": "{{count}} transactions — tap to view all",
+    "transactionsEmpty": "No transactions yet",
     "balance": "Balance",
     "loadError": "Failed to load wallet",
-    "purchaseError": "Purchase failed"
+    "purchaseError": "Purchase failed",
+    "noPacks": "No credit packs available right now.",
+    "txType": {
+      "purchase": "Purchase",
+      "spend": "Spent",
+      "refund": "Refund"
+    }
   }
 }

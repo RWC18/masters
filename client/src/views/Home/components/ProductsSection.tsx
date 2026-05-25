@@ -1,38 +1,35 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 import { useProducts } from '../../../constants/products';
-import Product from '../../../components/Product/Product';
 import { HomeStyles } from '../Home.styles';
 import { useHomeConstants } from '../Home.constants';
+import HomeProductCard from './HomeProductCard';
+import SectionHeader from './SectionHeader';
 
 const ProductsSection = () => {
-  const HOME_CONSTANTS = useHomeConstants();
+  const HOME = useHomeConstants();
   const products = useProducts();
 
   return (
-    <Box sx={HomeStyles.container}>
-      <Box sx={HomeStyles.productsContainer}>
-        <Typography id='products' sx={HomeStyles.sectionTitle}>
-          {HOME_CONSTANTS.products.title}
-        </Typography>
-        {products.map(
-          (
-            product: {
-              title: string;
-              url: string;
-              thumbnail: string;
-              description: string;
-              isActive: boolean;
-            },
-            id
-          ) => (
-            <Product {...product} reverse={(id + 1) % 2 === 0} key={id} />
-          )
-        )}
+    <Box component="section" sx={HomeStyles.section}>
+      <SectionHeader
+        id="products"
+        eyebrow={HOME.products.eyebrow}
+        title={HOME.products.title}
+        description={HOME.products.subtitle}
+        centered
+      />
+      <Box sx={HomeStyles.productsGrid}>
+        {products.map((product, id) => (
+          <HomeProductCard
+            key={product.url}
+            {...product}
+            reverse={id % 2 === 1}
+          />
+        ))}
       </Box>
     </Box>
   );
 };
 
 export default ProductsSection;
-

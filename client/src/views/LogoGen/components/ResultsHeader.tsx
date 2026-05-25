@@ -1,20 +1,19 @@
-import { Typography } from '@mui/material';
 import React from 'react';
-import { LogoGenResultsStyles } from '../LogoGenResults.styles';
+import ToolPageHeader from '../../shared/ToolPageHeader';
 import { useLogoGenResultsConstants } from '../LogoGenResults.constants';
+import { useTranslation } from 'react-i18next';
 
 const ResultsHeader = () => {
-  const LOGO_GEN_RESULTS_CONSTANTS = useLogoGenResultsConstants();
+  const c = useLogoGenResultsConstants();
+  const { t } = useTranslation();
 
   return (
-    <Typography sx={LogoGenResultsStyles.title}>
-      {LOGO_GEN_RESULTS_CONSTANTS.title.main}{' '}
-      <Typography component={'span'} sx={LogoGenResultsStyles.titleAccent}>
-        {LOGO_GEN_RESULTS_CONSTANTS.title.accent}
-      </Typography>
-    </Typography>
+    <ToolPageHeader
+      eyebrow={t('products.logoGen.title')}
+      titleMain={c.title.main}
+      titleAccent={c.title.accent}
+    />
   );
 };
 
 export default ResultsHeader;
-

@@ -8,15 +8,12 @@ interface PlusCardProps {
   icon: React.JSX.Element;
 }
 
-const PlusCard: React.FC<PlusCardProps> = ({ title, description, icon }) => {
-  return (
-    <Box sx={HomeStyles.plusCard}>
-      <Box sx={HomeStyles.plusIconContainer}>{icon}</Box>
-      <Typography sx={HomeStyles.plusTitle}>{title}</Typography>
-      <Typography sx={HomeStyles.plusDescription}>{description}</Typography>
-    </Box>
-  );
-};
+const PlusCard: React.FC<PlusCardProps> = ({ title, description, icon }) => (
+  <Box sx={HomeStyles.plusCard}>
+    <Box sx={HomeStyles.plusIcon}>{icon}</Box>
+    <Typography sx={HomeStyles.plusTitle}>{title}</Typography>
+    <Typography sx={HomeStyles.plusDescription}>{description}</Typography>
+  </Box>
+);
 
 export default PlusCard;
-
