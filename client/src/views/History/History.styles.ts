@@ -56,7 +56,6 @@ export const HistoryStyles = {
     color: active ? colors.TEXT_DARK : colors.TEXT_GRAY,
     bgcolor: active ? colors.ORANGE_ACTIVE : 'transparent',
     transition: 'background-color 0.2s, color 0.2s, transform 0.2s',
-    border: active ? 'none' : '1px solid transparent',
     '&:hover': {
       bgcolor: active ? colors.ORANGE_LIGHT : 'rgba(255,255,255,0.06)',
       color: active ? colors.TEXT_DARK : colors.TEXT_WHITE,

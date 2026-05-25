@@ -6,6 +6,7 @@ import {
   handleAxiosGenerationError,
   handleResponseGenerationError,
 } from './generationErrorHandler';
+import { extractImageUrlsFromPayload } from '../../lib/normalizeGenerationImages';
 
 export const logoGenActions = {
   SET_BRANDNAME_LOGO: 'SET_BRANDNAME_LOGO',
@@ -82,7 +83,7 @@ export const genLogo =
       if (res.data.status === STATUS_TYPES.SUCCESS) {
         const inferenceId = res.data.data.inference_id;
         const results = await getLogoResults(inferenceId);
-        const resultsData = results?.data?.data || [];
+        const resultsData = extractImageUrlsFromPayload(results?.data);
 
         if (!resultsData.length) {
           setError(
@@ -96,14 +97,9 @@ export const genLogo =
             type: logoGenActions.SET_RESULTS_LOGO,
             data: resultsData,
           });
-          const images = Array.isArray(resultsData)
-            ? resultsData.map((img: any) =>
-                typeof img === 'string' ? img : img?.url
-              )
-            : [];
           saveGenerationHistory('logo', {
             brand_name: data.brand_name,
-            images,
+            images: resultsData,
           }).catch(() => {});
         }
 
@@ -149,7 +145,7 @@ const getLogoResults = async (inferenceId: string) => {
         `${BACKEND_BASE_URL}/generation/logo?tid=${inferenceId}`,
         { headers: getAuthHeaders() }
       );
-      status = res.data.data.status;
+      status = (res.data.data.status || '').toLowerCase();
 
       if (
         status !== STATUS_TYPES.PROCESSING &&
@@ -157,9 +153,17 @@ const getLogoResults = async (inferenceId: string) => {
         status !== ''
       ) {
         if (status === STATUS_TYPES.ERROR || status === 'failed') {
-          return { response: res, data: res.data.data, failed: true };
+          return {
+            response: res,
+            data: res.data.data.data || res.data.data,
+            failed: true,
+          };
         }
-        return { response: res, data: res.data.data, failed: false };
+        return {
+          response: res,
+          data: res.data.data.data || res.data.data,
+          failed: false,
+        };
       }
 
       await new Promise((resolve) => setTimeout(resolve, 1000));

@@ -151,6 +151,7 @@
     "colorsLabel": "Цветовая палитра",
     "resultMain": "ИИ создал эти логотипы",
     "resultAccent": "Для вас",
+    "emptyResults": "Здесь появятся ваши логотипы",
     "back": "Назад",
     "regenerate": "Пересоздать"
   },

@@ -1,29 +1,36 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import ResultImageCard from './ResultImageCard';
 import { ToolPageStyles } from '../../shared/ToolPage.styles';
+import { toGenerationImageItems } from '../../../lib/normalizeGenerationImages';
 
 interface ResultsGridProps {
-  results: Array<{ id: string; url: string } | string>;
+  results: unknown;
   onZoom: (url: string) => void;
 }
 
 const ResultsGrid: React.FC<ResultsGridProps> = ({ results, onZoom }) => {
-  const items = (results || [])
-    .map((r) => (typeof r === 'string' ? { id: r, url: r } : r))
-    .filter((r) => r?.url);
+  const { t } = useTranslation();
+  const items = toGenerationImageItems(results);
 
   return (
     <Box sx={ToolPageStyles.resultsArea}>
-      <Box sx={ToolPageStyles.resultsGridWide}>
-        {items.map((image) => (
-          <ResultImageCard
-            key={image.id || image.url}
-            imageUrl={image.url}
-            onZoom={onZoom}
-          />
-        ))}
-      </Box>
+      {items.length === 0 ? (
+        <Box sx={{ ...ToolPageStyles.emptyResults, flex: 1 }}>
+          <Typography>{t('logoGen.emptyResults')}</Typography>
+        </Box>
+      ) : (
+        <Box sx={ToolPageStyles.resultsGridLogo}>
+          {items.map((image) => (
+            <ResultImageCard
+              key={image.id}
+              imageUrl={image.url}
+              onZoom={onZoom}
+            />
+          ))}
+        </Box>
+      )}
     </Box>
   );
 };

@@ -150,6 +150,7 @@
     "colorsLabel": "Color palette",
     "resultMain": "AI made these Logos",
     "resultAccent": "For You",
+    "emptyResults": "Your logos will appear here",
     "back": "Back",
     "regenerate": "Regenerate"
   },

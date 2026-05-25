@@ -115,7 +115,12 @@ const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
         )}
 
         <Box sx={ZoomImageStyles.frame}>
-          <img src={currentUrl} alt="" style={ZoomImageStyles.image as React.CSSProperties} />
+          <Box
+            component="img"
+            src={currentUrl}
+            alt=""
+            sx={ZoomImageStyles.image}
+          />
         </Box>
 
         {hasSlider && images && images.length > 1 && (
@@ -143,7 +148,12 @@ const ZoomImage = ({ url, handleClose, images, initialIndex = 0 }: Props) => {
                 if (e.key === 'Enter') setIndex(i);
               }}
             >
-              <img src={imgUrl} alt="" style={ZoomImageStyles.thumbImg as React.CSSProperties} />
+              <Box
+                component="img"
+                src={imgUrl}
+                alt=""
+                sx={ZoomImageStyles.thumbImg}
+              />
             </Box>
           ))}
         </Box>

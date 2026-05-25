@@ -8,6 +8,7 @@ import ZoomImage from '../../components/ZoomImage/ZoomImage';
 import { genLogo } from '../../redux/Actions/logoGenActions';
 import { useRouter } from 'next/navigation';
 import { ToolPageStyles } from '../shared/ToolPage.styles';
+import { extractImageUrlsFromPayload } from '../../lib/normalizeGenerationImages';
 import ResultsHeader from './components/ResultsHeader';
 import ResultsGrid from './components/ResultsGrid';
 import ActionButtons from './components/ActionButtons';
@@ -29,9 +30,7 @@ const LogoGenResults = () => {
 
   const [zoomedImageUrl, setZoomedImageUrl] = useState<string | null>(null);
 
-  const imageUrls = (results || [])
-    .map((r: any) => (typeof r === 'string' ? r : r?.url))
-    .filter(Boolean) as string[];
+  const imageUrls = extractImageUrlsFromPayload(results);
   const zoomedIndex = zoomedImageUrl ? imageUrls.indexOf(zoomedImageUrl) : -1;
 
   const handleBack = () => router.push('/logo-gen');
@@ -49,7 +48,7 @@ const LogoGenResults = () => {
     );
   };
 
-  const hasResults = results && results.length > 0;
+  const hasResults = imageUrls.length > 0;
 
   return (
     <Box sx={ToolPageStyles.resultsPage}>
@@ -64,12 +63,15 @@ const LogoGenResults = () => {
       <ResultsHeader />
       <GenerationErrorAlert message={error} />
       {loading && <Loading />}
-      {hasResults && (
-        <Box sx={ToolPageStyles.resultsWorkspace}>
-          <ResultsGrid results={results} onZoom={setZoomedImageUrl} />
-          <ActionButtons onBack={handleBack} onRegenerate={handleRegenerate} />
-        </Box>
-      )}
+      <Box sx={ToolPageStyles.resultsWorkspace}>
+        <ResultsGrid results={results} onZoom={setZoomedImageUrl} />
+        {hasResults && (
+          <ActionButtons
+            onBack={handleBack}
+            onRegenerate={handleRegenerate}
+          />
+        )}
+      </Box>
     </Box>
   );
 };

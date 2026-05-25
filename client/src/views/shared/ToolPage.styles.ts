@@ -237,6 +237,17 @@ export const ToolPageStyles = {
     maxWidth: 900,
     mx: 'auto',
   },
+  resultsGridLogo: {
+    display: 'grid',
+    gridTemplateColumns: {
+      xs: 'repeat(2, 1fr)',
+      sm: 'repeat(3, 1fr)',
+    },
+    gap: { xs: 1.5, md: 2 },
+    width: '100%',
+    maxWidth: 960,
+    mx: 'auto',
+  },
   imageCard: {
     position: 'relative',
     aspectRatio: '1',
